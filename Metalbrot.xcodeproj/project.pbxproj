@@ -17,6 +17,22 @@
 		57ACEA1E2854E23E004D6F23 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACE9F42854E23A004D6F23 /* ContentView.swift */; };
 		57ACEA1F2854E23E004D6F23 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57ACE9F52854E23E004D6F23 /* Assets.xcassets */; };
 		57ACEA202854E23E004D6F23 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57ACE9F52854E23E004D6F23 /* Assets.xcassets */; };
+		57ACEA332854E2B1004D6F23 /* MetalBrotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA322854E2B1004D6F23 /* MetalBrotView.swift */; };
+		57ACEA342854E2B1004D6F23 /* MetalBrotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA322854E2B1004D6F23 /* MetalBrotView.swift */; };
+		57ACEA3C2854E823004D6F23 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA3B2854E823004D6F23 /* Renderer.swift */; };
+		57ACEA3D2854E823004D6F23 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA3B2854E823004D6F23 /* Renderer.swift */; };
+		57ACEA3F2854E87E004D6F23 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA3E2854E87E004D6F23 /* Helpers.swift */; };
+		57ACEA402854E87E004D6F23 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA3E2854E87E004D6F23 /* Helpers.swift */; };
+		57ACEA422854F43C004D6F23 /* Brot.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA352854E7A0004D6F23 /* Brot.metal */; };
+		57ACEA432854F43D004D6F23 /* Brot.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA352854E7A0004D6F23 /* Brot.metal */; };
+		57ACEA4B2854F56D004D6F23 /* MetalBrot - Watch WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 57ACEA4A2854F56D004D6F23 /* MetalBrot - Watch WatchKit App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		57ACEA512854F56D004D6F23 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57ACEA4F2854F56D004D6F23 /* Interface.storyboard */; };
+		57ACEA532854F56F004D6F23 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57ACEA522854F56F004D6F23 /* Assets.xcassets */; };
+		57ACEA592854F56F004D6F23 /* MetalBrot - Watch WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 57ACEA582854F56F004D6F23 /* MetalBrot - Watch WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		57ACEA5E2854F56F004D6F23 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA5D2854F56F004D6F23 /* InterfaceController.swift */; };
+		57ACEA602854F56F004D6F23 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA5F2854F56F004D6F23 /* ExtensionDelegate.swift */; };
+		57ACEA622854F56F004D6F23 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA612854F56F004D6F23 /* ComplicationController.swift */; };
+		57ACEA642854F570004D6F23 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57ACEA632854F570004D6F23 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,7 +50,46 @@
 			remoteGlobalIDString = 57ACE9FF2854E23E004D6F23;
 			remoteInfo = "Metalbrot (macOS)";
 		};
+		57ACEA4C2854F56D004D6F23 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 57ACE9EE2854E23A004D6F23 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 57ACEA492854F56D004D6F23;
+			remoteInfo = "MetalBrot - Watch WatchKit App";
+		};
+		57ACEA5A2854F56F004D6F23 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 57ACE9EE2854E23A004D6F23 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 57ACEA572854F56F004D6F23;
+			remoteInfo = "MetalBrot - Watch WatchKit Extension";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		57ACEA692854F570004D6F23 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				57ACEA592854F56F004D6F23 /* MetalBrot - Watch WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		57ACEA6D2854F570004D6F23 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				57ACEA4B2854F56D004D6F23 /* MetalBrot - Watch WatchKit App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		57ACE9F32854E23A004D6F23 /* MetalbrotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalbrotApp.swift; sourceTree = "<group>"; };
@@ -49,6 +104,23 @@
 		57ACEA132854E23E004D6F23 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		57ACEA172854E23E004D6F23 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		57ACEA192854E23E004D6F23 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		57ACEA322854E2B1004D6F23 /* MetalBrotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalBrotView.swift; sourceTree = "<group>"; };
+		57ACEA352854E7A0004D6F23 /* Brot.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Brot.metal; sourceTree = "<group>"; };
+		57ACEA382854E7EC004D6F23 /* BasicShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BasicShader.metal; sourceTree = "<group>"; };
+		57ACEA3B2854E823004D6F23 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		57ACEA3E2854E87E004D6F23 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		57ACEA412854EB89004D6F23 /* Metalbrot (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Metalbrot (iOS).entitlements"; sourceTree = "<group>"; };
+		57ACEA442854F481004D6F23 /* MetalHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalHeaders.h; sourceTree = "<group>"; };
+		57ACEA472854F56D004D6F23 /* MetalBrot - Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MetalBrot - Watch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		57ACEA4A2854F56D004D6F23 /* MetalBrot - Watch WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MetalBrot - Watch WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		57ACEA502854F56D004D6F23 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		57ACEA522854F56F004D6F23 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		57ACEA582854F56F004D6F23 /* MetalBrot - Watch WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "MetalBrot - Watch WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		57ACEA5D2854F56F004D6F23 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		57ACEA5F2854F56F004D6F23 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		57ACEA612854F56F004D6F23 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		57ACEA632854F570004D6F23 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		57ACEA652854F570004D6F23 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,16 +152,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		57ACEA552854F56F004D6F23 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		57ACE9ED2854E23A004D6F23 = {
 			isa = PBXGroup;
 			children = (
+				57ACEA412854EB89004D6F23 /* Metalbrot (iOS).entitlements */,
 				57ACE9F22854E23A004D6F23 /* Shared */,
 				57ACEA012854E23E004D6F23 /* macOS */,
 				57ACEA0A2854E23E004D6F23 /* Tests iOS */,
 				57ACEA162854E23E004D6F23 /* Tests macOS */,
+				57ACEA4E2854F56D004D6F23 /* MetalBrot - Watch WatchKit App */,
+				57ACEA5C2854F56F004D6F23 /* MetalBrot - Watch WatchKit Extension */,
 				57ACE9FB2854E23E004D6F23 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -99,6 +181,12 @@
 			children = (
 				57ACE9F32854E23A004D6F23 /* MetalbrotApp.swift */,
 				57ACE9F42854E23A004D6F23 /* ContentView.swift */,
+				57ACEA322854E2B1004D6F23 /* MetalBrotView.swift */,
+				57ACEA3B2854E823004D6F23 /* Renderer.swift */,
+				57ACEA3E2854E87E004D6F23 /* Helpers.swift */,
+				57ACEA382854E7EC004D6F23 /* BasicShader.metal */,
+				57ACEA352854E7A0004D6F23 /* Brot.metal */,
+				57ACEA442854F481004D6F23 /* MetalHeaders.h */,
 				57ACE9F52854E23E004D6F23 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -111,6 +199,9 @@
 				57ACEA002854E23E004D6F23 /* Metalbrot.app */,
 				57ACEA072854E23E004D6F23 /* Tests iOS.xctest */,
 				57ACEA132854E23E004D6F23 /* Tests macOS.xctest */,
+				57ACEA472854F56D004D6F23 /* MetalBrot - Watch.app */,
+				57ACEA4A2854F56D004D6F23 /* MetalBrot - Watch WatchKit App.app */,
+				57ACEA582854F56F004D6F23 /* MetalBrot - Watch WatchKit Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -139,6 +230,27 @@
 				57ACEA192854E23E004D6F23 /* Tests_macOSLaunchTests.swift */,
 			);
 			path = "Tests macOS";
+			sourceTree = "<group>";
+		};
+		57ACEA4E2854F56D004D6F23 /* MetalBrot - Watch WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				57ACEA4F2854F56D004D6F23 /* Interface.storyboard */,
+				57ACEA522854F56F004D6F23 /* Assets.xcassets */,
+			);
+			path = "MetalBrot - Watch WatchKit App";
+			sourceTree = "<group>";
+		};
+		57ACEA5C2854F56F004D6F23 /* MetalBrot - Watch WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				57ACEA5D2854F56F004D6F23 /* InterfaceController.swift */,
+				57ACEA5F2854F56F004D6F23 /* ExtensionDelegate.swift */,
+				57ACEA612854F56F004D6F23 /* ComplicationController.swift */,
+				57ACEA632854F570004D6F23 /* Assets.xcassets */,
+				57ACEA652854F570004D6F23 /* Info.plist */,
+			);
+			path = "MetalBrot - Watch WatchKit Extension";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,6 +326,57 @@
 			productReference = 57ACEA132854E23E004D6F23 /* Tests macOS.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		57ACEA462854F56D004D6F23 /* MetalBrot - Watch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 57ACEA6E2854F570004D6F23 /* Build configuration list for PBXNativeTarget "MetalBrot - Watch" */;
+			buildPhases = (
+				57ACEA452854F56D004D6F23 /* Resources */,
+				57ACEA6D2854F570004D6F23 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				57ACEA4D2854F56D004D6F23 /* PBXTargetDependency */,
+			);
+			name = "MetalBrot - Watch";
+			productName = "MetalBrot - Watch";
+			productReference = 57ACEA472854F56D004D6F23 /* MetalBrot - Watch.app */;
+			productType = "com.apple.product-type.application.watchapp2-container";
+		};
+		57ACEA492854F56D004D6F23 /* MetalBrot - Watch WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 57ACEA6A2854F570004D6F23 /* Build configuration list for PBXNativeTarget "MetalBrot - Watch WatchKit App" */;
+			buildPhases = (
+				57ACEA482854F56D004D6F23 /* Resources */,
+				57ACEA692854F570004D6F23 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				57ACEA5B2854F56F004D6F23 /* PBXTargetDependency */,
+			);
+			name = "MetalBrot - Watch WatchKit App";
+			productName = "MetalBrot - Watch WatchKit App";
+			productReference = 57ACEA4A2854F56D004D6F23 /* MetalBrot - Watch WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		57ACEA572854F56F004D6F23 /* MetalBrot - Watch WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 57ACEA662854F570004D6F23 /* Build configuration list for PBXNativeTarget "MetalBrot - Watch WatchKit Extension" */;
+			buildPhases = (
+				57ACEA542854F56F004D6F23 /* Sources */,
+				57ACEA552854F56F004D6F23 /* Frameworks */,
+				57ACEA562854F56F004D6F23 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MetalBrot - Watch WatchKit Extension";
+			productName = "MetalBrot - Watch WatchKit Extension";
+			productReference = 57ACEA582854F56F004D6F23 /* MetalBrot - Watch WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -238,6 +401,15 @@
 						CreatedOnToolsVersion = 13.4.1;
 						TestTargetID = 57ACE9FF2854E23E004D6F23;
 					};
+					57ACEA462854F56D004D6F23 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					57ACEA492854F56D004D6F23 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					57ACEA572854F56F004D6F23 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
 				};
 			};
 			buildConfigurationList = 57ACE9F12854E23A004D6F23 /* Build configuration list for PBXProject "Metalbrot" */;
@@ -257,6 +429,9 @@
 				57ACE9FF2854E23E004D6F23 /* Metalbrot (macOS) */,
 				57ACEA062854E23E004D6F23 /* Tests iOS */,
 				57ACEA122854E23E004D6F23 /* Tests macOS */,
+				57ACEA462854F56D004D6F23 /* MetalBrot - Watch */,
+				57ACEA492854F56D004D6F23 /* MetalBrot - Watch WatchKit App */,
+				57ACEA572854F56F004D6F23 /* MetalBrot - Watch WatchKit Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -292,6 +467,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		57ACEA452854F56D004D6F23 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		57ACEA482854F56D004D6F23 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57ACEA532854F56F004D6F23 /* Assets.xcassets in Resources */,
+				57ACEA512854F56D004D6F23 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		57ACEA562854F56F004D6F23 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57ACEA642854F570004D6F23 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -300,7 +499,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				57ACEA1D2854E23E004D6F23 /* ContentView.swift in Sources */,
+				57ACEA3F2854E87E004D6F23 /* Helpers.swift in Sources */,
 				57ACEA1B2854E23E004D6F23 /* MetalbrotApp.swift in Sources */,
+				57ACEA422854F43C004D6F23 /* Brot.metal in Sources */,
+				57ACEA3C2854E823004D6F23 /* Renderer.swift in Sources */,
+				57ACEA332854E2B1004D6F23 /* MetalBrotView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,7 +512,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				57ACEA1E2854E23E004D6F23 /* ContentView.swift in Sources */,
+				57ACEA402854E87E004D6F23 /* Helpers.swift in Sources */,
 				57ACEA1C2854E23E004D6F23 /* MetalbrotApp.swift in Sources */,
+				57ACEA432854F43D004D6F23 /* Brot.metal in Sources */,
+				57ACEA3D2854E823004D6F23 /* Renderer.swift in Sources */,
+				57ACEA342854E2B1004D6F23 /* MetalBrotView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +538,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		57ACEA542854F56F004D6F23 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57ACEA602854F56F004D6F23 /* ExtensionDelegate.swift in Sources */,
+				57ACEA5E2854F56F004D6F23 /* InterfaceController.swift in Sources */,
+				57ACEA622854F56F004D6F23 /* ComplicationController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -344,7 +561,28 @@
 			target = 57ACE9FF2854E23E004D6F23 /* Metalbrot (macOS) */;
 			targetProxy = 57ACEA142854E23E004D6F23 /* PBXContainerItemProxy */;
 		};
+		57ACEA4D2854F56D004D6F23 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 57ACEA492854F56D004D6F23 /* MetalBrot - Watch WatchKit App */;
+			targetProxy = 57ACEA4C2854F56D004D6F23 /* PBXContainerItemProxy */;
+		};
+		57ACEA5B2854F56F004D6F23 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 57ACEA572854F56F004D6F23 /* MetalBrot - Watch WatchKit Extension */;
+			targetProxy = 57ACEA5A2854F56F004D6F23 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		57ACEA4F2854F56D004D6F23 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				57ACEA502854F56D004D6F23 /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		57ACEA212854E23E004D6F23 /* Debug */ = {
@@ -397,11 +635,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				WATCHOS_DEPLOYMENT_TARGET = 8.5;
 			};
 			name = Debug;
 		};
@@ -449,10 +690,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				WATCHOS_DEPLOYMENT_TARGET = 8.5;
 			};
 			name = Release;
 		};
@@ -461,6 +705,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Metalbrot (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3C42F7N9CQ;
@@ -480,9 +725,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.jossy.Metalbrot;
 				PRODUCT_NAME = Metalbrot;
 				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -491,6 +737,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Metalbrot (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3C42F7N9CQ;
@@ -510,9 +757,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.jossy.Metalbrot;
 				PRODUCT_NAME = Metalbrot;
 				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -652,6 +900,149 @@
 			};
 			name = Release;
 		};
+		57ACEA672854F570004D6F23 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MetalBrot - Watch WatchKit Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "MetalBrot - Watch WatchKit Extension";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = "$(PRODUCT_MODULE_NAME).ComplicationController";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_WKExtensionDelegateClassName = "$(PRODUCT_MODULE_NAME).ExtensionDelegate";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.jossy.MetalBrot---Watch.watchkitapp.watchkitextension";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.5;
+			};
+			name = Debug;
+		};
+		57ACEA682854F570004D6F23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MetalBrot - Watch WatchKit Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "MetalBrot - Watch WatchKit Extension";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = "$(PRODUCT_MODULE_NAME).ComplicationController";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_WKExtensionDelegateClassName = "$(PRODUCT_MODULE_NAME).ExtensionDelegate";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.jossy.MetalBrot---Watch.watchkitapp.watchkitextension";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.5;
+			};
+			name = Release;
+		};
+		57ACEA6B2854F570004D6F23 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_MODULE = "MetalBrot___Watch_WatchKit_Extension";
+				INFOPLIST_KEY_CFBundleDisplayName = "MetalBrot - Watch WatchKit App";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.jossy.MetalBrot---Watch.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.5;
+			};
+			name = Debug;
+		};
+		57ACEA6C2854F570004D6F23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_MODULE = "MetalBrot___Watch_WatchKit_Extension";
+				INFOPLIST_KEY_CFBundleDisplayName = "MetalBrot - Watch WatchKit App";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.jossy.MetalBrot---Watch.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.5;
+			};
+			name = Release;
+		};
+		57ACEA6F2854F570004D6F23 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.jossy.MetalBrot---Watch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		57ACEA702854F570004D6F23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.jossy.MetalBrot---Watch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -696,6 +1087,33 @@
 			buildConfigurations = (
 				57ACEA2D2854E23E004D6F23 /* Debug */,
 				57ACEA2E2854E23E004D6F23 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		57ACEA662854F570004D6F23 /* Build configuration list for PBXNativeTarget "MetalBrot - Watch WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				57ACEA672854F570004D6F23 /* Debug */,
+				57ACEA682854F570004D6F23 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		57ACEA6A2854F570004D6F23 /* Build configuration list for PBXNativeTarget "MetalBrot - Watch WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				57ACEA6B2854F570004D6F23 /* Debug */,
+				57ACEA6C2854F570004D6F23 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		57ACEA6E2854F570004D6F23 /* Build configuration list for PBXNativeTarget "MetalBrot - Watch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				57ACEA6F2854F570004D6F23 /* Debug */,
+				57ACEA702854F570004D6F23 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
