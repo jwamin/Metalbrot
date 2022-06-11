@@ -16,7 +16,7 @@ import UIKit
 import MetalKit
 import SwiftUI
 
-final class MetalBrotViewController: UIViewController, MTKViewDelegate {
+final class MetalBrotViewController: UIViewController {
 
     var metalView: MTKView!
     var renderer: Renderer?
@@ -29,20 +29,7 @@ final class MetalBrotViewController: UIViewController, MTKViewDelegate {
         renderer = Renderer(device: device, view: metalView)
         
         print("hello world")
-        metalView.delegate = self
-        renderer?.render()
-    }
-    
-    //MARK: Metal Kit
-    
-    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-     print("drawable size now \(size)")
-    }
-    
-    func draw(in view: MTKView) {
-        if let renderer = renderer {
-            renderer.render()
-        }
+        
     }
     
 }

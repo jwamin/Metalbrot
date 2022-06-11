@@ -8,10 +8,10 @@
 
 import MetalKit
 
-class Renderer{
+class Renderer: NSObject {
     
     let device:MTLDevice
-    let view:MTKView
+    unowned let view:MTKView
     let library:MTLLibrary
     let descriptor:MTLRenderPipelineDescriptor
     let pipelineState:MTLRenderPipelineState
@@ -88,6 +88,8 @@ class Renderer{
         descriptor.vertexDescriptor = vertexDescriptor
         
         pipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
+        super.init()
+        view.delegate = self
         
     }
     
@@ -135,3 +137,15 @@ class Renderer{
     
 }
 
+//MARK: Metal Kit
+extension Renderer: MTKViewDelegate {
+    
+    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+     print("drawable size now \(size)")
+        render()
+    }
+    
+    func draw(in view: MTKView) {
+        render()
+    }
+}
