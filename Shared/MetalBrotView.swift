@@ -31,6 +31,9 @@ final class MetalBrotViewController: UIViewController {
         print("hello world")
         
     }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        renderer?.render(view: metalView)
+    }
     
 }
 

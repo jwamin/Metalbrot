@@ -17,6 +17,17 @@ class Renderer: NSObject {
     let pipelineState:MTLRenderPipelineState
     let commandQueue:MTLCommandQueue
     
+    //use semaphore to synchronize CPU and GPU work?
+    let semaphore = DispatchSemaphore(value: 0)
+    
+    lazy var vertexBuffer = {
+        device.makeBuffer(bytes: gon2, length: gon2.count * MemoryLayout<BasicVertex>.stride, options: [])!
+    }()
+    
+    lazy var viewPortBuffer = {
+        device.makeBuffer(length: MemoryLayout<vector_uint2>.stride)
+    }()
+    
     typealias Blob = (Float,Float,Float,Float,Float,Float)
     
     struct ColoredVertex{
@@ -47,15 +58,21 @@ class Renderer: NSObject {
         
     ]
     
+    var gon2: [BasicVertex]
+    
     init(device: MTLDevice,view:MTKView){
+        
+        gon2 = gon.map({
+            BasicVertex(position: $0.position)
+        })
         
         self.device = device
         self.library = device.makeDefaultLibrary()!
         self.commandQueue = device.makeCommandQueue()!
         
         self.view = view
-        let clearColor = UIColor.systemBlue.metalClearColor()
-        view.clearColor = clearColor
+        view.preferredFramesPerSecond = 30
+        view.clearColor = UIColor.systemBlue.metalClearColor()
         
         let vertexFunction = library.makeFunction(name: "brot_vertex_main")
         let fragmentFunction = library.makeFunction(name: "brot_fragment_main")
@@ -65,8 +82,6 @@ class Renderer: NSObject {
         
         descriptor.fragmentFunction = fragmentFunction
         descriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
-        
-        
         
         let vertexDescriptor = MTLVertexDescriptor()
         vertexDescriptor.attributes[0].format = .float2
@@ -79,21 +94,21 @@ class Renderer: NSObject {
         vertexDescriptor.attributes[1].bufferIndex = 1
         vertexDescriptor.layouts[1].stride = MemoryLayout<vector_uint2>.stride
         
-        
-//        vertexDescriptor.attributes[2].format = .float4
-//        vertexDescriptor.attributes[2].offset = MemoryLayout<SIMD4<Float>>.stride
-//        vertexDescriptor.attributes[2].bufferIndex = 2
-//        vertexDescriptor.layouts[2].stride = MemoryLayout<VertexWithWH>.stride
-        
         descriptor.vertexDescriptor = vertexDescriptor
+        //
+        //        view.enableSetNeedsDisplay = false
+        //        view.isPaused = true
         
         pipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
+        
+        
+        
         super.init()
         view.delegate = self
-        
+        //render()
     }
     
-    func render(){
+    func render(view: MTKView){
         
         guard let descriptor = view.currentRenderPassDescriptor,
               let commandBuffer = commandQueue.makeCommandBuffer(),
@@ -101,37 +116,38 @@ class Renderer: NSObject {
             fatalError()
         }
         
-        //begin actual drawing code
-        //let wh:SIMD2<Float> = [Float(view.bounds.width),Float(view.bounds.height)]
-        var newGon = gon.map({
-            BasicVertex(position: $0.position)
-        })
+        let size = view.drawableSize
+        var viewportSize: vector_uint2 = vector_uint2(x: UInt32(size.width), y: UInt32(size.height))
+        viewPortBuffer = device.makeBuffer(bytes: &viewportSize, length: MemoryLayout.size(ofValue: viewportSize))
         
-        
-        let buffer = device.makeBuffer(bytes: newGon, length: newGon.count * MemoryLayout<BasicVertex>.stride, options: [])!
-        
-        var viewportSize: vector_uint2 = vector_uint2(x: UInt32(view.drawableSize.width), y: UInt32(view.drawableSize.height))
         
         //
         renderEncoder.setRenderPipelineState(pipelineState)
-        //renderEncoder.setVertexBytes(&newGon, length: newGon.count * MemoryLayout<BasicVertex>.stride, index: 0)
-        renderEncoder.setVertexBuffer(buffer, offset: 0, index: 0)
-        renderEncoder.setVertexBytes(&viewportSize, length: MemoryLayout<vector_uint2>.stride, index: 1)
-//        renderEncoder.setVertexBuffer(buffer, offset: 0, index: 1)
-//        renderEncoder.setVertexBuffer(buffer, offset: 0, index: 2)
         
-        //renderEncoder.drawIndexedPrimitives(type: .triangle, indexCount: 1, indexType: .uint16, indexBuffer: buffer, indexBufferOffset: 0)
+        //begin actual drawing code
         
+        renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+        renderEncoder.setVertexBuffer(viewPortBuffer, offset:0, index: 1)
+        renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+        
+
         //END actual draw code
         
-        renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
-        renderEncoder.endEncoding()
-        
-        if let drawable = view.currentDrawable?.layer.nextDrawable() {
+        if let drawable = view.currentDrawable {
+            
+            //            commandBuffer.addCompletedHandler { [weak self] buffer in
+            //                //self?.semaphore.signal()
+            //            }
+            //commandBuffer.present(drawable, afterMinimumDuration: Double(view.preferredFramesPerSecond))
+            renderEncoder.endEncoding()
             commandBuffer.present(drawable)
             commandBuffer.commit()
+            commandBuffer.waitUntilCompleted()
+            //semaphore.wait(timeout: .distantFuture)
             
         }
+        
+        
         
     }
     
@@ -141,11 +157,11 @@ class Renderer: NSObject {
 extension Renderer: MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-     print("drawable size now \(size)")
-        render()
+        print("drawable size now \(size)")
+        //       render(view: view)
     }
     
     func draw(in view: MTKView) {
-        render()
+        render(view: view)
     }
 }

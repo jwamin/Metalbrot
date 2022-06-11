@@ -56,7 +56,8 @@ using namespace metal;
 
 
 
-vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]], constant vector_uint2 *viewportSizePointer [[buffer(AAPLVertexInputIndexViewportSize)]]) {
+vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
+                                      constant vector_uint2 *viewportSizePointer [[buffer(AAPLVertexInputIndexViewportSize)]]) {
   
   //define vertexOut struct
   BrotVertexOut out;
@@ -80,21 +81,21 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     //float4 error = float4(1.0,0.0,1.0,1);
     float4 out = float4(0.0,0.0,0.0,1);
   
-    float col = in.position.x;
-    float row = in.position.y;
-    float width = in.viewportSize.x;//1284.0;//in.heightWidth.x;
-    float height = in.viewportSize.y;//2535.0;//in.heightWidth.y;
+    half col = in.position.x;
+    half row = in.position.y;
+    half width = in.viewportSize.x;//1284.0;//in.heightWidth.x;
+    half height = in.viewportSize.y;//2535.0;//in.heightWidth.y;
     
-    float randomR = 1.0;
-    float randomG = 1.0;
-    float randomB = 1.0;
+    half randomR = 1.0;
+    half randomG = 1.0;
+    half randomB = 1.0;
     
-    float c_re = (col - width/2.0)*4.0/width;
-    float c_im = (row - height/2.0)*4.0/width;
-    float x = 0, y = 0;
+    half c_re = (col - width/2.0)*4.0/width;
+    half c_im = (row - height/2.0)*4.0/width;
+    half x = 0, y = 0;
     int iteration = 0;
     while (x*x+y*y <= 4 && iteration < ITERATION_MAX) {
-        float x_new = x*x - y*y + c_re;
+        half x_new = x*x - y*y + c_re;
         y = 2*x*y + c_im;
         x = x_new;
         iteration++;
@@ -106,10 +107,10 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
         out.y = randomG * increase;   /* green */
         out.z = randomB * increase;  /* blue */
         return out;
-    } else {
+    }
         //write black to "void:"
         return black;
-    }
+    
     
   
 
