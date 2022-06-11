@@ -71,8 +71,8 @@ class Renderer: NSObject {
         self.commandQueue = device.makeCommandQueue()!
         
         self.view = view
-        view.preferredFramesPerSecond = 30
-        view.clearColor = UIColor.systemBlue.metalClearColor()
+        //view.preferredFramesPerSecond = 30
+        view.clearColor = Color.systemBlue.metalClearColor()
         
         let vertexFunction = library.makeFunction(name: "brot_vertex_main")
         let fragmentFunction = library.makeFunction(name: "brot_fragment_main")
@@ -95,9 +95,9 @@ class Renderer: NSObject {
         vertexDescriptor.layouts[1].stride = MemoryLayout<vector_uint2>.stride
         
         descriptor.vertexDescriptor = vertexDescriptor
-        //
-        //        view.enableSetNeedsDisplay = false
-        //        view.isPaused = true
+        
+//        view.enableSetNeedsDisplay = false
+//        view.isPaused = true
         
         pipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
         
@@ -158,7 +158,7 @@ extension Renderer: MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         print("drawable size now \(size)")
-        //       render(view: view)
+        draw(in: view)
     }
     
     func draw(in view: MTKView) {

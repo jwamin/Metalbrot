@@ -101,11 +101,11 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
         iteration++;
     }
     if (iteration < ITERATION_MAX) {
-        int increase = iteration;
-
-        out.x = randomR * increase;  /* red */
-        out.y = randomG * increase;   /* green */
-        out.z = randomB * increase;  /* blue */
+        int increase = iteration * 100;
+        int normalizedIncrease = increase / ITERATION_MAX;
+        out.x = randomR * normalizedIncrease;  /* red */
+        out.y = randomG * normalizedIncrease;   /* green */
+        out.z = randomB * normalizedIncrease;  /* blue */
         return out;
     }
         //write black to "void:"
