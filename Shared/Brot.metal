@@ -40,9 +40,9 @@ using namespace metal;
                  int increase = iteration * 100;
 
 
-                 other[0] = randomR * increase;  /* red */ /*
-                 other[1] = randomG * increase ;   /* green */ /*
-                 other[2] = randomB * increase;  /* blue */
+                 other[0] = randomR * increase;  // red
+                 other[1] = randomG * increase;   //green
+                 other[2] = randomB * increase;  //  blue
 /*
                  (void) fwrite(other, 1, 3, fp);
              } else {
@@ -105,13 +105,13 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
         half halfiteration = iteration;
         half normalizedIncrease = halfiteration / 100;
         
-        out.x = randomR * (normalizedIncrease / 0.333);   /* red */
+        out.z = randomR * (normalizedIncrease / 0.333);   /* red */
         
         if (normalizedIncrease > 0.333){
             out.y = randomG * (normalizedIncrease / 0.666); //* normalizedIncrease;   /* green */
         }
         if (normalizedIncrease > 0.666){
-            out.z = randomB * (normalizedIncrease / 1.0); //* normalizedIncrease;  /* blue */
+            out.x = randomB * (normalizedIncrease / 1.0); //* normalizedIncrease;  /* blue */
         }
         return out;
     }

@@ -19,14 +19,14 @@ import SwiftUI
 final class MetalBrotViewController: UIViewController {
 
     var metalView: MTKView!
-    var renderer: Renderer?
+    var renderer: MetalbrotRenderer?
     
     override func viewDidLoad() {
         let device = MTLCreateSystemDefaultDevice()!
         metalView = MTKView(frame: self.view.bounds, device: device)
         self.view.addSubview(metalView)
         metalView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
-        renderer = Renderer(device: device, view: metalView)
+        renderer = MetalbrotRenderer(device: device, view: metalView)
         
         print("hello world")
         

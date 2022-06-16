@@ -8,7 +8,7 @@
 
 import MetalKit
 
-class Renderer: NSObject {
+class MetalbrotRenderer: NSObject {
     
     let device:MTLDevice
     unowned let view:MTKView
@@ -17,6 +17,8 @@ class Renderer: NSObject {
     let pipelineState:MTLRenderPipelineState
     let commandQueue:MTLCommandQueue
     
+    var gon2: [BasicVertex]
+    
     //use semaphore to synchronize CPU and GPU work?
     let semaphore = DispatchSemaphore(value: 0)
     
@@ -24,41 +26,9 @@ class Renderer: NSObject {
         device.makeBuffer(bytes: gon2, length: gon2.count * MemoryLayout<BasicVertex>.stride, options: [])!
     }()
     
-    lazy var viewPortBuffer = {
+    lazy var viewportBuffer = {
         device.makeBuffer(length: MemoryLayout<vector_uint2>.stride)
     }()
-    
-    typealias Blob = (Float,Float,Float,Float,Float,Float)
-    
-    struct ColoredVertex{
-        
-        let position:SIMD2<Float>
-        let color:SIMD4<Float>
-        
-        init(with blob:Blob) {
-            position = [blob.0,blob.1]
-            color = [blob.2,blob.3,blob.4,blob.5]
-        }
-        
-        
-    }
-    
-    struct BasicVertex {
-        
-        let position:SIMD2<Float>
-        
-    }
-    
-    let gon:[ColoredVertex] = [
-        ColoredVertex(with:(-1.0,-1.0,1.0,0.0,0.0,1.0)), // r
-        ColoredVertex(with:(-1.0,1.0,0.0,0.0,1.0,1.0)), //b
-        ColoredVertex(with:(1.0,-1.0,1.0,1.0,1.0,1.0)), //w
-        ColoredVertex(with:(1.0,1.0,0.0,1.0,0.0,1.0)), //g
-        
-        
-    ]
-    
-    var gon2: [BasicVertex]
     
     init(device: MTLDevice,view:MTKView){
         
@@ -101,11 +71,9 @@ class Renderer: NSObject {
         
         pipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
         
-        
-        
         super.init()
         view.delegate = self
-        //render()
+
     }
     
     func render(view: MTKView){
@@ -117,51 +85,43 @@ class Renderer: NSObject {
         }
         
         let size = view.drawableSize
-        var viewportSize: vector_uint2 = vector_uint2(x: UInt32(size.width), y: UInt32(size.height))
-        viewPortBuffer = device.makeBuffer(bytes: &viewportSize, length: MemoryLayout.size(ofValue: viewportSize))
+        let viewportSize: vector_uint2 = vector_uint2(x: UInt32(size.width), y: UInt32(size.height))
+        let ptr = viewportBuffer?.contents()
+        ptr?.storeBytes(of: viewportSize, as: vector_uint2.self)
         
-        
-        //
         renderEncoder.setRenderPipelineState(pipelineState)
         
         //begin actual drawing code
         
         renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
-        renderEncoder.setVertexBuffer(viewPortBuffer, offset:0, index: 1)
+        renderEncoder.setVertexBuffer(viewportBuffer, offset:0, index: 1)
         renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
-        
-
+    
         //END actual draw code
         
         if let drawable = view.currentDrawable {
             
-            //            commandBuffer.addCompletedHandler { [weak self] buffer in
-            //                //self?.semaphore.signal()
-            //            }
-            //commandBuffer.present(drawable, afterMinimumDuration: Double(view.preferredFramesPerSecond))
             renderEncoder.endEncoding()
             commandBuffer.present(drawable)
             commandBuffer.commit()
             commandBuffer.waitUntilCompleted()
-            //semaphore.wait(timeout: .distantFuture)
             
         }
-        
-        
         
     }
     
 }
 
 //MARK: Metal Kit
-extension Renderer: MTKViewDelegate {
+extension MetalbrotRenderer: MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        print("drawable size now \(size)")
-        draw(in: view)
+        
     }
+    
     
     func draw(in view: MTKView) {
         render(view: view)
     }
+    
 }

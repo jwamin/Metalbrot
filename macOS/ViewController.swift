@@ -12,7 +12,7 @@ import MetalKit
 class ViewController: NSViewController {
 
     var metalView: MTKView!
-    var renderer: Renderer?
+    var renderer: MetalbrotRenderer?
     
     init(){
         super.init(nibName: nil, bundle: nil)
@@ -31,7 +31,7 @@ class ViewController: NSViewController {
         metalView = MTKView(frame: self.view.bounds, device: device)
         self.view.addSubview(metalView)
         metalView.autoresizingMask = [.height,.width]
-        renderer = Renderer(device: device, view: metalView)
+        renderer = MetalbrotRenderer(device: device, view: metalView)
         
         print("hello world")
         
