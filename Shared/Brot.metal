@@ -81,10 +81,10 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     //float4 error = float4(1.0,0.0,1.0,1);
     float4 out = float4(0.0,0.0,0.0,1);
   
-    half col = in.position.x;
-    half row = in.position.y;
-    half width = in.viewportSize.x;//1284.0;//in.heightWidth.x;
-    half height = in.viewportSize.y;//2535.0;//in.heightWidth.y;
+    half col = in.position.x;// + 500;
+    half row = in.position.y;// + 800;
+    half width = in.viewportSize.x;// * 4;//1284.0;//in.heightWidth.x;
+    half height = in.viewportSize.y;// * 4;//2535.0;//in.heightWidth.y;
     
     half randomR = 1.0;
     half randomG = 1.0;
@@ -101,11 +101,18 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
         iteration++;
     }
     if (iteration < ITERATION_MAX) {
-        int increase = iteration * 100;
-        int normalizedIncrease = increase / ITERATION_MAX;
-        out.x = randomR * normalizedIncrease;  /* red */
-        out.y = randomG * normalizedIncrease;   /* green */
-        out.z = randomB * normalizedIncrease;  /* blue */
+        
+        half halfiteration = iteration;
+        half normalizedIncrease = halfiteration / 100;
+        
+        out.x = randomR * (normalizedIncrease / 0.333);   /* red */
+        
+        if (normalizedIncrease > 0.333){
+            out.y = randomG * (normalizedIncrease / 0.666); //* normalizedIncrease;   /* green */
+        }
+        if (normalizedIncrease > 0.666){
+            out.z = randomB * (normalizedIncrease / 1.0); //* normalizedIncrease;  /* blue */
+        }
         return out;
     }
         //write black to "void:"
