@@ -71,6 +71,8 @@
 		57ACEA442854F481004D6F23 /* MetalHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalHeaders.h; sourceTree = "<group>"; };
 		57FEEC95285B531C00C4B9B4 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		57FEEC98285B534300C4B9B4 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		57FEEC9B285B563900C4B9B4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		57FEEC9D285B57BB00C4B9B4 /* mbrot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbrot.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,8 @@
 		57ACE9ED2854E23A004D6F23 = {
 			isa = PBXGroup;
 			children = (
+				57FEEC9B285B563900C4B9B4 /* README.md */,
+				57FEEC9C285B575700C4B9B4 /* readme-assets */,
 				57ACEA412854EB89004D6F23 /* Metalbrot (iOS).entitlements */,
 				57ACE9F22854E23A004D6F23 /* Shared */,
 				57558E57285AC30B00B61D64 /* iOS */,
@@ -179,6 +183,14 @@
 				57ACEA192854E23E004D6F23 /* Tests_macOSLaunchTests.swift */,
 			);
 			path = "Tests macOS";
+			sourceTree = "<group>";
+		};
+		57FEEC9C285B575700C4B9B4 /* readme-assets */ = {
+			isa = PBXGroup;
+			children = (
+				57FEEC9D285B57BB00C4B9B4 /* mbrot.png */,
+			);
+			path = "readme-assets";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

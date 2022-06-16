@@ -1,6 +1,6 @@
 //
-//  Renderer.swift
-//  MetalFromTheTop
+//  MetalbrotRenderer.swift
+//  Metalbrot
 //
 //  Created by Joss Manger on 11/24/19.
 //  Copyright © 2019 Joss Manger. All rights reserved.
