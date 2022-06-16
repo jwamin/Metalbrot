@@ -17,13 +17,14 @@ class MetalbrotRenderer: NSObject {
     let pipelineState:MTLRenderPipelineState
     let commandQueue:MTLCommandQueue
     
-    var gon2: [BasicVertex]
-    
     //use semaphore to synchronize CPU and GPU work?
     let semaphore = DispatchSemaphore(value: 0)
     
-    lazy var vertexBuffer = {
-        device.makeBuffer(bytes: gon2, length: gon2.count * MemoryLayout<BasicVertex>.stride, options: [])!
+    lazy var vertexBuffer: MTLBuffer = {
+        let gon2 = gon.map({
+            BasicVertex(position: $0.position)
+        })
+        return device.makeBuffer(bytes: gon2, length: gon2.count * MemoryLayout<BasicVertex>.stride, options: [])!
     }()
     
     lazy var viewportBuffer = {
@@ -31,10 +32,6 @@ class MetalbrotRenderer: NSObject {
     }()
     
     init(device: MTLDevice,view:MTKView){
-        
-        gon2 = gon.map({
-            BasicVertex(position: $0.position)
-        })
         
         self.device = device
         self.library = device.makeDefaultLibrary()!
