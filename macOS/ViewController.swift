@@ -43,7 +43,7 @@ class ViewController: NSViewController {
     
 }
 
-final class SwiftUIMetalKitView: NSViewControllerRepresentable {
+struct SwiftUIMetalKitView: NSViewControllerRepresentable {
 
     typealias NSViewControllerType = ViewController
     typealias NSViewType = NSView
