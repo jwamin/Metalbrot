@@ -38,7 +38,7 @@ class ViewController: NSViewController {
     }
     
     override func mouseDown(with event: NSEvent) {
-        renderer?.render(view: metalView)
+        metalView.setNeedsDisplay(.init(origin: .zero, size: metalView.drawableSize))
     }
     
 }

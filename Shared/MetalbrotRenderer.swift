@@ -63,8 +63,8 @@ class MetalbrotRenderer: NSObject {
         
         descriptor.vertexDescriptor = vertexDescriptor
         
-//        view.enableSetNeedsDisplay = false
-//        view.isPaused = true
+        view.enableSetNeedsDisplay = true
+        view.isPaused = true
         
         pipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
         
@@ -113,7 +113,7 @@ class MetalbrotRenderer: NSObject {
 extension MetalbrotRenderer: MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        
+        view.setNeedsDisplay(.init(origin: .zero, size: size))
     }
     
     
