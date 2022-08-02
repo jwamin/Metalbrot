@@ -44,7 +44,7 @@ class Setting {
     }
 }
 
-final class SwiftUIMetalKitView: UIViewControllerRepresentable {
+struct SwiftUIMetalKitView: UIViewControllerRepresentable {
     
     typealias UIViewControllerType = MetalBrotViewController
     typealias UIViewType = UIView
