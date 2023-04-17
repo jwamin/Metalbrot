@@ -73,7 +73,7 @@ class MetalbrotRenderer: NSObject {
 
     }
     
-    func render(view: MTKView){
+    func render(view: MTKView, drawableSize: CGSize? = nil){
         
         guard let descriptor = view.currentRenderPassDescriptor,
               let commandBuffer = commandQueue.makeCommandBuffer(),
@@ -81,7 +81,7 @@ class MetalbrotRenderer: NSObject {
             fatalError()
         }
         
-        let size = view.drawableSize
+        let size = drawableSize ?? view.drawableSize
         let viewportSize: vector_uint2 = vector_uint2(x: UInt32(size.width), y: UInt32(size.height))
         let ptr = viewportBuffer?.contents()
         ptr?.storeBytes(of: viewportSize, as: vector_uint2.self)
@@ -107,6 +107,8 @@ class MetalbrotRenderer: NSObject {
         
     }
     
+    var customSize: CGSize? = nil
+    
 }
 
 //MARK: Metal Kit
@@ -116,9 +118,13 @@ extension MetalbrotRenderer: MTKViewDelegate {
         view.setNeedsDisplay(.init(origin: .zero, size: size))
     }
     
+    func updateZoomArea(_ newSize: CGSize?){
+        customSize = newSize
+        view.setNeedsDisplay(.init(origin: .zero, size: view.drawableSize))
+    }
     
     func draw(in view: MTKView) {
-        render(view: view)
+        render(view: view,drawableSize: customSize)
     }
     
 }

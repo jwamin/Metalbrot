@@ -41,6 +41,11 @@ class ViewController: NSViewController {
         metalView.setNeedsDisplay(.init(origin: .zero, size: metalView.drawableSize))
     }
     
+    override func scrollWheel(with event: NSEvent) {
+        
+        renderer
+    }
+    
 }
 
 struct SwiftUIMetalKitView: NSViewControllerRepresentable {
