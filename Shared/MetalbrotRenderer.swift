@@ -27,8 +27,9 @@ class MetalbrotRenderer: NSObject {
         return device.makeBuffer(bytes: gon2, length: gon2.count * MemoryLayout<BasicVertex>.stride, options: [])!
     }()
     
-    lazy var viewportBuffer = {
-        device.makeBuffer(length: MemoryLayout<vector_uint2>.stride)
+    lazy var getBuffers = {
+        (device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
+         device.makeBuffer(length: MemoryLayout<vector_uint2>.stride))
     }()
     
     init(device: MTLDevice,view:MTKView){
@@ -61,6 +62,11 @@ class MetalbrotRenderer: NSObject {
         vertexDescriptor.attributes[1].bufferIndex = 1
         vertexDescriptor.layouts[1].stride = MemoryLayout<vector_uint2>.stride
         
+        vertexDescriptor.attributes[2].format = .uint2
+        vertexDescriptor.attributes[2].offset = 0
+        vertexDescriptor.attributes[2].bufferIndex = 2
+        vertexDescriptor.layouts[2].stride = MemoryLayout<vector_uint2>.stride
+        
         descriptor.vertexDescriptor = vertexDescriptor
         
         view.enableSetNeedsDisplay = true
@@ -81,10 +87,15 @@ class MetalbrotRenderer: NSObject {
             fatalError()
         }
         
+        let origin: vector_uint2 = vector_uint2(x: UInt32(100), y: UInt32(200))
+        let (viewportBuffer, originBuffer) = getBuffers
         let size = drawableSize ?? view.drawableSize
         let viewportSize: vector_uint2 = vector_uint2(x: UInt32(size.width), y: UInt32(size.height))
-        let ptr = viewportBuffer?.contents()
-        ptr?.storeBytes(of: viewportSize, as: vector_uint2.self)
+        let sizePtr = viewportBuffer?.contents()
+        sizePtr?.storeBytes(of: viewportSize, as: vector_uint2.self)
+        
+        let originPtr = originBuffer?.contents()
+        originPtr?.storeBytes(of: origin, as: vector_uint2.self)
         
         renderEncoder.setRenderPipelineState(pipelineState)
         
@@ -92,6 +103,7 @@ class MetalbrotRenderer: NSObject {
         
         renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         renderEncoder.setVertexBuffer(viewportBuffer, offset:0, index: 1)
+        renderEncoder.setVertexBuffer(originBuffer, offset: 0, index: 2)
         renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
     
         //END actual draw code

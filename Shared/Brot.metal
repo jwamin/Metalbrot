@@ -61,7 +61,9 @@ using namespace metal;
 
 /// Vertex function
 vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
-                                      constant vector_uint2 *viewportSizePointer [[buffer(AAPLVertexInputIndexViewportSize)]]) {
+                                      constant vector_uint2 *viewportSizePointer [[buffer(AAPLVertexInputIndexViewportSize)]],
+                                      constant vector_int2 *originPointer [[buffer(2)]]
+                                      ) {
     
     //define vertexOut struct
     BrotVertexOut out;
@@ -73,7 +75,7 @@ vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
     
     //assign viewportSize to out struct
     out.viewportSize = viewportSize;
-    
+    out.origin = vector_float2(*originPointer);
     //pass vertex on
     return out;
     
@@ -88,8 +90,8 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     //float4 error = float4(1.0,0.0,1.0,1);
     float4 out = float4(0.0,0.0,0.0,1);
     
-    half col = in.position.x;// + 500;
-    half row = in.position.y;// + 800;
+    half col = in.position.x + in.origin.x;// + 500;
+    half row = in.position.y + in.origin.y;;// + 800;
     half width = in.viewportSize.x;// * 4;//1284.0;//in.heightWidth.x;
     half height = in.viewportSize.y;// * 4;//2535.0;//in.heightWidth.y;
     
