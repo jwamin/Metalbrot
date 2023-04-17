@@ -79,17 +79,17 @@ class MetalbrotRenderer: NSObject {
 
     }
     
-    func render(view: MTKView, drawableSize: CGSize? = nil){
+    func render(view: MTKView, originSize: (Int,Int)?){
         
         guard let descriptor = view.currentRenderPassDescriptor,
               let commandBuffer = commandQueue.makeCommandBuffer(),
               let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
             fatalError()
         }
-        
-        let origin: vector_uint2 = vector_uint2(x: UInt32(100), y: UInt32(200))
+        let origin2 = originSize ?? (0,0)
+        let origin: vector_uint2 = vector_uint2(x: UInt32(origin2.0), y: UInt32(origin2.1))
         let (viewportBuffer, originBuffer) = getBuffers
-        let size = drawableSize ?? view.drawableSize
+        let size = view.drawableSize
         let viewportSize: vector_uint2 = vector_uint2(x: UInt32(size.width), y: UInt32(size.height))
         let sizePtr = viewportBuffer?.contents()
         sizePtr?.storeBytes(of: viewportSize, as: vector_uint2.self)
@@ -136,7 +136,9 @@ extension MetalbrotRenderer: MTKViewDelegate {
     }
     
     func draw(in view: MTKView) {
-        render(view: view,drawableSize: customSize)
+        var tuple = (Int(customSize?.width ?? 0),Int(customSize?.height ?? 0))
+        tuple = (max(tuple.0, 0),max(tuple.1, 0))
+        render(view: view,originSize: tuple)
     }
     
 }

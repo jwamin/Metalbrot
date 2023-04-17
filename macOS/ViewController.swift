@@ -26,24 +26,43 @@ class ViewController: NSViewController {
         view = NSView(frame: NSRect(origin: .zero, size: CGSize(width: 640, height: 480)))
     }
     
+    var gesture: NSPanGestureRecognizer!
+    
     override func viewDidLoad() {
         let device = MTLCreateSystemDefaultDevice()!
         metalView = MTKView(frame: self.view.bounds, device: device)
         self.view.addSubview(metalView)
         metalView.autoresizingMask = [.height,.width]
         renderer = MetalbrotRenderer(device: device, view: metalView)
-        
+        gesture = NSPanGestureRecognizer(target: self, action: nil)
         print("hello world")
         
     }
     
+    var start: NSPoint!
+    var translation: NSPoint!
+    var end: NSPoint!
+    
     override func mouseDown(with event: NSEvent) {
         metalView.setNeedsDisplay(.init(origin: .zero, size: metalView.drawableSize))
+        start = event.locationInWindow
     }
     
-    override func scrollWheel(with event: NSEvent) {
+    override func mouseDragged(with event: NSEvent) {
+        //let location = gesture?.location(in: self.view)
+        translation = event.locationInWindow
+        print("moved at \(translation)")
+        let translation = CGSize(width: start.x - translation.x, height: start.y - translation.y)
         
-        renderer
+        renderer?.updateZoomArea(translation)
+        
+    }
+    
+    override func mouseUp(with event: NSEvent) {
+        
+        //let location = gesture?.location(in: self.view)
+        end = event.locationInWindow
+        print("ended at \(end)")
     }
     
 }
