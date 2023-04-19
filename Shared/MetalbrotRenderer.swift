@@ -119,7 +119,7 @@ class MetalbrotRenderer: NSObject {
         
     }
     
-    var customSize: CGSize? = nil
+    var customSize: CGPoint? = nil
     
 }
 
@@ -130,13 +130,13 @@ extension MetalbrotRenderer: MTKViewDelegate {
         view.setNeedsDisplay(.init(origin: .zero, size: size))
     }
     
-    func updateZoomArea(_ newSize: CGSize?){
+    func updateZoomArea(_ newSize: CGPoint){
         customSize = newSize
         view.setNeedsDisplay(.init(origin: .zero, size: view.drawableSize))
     }
     
     func draw(in view: MTKView) {
-        var tuple = (Int(customSize?.width ?? 0),Int(customSize?.height ?? 0))
+        var tuple = (Int(customSize?.x ?? 0),Int(customSize?.y ?? 0))
         tuple = (max(tuple.0, 0),max(tuple.1, 0))
         render(view: view,originSize: tuple)
     }

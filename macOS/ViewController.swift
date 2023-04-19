@@ -45,15 +45,17 @@ class ViewController: NSViewController {
     
     override func mouseDown(with event: NSEvent) {
         metalView.setNeedsDisplay(.init(origin: .zero, size: metalView.drawableSize))
-        start = event.locationInWindow
+        translation = translation ?? .zero
     }
     
     override func mouseDragged(with event: NSEvent) {
         //let location = gesture?.location(in: self.view)
-        translation = event.locationInWindow
-        print("moved at \(translation)")
-        let translation = CGSize(width: start.x - translation.x, height: start.y - translation.y)
         
+        
+        let translation = CGPoint(x: translation.x - event.deltaX, y: translation.y - event.deltaY)
+        //NSMakePoint(windowOrigin.x + [theEvent deltaX], windowOrigin.y - [theEvent deltaY])
+        print("moved at \(translation)")
+        self.translation = translation
         renderer?.updateZoomArea(translation)
         
     }
