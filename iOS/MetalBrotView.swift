@@ -31,8 +31,31 @@ final class MetalBrotViewController: UIViewController {
         print("hello world")
         
     }
+    
+    var translation: CGPoint = .zero
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        renderer?.render(view: metalView)
+        metalView.setNeedsDisplay(.init(origin: .zero, size: metalView.drawableSize))
+        translation = translation ?? .zero
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        guard let touch = touches.first else {
+            return
+        }
+        
+        let position = touch.location(in: metalView)
+        let previous = touch.previousLocation(in: metalView)
+        
+        let dX = position.x - previous.x
+        let dY = position.y - previous.y
+        
+        let translation = CGPoint(x: translation.x - dX, y: translation.y - dY)
+        
+        print("moved at \(translation)")
+        self.translation = translation
+        renderer?.updateZoomArea(translation)
     }
     
 }
