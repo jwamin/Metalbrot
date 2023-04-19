@@ -62,10 +62,10 @@ class MetalbrotRenderer: NSObject {
         vertexDescriptor.attributes[1].bufferIndex = 1
         vertexDescriptor.layouts[1].stride = MemoryLayout<vector_uint2>.stride
         
-        vertexDescriptor.attributes[2].format = .uint2
+        vertexDescriptor.attributes[2].format = .int2
         vertexDescriptor.attributes[2].offset = 0
         vertexDescriptor.attributes[2].bufferIndex = 2
-        vertexDescriptor.layouts[2].stride = MemoryLayout<vector_uint2>.stride
+        vertexDescriptor.layouts[2].stride = MemoryLayout<vector_int2>.stride
         
         descriptor.vertexDescriptor = vertexDescriptor
         
@@ -87,7 +87,7 @@ class MetalbrotRenderer: NSObject {
             fatalError()
         }
         let origin2 = originSize ?? (0,0)
-        let origin: vector_uint2 = vector_uint2(x: UInt32(origin2.0), y: UInt32(origin2.1))
+        let origin: vector_int2 = vector_int2(x: Int32(origin2.0), y: Int32(origin2.1))
         let (viewportBuffer, originBuffer) = getBuffers
         let size = view.drawableSize
         let viewportSize: vector_uint2 = vector_uint2(x: UInt32(size.width), y: UInt32(size.height))
@@ -95,7 +95,7 @@ class MetalbrotRenderer: NSObject {
         sizePtr?.storeBytes(of: viewportSize, as: vector_uint2.self)
         
         let originPtr = originBuffer?.contents()
-        originPtr?.storeBytes(of: origin, as: vector_uint2.self)
+        originPtr?.storeBytes(of: origin, as: vector_int2.self)
         
         renderEncoder.setRenderPipelineState(pipelineState)
         
@@ -137,7 +137,6 @@ extension MetalbrotRenderer: MTKViewDelegate {
     
     func draw(in view: MTKView) {
         var tuple = (Int(customSize?.x ?? 0),Int(customSize?.y ?? 0))
-        tuple = (max(tuple.0, 0),max(tuple.1, 0))
         render(view: view,originSize: tuple)
     }
     
