@@ -64,7 +64,7 @@ class ViewController: NSViewController {
         
         //let location = gesture?.location(in: self.view)
         end = event.locationInWindow
-        print("ended at \(end)")
+        print("ended at \(end ?? .zero)")
     }
     
 }

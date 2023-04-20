@@ -136,7 +136,7 @@ extension MetalbrotRenderer: MTKViewDelegate {
     }
     
     func draw(in view: MTKView) {
-        var tuple = (Int(customSize?.x ?? 0),Int(customSize?.y ?? 0))
+        let tuple = (Int(customSize?.x ?? 0),Int(customSize?.y ?? 0))
         render(view: view,originSize: tuple)
     }
     

@@ -36,7 +36,7 @@ final class MetalBrotViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         metalView.setNeedsDisplay(.init(origin: .zero, size: metalView.drawableSize))
-        translation = translation ?? .zero
+    
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
