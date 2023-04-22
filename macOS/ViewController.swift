@@ -9,6 +9,15 @@ import Cocoa
 import SwiftUI
 import MetalKit
 
+class MyView: NSView {
+    override func draw(_ dirtyRect: NSRect) {
+//        print("frame",self.frame)
+//        print("drect",dirtyRect)
+//        NSColor.red.setFill()
+//        dirtyRect.fill()
+    }
+}
+
 class ViewController: NSViewController {
 
     var metalView: MTKView!
@@ -36,7 +45,9 @@ class ViewController: NSViewController {
         renderer = MetalbrotRenderer(device: device, view: metalView)
         gesture = NSPanGestureRecognizer(target: self, action: nil)
         print("hello world")
-        
+        viewRect.frame = self.view.bounds
+        viewRect.autoresizingMask = [.height,.width]
+        self.view.addSubview(viewRect)
     }
     
     var start: NSPoint!
@@ -45,8 +56,9 @@ class ViewController: NSViewController {
     
     override func mouseDown(with event: NSEvent) {
         metalView.setNeedsDisplay(.init(origin: .zero, size: metalView.drawableSize))
-        translation = translation ?? .zero
+        translation = renderer?.viewState.frame.origin
     }
+    
     
     override func mouseDragged(with event: NSEvent) {
         //let location = gesture?.location(in: self.view)
@@ -54,18 +66,45 @@ class ViewController: NSViewController {
         
         let translation = CGPoint(x: translation.x - event.deltaX, y: translation.y - event.deltaY)
         //NSMakePoint(windowOrigin.x + [theEvent deltaX], windowOrigin.y - [theEvent deltaY])
-        print("moved at \(translation)")
+        
         self.translation = translation
-        renderer?.updateZoomArea(translation)
+        renderer?.updatePan(translation)
         
     }
     
     override func mouseUp(with event: NSEvent) {
         
         //let location = gesture?.location(in: self.view)
-        end = event.locationInWindow
+        end = translation
         print("ended at \(end ?? .zero)")
     }
+    
+    override func viewDidLayout() {
+        renderer?.updateZoom(self.view.bounds)
+    }
+    
+    let viewRect: MyView = MyView(frame: NSRect(origin: .zero, size: CGSize(width: 30, height: 30)))
+    
+    var startSize: CGRect = .zero
+    var zoomSize: CGRect! = .zero
+    
+    var totalXScale: CGFloat = 100
+    var totalYScale:  CGFloat = 100
+    
+    override func scrollWheel(with event: NSEvent) {
+        
+        totalXScale += event.scrollingDeltaX
+        totalYScale += event.scrollingDeltaY
+        let yScale:CGFloat = totalYScale/100
+        viewRect.layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        viewRect.layer?.position = CGPoint(x: viewRect.bounds.midX, y: viewRect.bounds.midY)
+        viewRect.layer?.setAffineTransform(.init(scaleX: yScale, y: yScale))
+        viewRect.setNeedsDisplay(viewRect.bounds)
+        translation = viewRect.layer?.frame.origin
+        renderer?.viewState.setZoom(viewRect.layer!.frame)
+    }
+    
+
     
 }
 

@@ -31,6 +31,7 @@ struct BrotVertexOut {
     vector_float2 viewportSize;
     float4 color [[ flat ]];
     vector_float2 origin;
+    vector_float2 zoom;
 };
 
 #endif /* MetalHeaders_h */

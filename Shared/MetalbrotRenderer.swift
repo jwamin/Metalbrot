@@ -17,6 +17,12 @@ class MetalbrotRenderer: NSObject {
     let pipelineState:MTLRenderPipelineState
     let commandQueue:MTLCommandQueue
     
+    var viewState: OriginZoom = .zero {
+        didSet{
+            view.setNeedsDisplay(view.bounds)
+        }
+    }
+    
     //use semaphore to synchronize CPU and GPU work?
     let semaphore = DispatchSemaphore(value: 0)
     
@@ -29,6 +35,7 @@ class MetalbrotRenderer: NSObject {
     
     lazy var getBuffers = {
         (device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
+         device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
          device.makeBuffer(length: MemoryLayout<vector_uint2>.stride))
     }()
     
@@ -67,6 +74,12 @@ class MetalbrotRenderer: NSObject {
         vertexDescriptor.attributes[2].bufferIndex = 2
         vertexDescriptor.layouts[2].stride = MemoryLayout<vector_int2>.stride
         
+        vertexDescriptor.attributes[3].format = .int2
+        vertexDescriptor.attributes[3].offset = 0
+        vertexDescriptor.attributes[3].bufferIndex = 3
+        vertexDescriptor.layouts[3].stride = MemoryLayout<vector_int2>.stride
+        
+        
         descriptor.vertexDescriptor = vertexDescriptor
         
         view.enableSetNeedsDisplay = true
@@ -75,20 +88,43 @@ class MetalbrotRenderer: NSObject {
         pipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
         
         super.init()
+        viewState = OriginZoom(frame: self.view.bounds)
         view.delegate = self
 
     }
     
-    func render(view: MTKView, originSize: (Int,Int)?){
+    func render(view: MTKView, originZoom: OriginZoom){
         
         guard let descriptor = view.currentRenderPassDescriptor,
               let commandBuffer = commandQueue.makeCommandBuffer(),
               let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
             fatalError()
         }
-        let origin2 = originSize ?? (0,0)
-        let origin: vector_int2 = vector_int2(x: Int32(origin2.0), y: Int32(origin2.1))
-        let (viewportBuffer, originBuffer) = getBuffers
+        
+        /// \param maxX the the width of the full mandelbrot set image
+        /// \param maxY the height of the full mandelbrot set image
+        /// \param originX the origin horizontal pixel of the sub rect of mandelbrot set we are rendering
+        /// \param originY the origin vertical pixel of the sub rect of mandelbrot set we are rendering
+        /// \param dimensionX the width of the drawing region of mandelbrot set
+        /// \param dimensionY the height of the drawing region of mandelbrot set
+    //    int dimensionXMax = originX + dimensionX;
+    //    int dimensionYMax = originY + dimensionY;
+    //
+    //    for (int row = originY; row < dimensionYMax; row++) {
+    //        for (int col = originX; col < dimensionXMax; col++) {
+        
+    // INSIDE SHADER CODE
+    //            double c_re = (col - maxX / 2.0) * 4.0 / maxX;
+    //            double c_im = (row - maxY / 2.0) * 4.0 / maxX;
+        
+        let origin: vector_int2 = originZoom.getVector(.origin)
+        let zoom: vector_int2 = originZoom.getVector(.zoom)
+        let (viewportBuffer, originBuffer, zoomBuffer) = getBuffers
+        
+        print("will draw from origin \(origin)\n size:\(zoom)")
+        
+        
+        
         let size = view.drawableSize
         let viewportSize: vector_uint2 = vector_uint2(x: UInt32(size.width), y: UInt32(size.height))
         let sizePtr = viewportBuffer?.contents()
@@ -96,6 +132,9 @@ class MetalbrotRenderer: NSObject {
         
         let originPtr = originBuffer?.contents()
         originPtr?.storeBytes(of: origin, as: vector_int2.self)
+
+        let zoomPtr = zoomBuffer?.contents()
+        zoomPtr?.storeBytes(of: zoom, as: vector_int2.self)
         
         renderEncoder.setRenderPipelineState(pipelineState)
         
@@ -104,6 +143,7 @@ class MetalbrotRenderer: NSObject {
         renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         renderEncoder.setVertexBuffer(viewportBuffer, offset:0, index: 1)
         renderEncoder.setVertexBuffer(originBuffer, offset: 0, index: 2)
+        renderEncoder.setVertexBuffer(zoomBuffer, offset: 0, index: 3)
         renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
     
         //END actual draw code
@@ -120,11 +160,43 @@ class MetalbrotRenderer: NSObject {
         
     }
     
-    var customSize: CGPoint? = nil {
-        didSet{
-            view.setNeedsDisplay(.init(origin: .zero, size: view.drawableSize))
-        }
+}
+
+struct OriginZoom {
+    
+    var frame: CGRect
+    
+    enum Value{
+        case origin
+        case zoom
     }
+    
+    func getVector(_ value:Value) -> vector_int2 {
+        
+        switch value{
+        case .origin:
+            return vector_int2(x: Int32(frame.origin.x), y: Int32(frame.origin.y))
+        case .zoom:
+            return vector_int2(x: Int32(frame.size.width), y: Int32(frame.size.height))
+        }
+        
+    }
+    
+    mutating func setOrigin(_ newOrigin: CGPoint){
+        print("got new origin \(newOrigin)")
+        frame = CGRect(origin: newOrigin, size: frame.size)
+        print("frame now \(frame)")
+        
+    }
+    
+    
+    mutating func setZoom(_ newZoom: CGRect){
+        print("got new frame \(newZoom)")
+        frame = newZoom
+        print("frame now \(frame)")
+    }
+    
+    static var zero: OriginZoom = OriginZoom(frame: .zero)
     
 }
 
@@ -135,13 +207,16 @@ extension MetalbrotRenderer: MTKViewDelegate {
         view.setNeedsDisplay(.init(origin: .zero, size: size))
     }
     
-    func updateZoomArea(_ newSize: CGPoint){
-        customSize = newSize
+    func updateZoom(_ newSize: CGRect){
+        viewState.setZoom(newSize)
+    }
+    
+    func updatePan(_ origin: CGPoint){
+        viewState.setOrigin(origin)
     }
     
     func draw(in view: MTKView) {
-        let tuple = (Int(customSize?.x ?? 0),Int(customSize?.y ?? 0))
-        render(view: view,originSize: tuple)
+        render(view: view, originZoom: self.viewState)
     }
     
 }

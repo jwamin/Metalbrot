@@ -54,7 +54,7 @@ final class MetalBrotViewController: UIViewController {
             
             
             let translation = CGPoint(x: currentPosition.x - dX, y: currentPosition.y - dY)
-            self.renderer?.updateZoomArea(translation)
+            self.renderer?.updatePan(translation)
             endPosition = translation
         case.ended, .cancelled, .failed:
             currentPosition = endPosition
@@ -110,7 +110,7 @@ final class MetalBrotViewController: UIViewController {
                         print("done?")
                     })
                     //CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut))
-                    self?.renderer?.customSize?.animatableData = .zero
+                    
                     CATransaction.commit()
                 })
         default:
