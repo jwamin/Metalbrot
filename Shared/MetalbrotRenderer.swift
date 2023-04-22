@@ -113,13 +113,18 @@ class MetalbrotRenderer: NSObject {
             renderEncoder.endEncoding()
             commandBuffer.present(drawable)
             commandBuffer.commit()
+            commandBuffer.waitUntilScheduled()
             commandBuffer.waitUntilCompleted()
             
         }
         
     }
     
-    var customSize: CGPoint? = nil
+    var customSize: CGPoint? = nil {
+        didSet{
+            view.setNeedsDisplay(.init(origin: .zero, size: view.drawableSize))
+        }
+    }
     
 }
 
@@ -132,7 +137,6 @@ extension MetalbrotRenderer: MTKViewDelegate {
     
     func updateZoomArea(_ newSize: CGPoint){
         customSize = newSize
-        view.setNeedsDisplay(.init(origin: .zero, size: view.drawableSize))
     }
     
     func draw(in view: MTKView) {
