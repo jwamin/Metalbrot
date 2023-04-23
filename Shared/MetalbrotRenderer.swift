@@ -79,6 +79,11 @@ class MetalbrotRenderer: NSObject {
         vertexDescriptor.attributes[3].bufferIndex = 3
         vertexDescriptor.layouts[3].stride = MemoryLayout<vector_int2>.stride
         
+        vertexDescriptor.attributes[4].format = .float
+        vertexDescriptor.attributes[4].offset = 0
+        vertexDescriptor.attributes[4].bufferIndex = 4
+        vertexDescriptor.layouts[4].stride = MemoryLayout<Float>.stride
+        
         
         descriptor.vertexDescriptor = vertexDescriptor
         
@@ -120,11 +125,7 @@ class MetalbrotRenderer: NSObject {
         let origin: vector_int2 = originZoom.getVector(.origin)
         let zoom: vector_int2 = originZoom.getVector(.zoom)
         let (viewportBuffer, originBuffer, zoomBuffer) = getBuffers
-        
-        print("will draw from origin \(origin)\n size:\(zoom)")
-        
-        
-        
+
         let size = view.drawableSize
         let viewportSize: vector_uint2 = vector_uint2(x: UInt32(size.width), y: UInt32(size.height))
         let sizePtr = viewportBuffer?.contents()
@@ -138,12 +139,22 @@ class MetalbrotRenderer: NSObject {
         
         renderEncoder.setRenderPipelineState(pipelineState)
         
+        
+        var floatVAdjust: Float = 0
+        
+        #if os(macOS)
+        floatVAdjust = 2
+        #elseif os(iOS)
+        floatVAdjust = 1.5
+        #endif
+        
         //begin actual drawing code
         
         renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         renderEncoder.setVertexBuffer(viewportBuffer, offset:0, index: 1)
         renderEncoder.setVertexBuffer(originBuffer, offset: 0, index: 2)
         renderEncoder.setVertexBuffer(zoomBuffer, offset: 0, index: 3)
+        renderEncoder.setVertexBytes(&floatVAdjust, length: MemoryLayout<Float>.stride, index: 4)
         renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
     
         //END actual draw code

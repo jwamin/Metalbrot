@@ -63,7 +63,6 @@ class ViewController: NSViewController {
     override func mouseDragged(with event: NSEvent) {
         //let location = gesture?.location(in: self.view)
         
-        
         let translation = CGPoint(x: translation.x - event.deltaX, y: translation.y - event.deltaY)
         //NSMakePoint(windowOrigin.x + [theEvent deltaX], windowOrigin.y - [theEvent deltaY])
         
@@ -95,7 +94,7 @@ class ViewController: NSViewController {
         
         totalXScale += event.scrollingDeltaX
         totalYScale += event.scrollingDeltaY
-        let yScale:CGFloat = totalYScale/100
+        let yScale: CGFloat = totalYScale / 100
         viewRect.layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         viewRect.layer?.position = CGPoint(x: viewRect.bounds.midX, y: viewRect.bounds.midY)
         viewRect.layer?.setAffineTransform(.init(scaleX: yScale, y: yScale))

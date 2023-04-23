@@ -63,7 +63,8 @@ using namespace metal;
 vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
                                       constant vector_uint2 *viewportSizePointer [[buffer(AAPLVertexInputIndexViewportSize)]],
                                       constant vector_int2 *originPointer [[buffer(2)]],
-                                      constant vector_int2 *zoomPointer [[buffer(3)]]
+                                      constant vector_int2 *zoomPointer [[buffer(3)]],
+                                      constant float *floater [[buffer(4)]]
                                       ) {
     
     //define vertexOut struct
@@ -78,6 +79,7 @@ vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
     out.viewportSize = viewportSize;
     out.origin = vector_float2(*originPointer);
     out.zoom = vector_float2(*zoomPointer);
+    out.vAdjust = float(*floater);
     //pass vertex on
     return out;
     
@@ -109,34 +111,39 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
 //            double c_im = (row - maxY / 2.0) * 4.0 / maxX;
     
 
-    half col = in.position.x ;// + 500;
-    half row = in.position.y ;// + 800;
-    
-    //414.315, 291.06, 8.370000000000005, 5.8799999999999955
-    
+    half pixX = in.position.x ;// + 500;
+    half pixY = in.position.y ;// + 800;
     half width = in.viewportSize.x;
     half height = in.viewportSize.y;
     
-    half dimensionXMax = in.origin.x + in.zoom.x;
-    half dimensionYMax = in.origin.y + in.zoom.y;
+    //414.315, 291.06, 8.370000000000005, 5.8799999999999955
+    
+    // createSquare(10000,10000,1300,4900,300,300, randomR, randomG, randomB);
+    
+    half pxScaleFactor = in.viewportSize.x / in.zoom.x; // a low number
+    //half resizeFactor = in.viewportSize. / pxScaleFactor;
+
+    
+    half dimensionXMax = in.origin.x * pxScaleFactor;
+    half dimensionYMax = in.origin.y * pxScaleFactor;
 
 // Magic
     const half centerX = width / 2;
     const half centerY = height / 2;
-    const half magicVAdjust = centerY / 2;
+    const half magicVAdjust = (centerY / in.vAdjust) * pxScaleFactor;
     
-    half adjustedColX = ((col / width) * in.zoom.x) + in.origin.x;
-    half adjustedColY = ((row / height) * in.zoom.y) + in.origin.y + magicVAdjust;
+    half adjustedPixX = ((pixX / width) * (in.zoom.x * pxScaleFactor)) + dimensionXMax;
+    half adjustedPixY = ((pixY / height) * (in.zoom.y * pxScaleFactor)) + dimensionYMax + magicVAdjust;
 
-    half adjustedWidth = width;
-    half adjustedHeight = height;
+    half adjustedWidth = width * pxScaleFactor;
+    half adjustedHeight = height * pxScaleFactor;
     
     half randomR = 1.0;
     half randomG = 1.0;
     half randomB = 1.0;
     
-    half c_re = (adjustedColX - adjustedWidth/2.0)*4.0/adjustedWidth;
-    half c_im = (adjustedColY - adjustedHeight/2.0)*4.0/adjustedWidth; //height/width constrains proportions
+    half c_re = (adjustedPixX - adjustedWidth/2.0)*4.0/adjustedWidth;
+    half c_im = (adjustedPixY - adjustedHeight/2.0)*4.0/adjustedWidth; //height/width constrains proportions
     half x = 0, y = 0;
     int iteration = 0;
     while (x*x+y*y <= 4 && iteration < ITERATION_MAX) {
