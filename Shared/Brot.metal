@@ -112,18 +112,21 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     half col = in.position.x ;// + 500;
     half row = in.position.y ;// + 800;
     
+    //414.315, 291.06, 8.370000000000005, 5.8799999999999955
+    
     half width = in.viewportSize.x;
     half height = in.viewportSize.y;
     
     half dimensionXMax = in.origin.x + in.zoom.x;
     half dimensionYMax = in.origin.y + in.zoom.y;
 
-    half centerX = width / 2;
-    half centerY = height / 2;
+// Magic
+    const half centerX = width / 2;
+    const half centerY = height / 2;
+    const half magicVAdjust = centerY / 2;
     
-    
-    half adjustedColX = ((col / width) * dimensionXMax) + in.origin.x;
-    half adjustedColY = ((row / height) * dimensionYMax) + in.origin.y + (height / 4);
+    half adjustedColX = ((col / width) * in.zoom.x) + in.origin.x;
+    half adjustedColY = ((row / height) * in.zoom.y) + in.origin.y + magicVAdjust;
 
     half adjustedWidth = width;
     half adjustedHeight = height;
