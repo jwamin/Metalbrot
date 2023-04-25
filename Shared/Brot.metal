@@ -111,40 +111,40 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
 //            double c_im = (row - maxY / 2.0) * 4.0 / maxX;
     
 
-    half pixX = in.position.x ;// + 500;
-    half pixY = in.position.y ;// + 800;
-    half width = in.viewportSize.x;
-    half height = in.viewportSize.y;
+    const float pixX = in.position.x ;// + 500;
+    const float pixY = in.position.y ;// + 800;
+    const float width = in.viewportSize.x;
+    const float height = in.viewportSize.y;
     
     //414.315, 291.06, 8.370000000000005, 5.8799999999999955
     
     // createSquare(10000,10000,1300,4900,300,300, randomR, randomG, randomB);
     
-    half pxScaleFactor = in.viewportSize.x / in.zoom.x; // a low number
-    //half resizeFactor = in.viewportSize. / pxScaleFactor;
+    const float pxXScaleFactor = in.viewportSize.x / in.zoom.x; // a low number
+    const float pxYScaleFactor = in.viewportSize.y / in.zoom.y;
 
-    
-    half dimensionXMax = in.origin.x * pxScaleFactor;
-    half dimensionYMax = in.origin.y * pxScaleFactor;
+    const float dimensionXMax = in.origin.x * pxXScaleFactor;
+    const float dimensionYMax = in.origin.y * pxYScaleFactor;
 
-// Magic
-    const half centerX = width / 2;
-    const half centerY = height / 2;
-    const half magicVAdjust = (centerY / in.vAdjust) * pxScaleFactor;
+    // Magic
+    //const float centerX = width / 2;
+    const float centerY = height / 2;
+    const float magicVAdjust = (centerY / in.vAdjust) * pxYScaleFactor;
     
-    half adjustedPixX = ((pixX / width) * (in.zoom.x * pxScaleFactor)) + dimensionXMax;
-    half adjustedPixY = ((pixY / height) * (in.zoom.y * pxScaleFactor)) + dimensionYMax + magicVAdjust;
+    const float adjustedPixX = ((pixX / width) * (in.zoom.x * pxXScaleFactor)) + dimensionXMax;
+    const float adjustedPixY = ((pixY / height) * (in.zoom.y * pxYScaleFactor)) + dimensionYMax + magicVAdjust;
 
-    half adjustedWidth = width * pxScaleFactor;
-    half adjustedHeight = height * pxScaleFactor;
+    const float adjustedWidth = width * pxXScaleFactor;
+    const float adjustedHeight = height * pxYScaleFactor;
     
-    half randomR = 1.0;
-    half randomG = 1.0;
-    half randomB = 1.0;
+    const float randomR = 1.0;
+    const float randomG = 1.0;
+    const float randomB = 1.0;
     
-    half c_re = (adjustedPixX - adjustedWidth/2.0)*4.0/adjustedWidth;
-    half c_im = (adjustedPixY - adjustedHeight/2.0)*4.0/adjustedWidth; //height/width constrains proportions
-    half x = 0, y = 0;
+    const float c_re = (adjustedPixX - adjustedWidth/2.0)*4.0/adjustedWidth;
+    const float c_im = (adjustedPixY - adjustedHeight/2.0)*4.0/adjustedWidth; //height/width constrains proportions
+    float x = 0, y = 0;
+    
     int iteration = 0;
     while (x*x+y*y <= 4 && iteration < ITERATION_MAX) {
         half x_new = x*x - y*y + c_re;
@@ -156,7 +156,7 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     if (iteration < ITERATION_MAX) {
         
         half halfiteration = iteration;
-        half normalizedIncrease = halfiteration / 100;
+        half normalizedIncrease = halfiteration / ITERATION_MAX;
         
         out.z = randomR * (normalizedIncrease / 0.333);   /* red */
         
