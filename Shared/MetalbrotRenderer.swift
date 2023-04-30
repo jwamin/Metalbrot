@@ -8,6 +8,10 @@
 
 import MetalKit
 
+protocol MetalViewUpdateDelegate {
+    func translationDidUpdate(point: CGPoint)
+}
+
 class MetalbrotRenderer: NSObject {
     
     let device:MTLDevice
@@ -16,6 +20,8 @@ class MetalbrotRenderer: NSObject {
     let descriptor:MTLRenderPipelineDescriptor
     let pipelineState:MTLRenderPipelineState
     let commandQueue:MTLCommandQueue
+    
+    var delegate: MetalViewUpdateDelegate?
     
     var viewState: OriginZoom = .zero {
         didSet{
@@ -95,7 +101,7 @@ class MetalbrotRenderer: NSObject {
         super.init()
         viewState = OriginZoom(frame: self.view.bounds)
         view.delegate = self
-
+        
     }
     
     func render(view: MTKView, originZoom: OriginZoom){
@@ -121,7 +127,7 @@ class MetalbrotRenderer: NSObject {
     // INSIDE SHADER CODE
     //            double c_re = (col - maxX / 2.0) * 4.0 / maxX;
     //            double c_im = (row - maxY / 2.0) * 4.0 / maxX;
-        
+        print(originZoom)
         let origin: vector_int2 = originZoom.getVector(.origin)
         let zoom: vector_int2 = originZoom.getVector(.zoom)
         let (viewportBuffer, originBuffer, zoomBuffer) = getBuffers
@@ -212,11 +218,18 @@ struct OriginZoom {
     
 }
 
+extension OriginZoom: CustomStringConvertible {
+    var description: String{
+        "\(frame)"
+    }
+}
+
 //MARK: Metal Kit
 extension MetalbrotRenderer: MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        view.setNeedsDisplay(.init(origin: .zero, size: size))
+        viewState.setZoom(.init(origin: viewState.frame.origin, size: size))
+        delegate?.translationDidUpdate(point: size.center)
     }
     
     func updateZoom(_ newSize: CGRect){

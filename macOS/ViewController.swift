@@ -23,6 +23,21 @@ class ViewController: NSViewController {
     var metalView: MTKView!
     var renderer: MetalbrotRenderer?
     
+    let viewRect: MyView = {
+        let view = MyView(frame: NSRect(origin: .zero, size: CGSize(width: 30, height: 30)))
+        
+        return view
+    }()
+    
+    var startSize: CGRect = .zero
+    var zoomSize: CGRect! = .zero
+    
+    var totalXScale: CGFloat = 100
+    var totalYScale:  CGFloat = 100
+    
+    var translation: NSPoint!
+    var gesture: NSPanGestureRecognizer!
+    
     init(){
         super.init(nibName: nil, bundle: nil)
     }
@@ -32,33 +47,29 @@ class ViewController: NSViewController {
     }
     
     override func loadView() {
-        view = NSView(frame: NSRect(origin: .zero, size: CGSize(width: 640, height: 480)))
-    }
-    
-    var gesture: NSPanGestureRecognizer!
-    
-    override func viewDidLoad() {
         let device = MTLCreateSystemDefaultDevice()!
-        metalView = MTKView(frame: self.view.bounds, device: device)
-        self.view.addSubview(metalView)
+        metalView = MTKView(frame: .zero, device: device)
+        self.view = metalView
         metalView.autoresizingMask = [.height,.width]
         renderer = MetalbrotRenderer(device: device, view: metalView)
-        gesture = NSPanGestureRecognizer(target: self, action: nil)
-        print("hello world")
+        renderer?.delegate = self
         viewRect.frame = self.view.bounds
         viewRect.autoresizingMask = [.height,.width]
         self.view.addSubview(viewRect)
     }
-
-    var translation: NSPoint!
     
-    override func viewDidLayout() {
-        renderer?.updateZoom(self.view.bounds)
-        translation = CGPoint(x: self.view.bounds.width / 2, y: self.view.bounds.height / 2)
+    override func viewDidLoad() {
+        gesture = NSPanGestureRecognizer(target: self, action: nil)
+        print("hello world")
+
     }
     
+//    override func viewDidLayout() {
+//        print("view center: \(self.view.bounds.center) \(self.view.frame.center)")
+//        translation = self.view.frame.center
+//    }
+    
     override func mouseDragged(with event: NSEvent) {
-        //let location = gesture?.location(in: self.view)
         
         let translation = CGPoint(x: translation.x - event.deltaX, y: translation.y - event.deltaY)
         viewRect.layer?.position = translation
@@ -67,17 +78,8 @@ class ViewController: NSViewController {
         
     }
     
-    let viewRect: MyView = MyView(frame: NSRect(origin: .zero, size: CGSize(width: 30, height: 30)))
-    
-    var startSize: CGRect = .zero
-    var zoomSize: CGRect! = .zero
-    
-    var totalXScale: CGFloat = 100
-    var totalYScale:  CGFloat = 100
-    
     override func scrollWheel(with event: NSEvent) {
         
-        totalXScale += event.scrollingDeltaX
         totalYScale += event.scrollingDeltaY
         let yScale: CGFloat = totalYScale / 100
         viewRect.layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -88,7 +90,14 @@ class ViewController: NSViewController {
         renderer?.viewState.setZoom(viewRect.layer!.frame)
     }
     
+}
 
+extension ViewController: MetalViewUpdateDelegate {
+    
+    func translationDidUpdate(point: CGPoint) {
+        print("got updated translation \(point)")
+        translation = point
+    }
     
 }
 
@@ -110,3 +119,4 @@ struct SwiftUIMetalKitView: NSViewControllerRepresentable {
     }
     
 }
+
