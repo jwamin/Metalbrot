@@ -49,37 +49,22 @@ class ViewController: NSViewController {
         viewRect.autoresizingMask = [.height,.width]
         self.view.addSubview(viewRect)
     }
-    
-    var start: NSPoint!
+
     var translation: NSPoint!
-    var end: NSPoint!
     
-    override func mouseDown(with event: NSEvent) {
-        metalView.setNeedsDisplay(.init(origin: .zero, size: metalView.drawableSize))
-        translation = renderer?.viewState.frame.origin
+    override func viewDidLayout() {
+        renderer?.updateZoom(self.view.bounds)
+        translation = CGPoint(x: self.view.bounds.width / 2, y: self.view.bounds.height / 2)
     }
-    
     
     override func mouseDragged(with event: NSEvent) {
         //let location = gesture?.location(in: self.view)
         
         let translation = CGPoint(x: translation.x - event.deltaX, y: translation.y - event.deltaY)
-        //NSMakePoint(windowOrigin.x + [theEvent deltaX], windowOrigin.y - [theEvent deltaY])
-        
+        viewRect.layer?.position = translation
         self.translation = translation
         renderer?.updatePan(translation)
         
-    }
-    
-    override func mouseUp(with event: NSEvent) {
-        
-        //let location = gesture?.location(in: self.view)
-        end = translation
-        print("ended at \(end ?? .zero)")
-    }
-    
-    override func viewDidLayout() {
-        renderer?.updateZoom(self.view.bounds)
     }
     
     let viewRect: MyView = MyView(frame: NSRect(origin: .zero, size: CGSize(width: 30, height: 30)))
@@ -96,10 +81,10 @@ class ViewController: NSViewController {
         totalYScale += event.scrollingDeltaY
         let yScale: CGFloat = totalYScale / 100
         viewRect.layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        viewRect.layer?.position = CGPoint(x: viewRect.bounds.midX, y: viewRect.bounds.midY)
+        viewRect.layer?.position = translation
         viewRect.layer?.setAffineTransform(.init(scaleX: yScale, y: yScale))
         viewRect.setNeedsDisplay(viewRect.bounds)
-        translation = viewRect.layer?.frame.origin
+        translation = viewRect.layer?.position
         renderer?.viewState.setZoom(viewRect.layer!.frame)
     }
     

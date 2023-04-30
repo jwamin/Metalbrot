@@ -193,8 +193,9 @@ struct OriginZoom {
         
     }
     
-    mutating func setOrigin(_ newOrigin: CGPoint){
-        print("got new origin \(newOrigin)")
+    mutating func setPosition(_ newPosition: CGPoint){
+        print("got new position \(newPosition)")
+        let newOrigin = CGPoint(x: newPosition.x - (frame.size.width / 2), y: newPosition.y - (frame.size.height / 2))
         frame = CGRect(origin: newOrigin, size: frame.size)
         print("frame now \(frame)")
         
@@ -222,8 +223,8 @@ extension MetalbrotRenderer: MTKViewDelegate {
         viewState.setZoom(newSize)
     }
     
-    func updatePan(_ origin: CGPoint){
-        viewState.setOrigin(origin)
+    func updatePan(_ position: CGPoint){
+        viewState.setPosition(position)
     }
     
     func draw(in view: MTKView) {
