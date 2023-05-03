@@ -53,6 +53,11 @@ class MetalbrotRenderer: NSObject {
         
         self.view = view
         //view.preferredFramesPerSecond = 30
+        if #available(macOS 13.0, *) {
+            (view.layer as! CAMetalLayer).developerHUDProperties = [
+                "mode":"default"
+            ]
+        }
         view.clearColor = Color.systemBlue.metalClearColor()
         
         let vertexFunction = library.makeFunction(name: "brot_vertex_main")
