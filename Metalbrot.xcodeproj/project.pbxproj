@@ -18,7 +18,7 @@
 		57ACEA1E2854E23E004D6F23 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACE9F42854E23A004D6F23 /* ContentView.swift */; };
 		57ACEA1F2854E23E004D6F23 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57ACE9F52854E23E004D6F23 /* Assets.xcassets */; };
 		57ACEA202854E23E004D6F23 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57ACE9F52854E23E004D6F23 /* Assets.xcassets */; };
-		57ACEA332854E2B1004D6F23 /* MetalBrotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA322854E2B1004D6F23 /* MetalBrotView.swift */; };
+		57ACEA332854E2B1004D6F23 /* MetalBrotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA322854E2B1004D6F23 /* MetalBrotViewController.swift */; };
 		57ACEA3C2854E823004D6F23 /* MetalbrotRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA3B2854E823004D6F23 /* MetalbrotRenderer.swift */; };
 		57ACEA3D2854E823004D6F23 /* MetalbrotRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA3B2854E823004D6F23 /* MetalbrotRenderer.swift */; };
 		57ACEA3F2854E87E004D6F23 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA3E2854E87E004D6F23 /* Helpers.swift */; };
@@ -62,7 +62,7 @@
 		57ACEA132854E23E004D6F23 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		57ACEA172854E23E004D6F23 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		57ACEA192854E23E004D6F23 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
-		57ACEA322854E2B1004D6F23 /* MetalBrotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalBrotView.swift; sourceTree = "<group>"; };
+		57ACEA322854E2B1004D6F23 /* MetalBrotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalBrotViewController.swift; sourceTree = "<group>"; };
 		57ACEA352854E7A0004D6F23 /* Brot.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Brot.metal; sourceTree = "<group>"; };
 		57ACEA382854E7EC004D6F23 /* BasicShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BasicShader.metal; sourceTree = "<group>"; };
 		57ACEA3B2854E823004D6F23 /* MetalbrotRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalbrotRenderer.swift; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 		57558E57285AC30B00B61D64 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				57ACEA322854E2B1004D6F23 /* MetalBrotView.swift */,
+				57ACEA322854E2B1004D6F23 /* MetalBrotViewController.swift */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -356,7 +356,7 @@
 				57ACEA1B2854E23E004D6F23 /* MetalbrotApp.swift in Sources */,
 				57ACEA422854F43C004D6F23 /* Brot.metal in Sources */,
 				57ACEA3C2854E823004D6F23 /* MetalbrotRenderer.swift in Sources */,
-				57ACEA332854E2B1004D6F23 /* MetalBrotView.swift in Sources */,
+				57ACEA332854E2B1004D6F23 /* MetalBrotViewController.swift in Sources */,
 				57FEEC96285B531C00C4B9B4 /* Models.swift in Sources */,
 				57FEEC99285B534300C4B9B4 /* Data.swift in Sources */,
 			);
@@ -611,7 +611,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.jossy.Metalbrot;
 				PRODUCT_NAME = Metalbrot;
@@ -639,7 +639,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.jossy.Metalbrot;
 				PRODUCT_NAME = Metalbrot;

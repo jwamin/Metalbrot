@@ -23,13 +23,16 @@ struct VertexOut {
 
 struct BrotVertexIn {
     float2 position [[ attribute(0) ]];
-    //float2 heightWidth [[ attribute (1) ]];
+    float2 origin [[ attribute (2) ]];
 };
 
 struct BrotVertexOut {
     float4 position [[ position ]];
     vector_float2 viewportSize;
     float4 color [[ flat ]];
+    vector_float2 origin;
+    vector_float2 zoom;
+    float vAdjust;
 };
 
 #endif /* MetalHeaders_h */

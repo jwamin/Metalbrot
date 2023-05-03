@@ -61,7 +61,11 @@ using namespace metal;
 
 /// Vertex function
 vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
-                                      constant vector_uint2 *viewportSizePointer [[buffer(AAPLVertexInputIndexViewportSize)]]) {
+                                      constant vector_uint2 *viewportSizePointer [[buffer(AAPLVertexInputIndexViewportSize)]],
+                                      constant vector_int2 *originPointer [[buffer(2)]],
+                                      constant vector_int2 *zoomPointer [[buffer(3)]],
+                                      constant float *floater [[buffer(4)]]
+                                      ) {
     
     //define vertexOut struct
     BrotVertexOut out;
@@ -73,7 +77,9 @@ vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
     
     //assign viewportSize to out struct
     out.viewportSize = viewportSize;
-    
+    out.origin = vector_float2(*originPointer);
+    out.zoom = vector_float2(*zoomPointer);
+    out.vAdjust = float(*floater);
     //pass vertex on
     return out;
     
@@ -88,18 +94,57 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     //float4 error = float4(1.0,0.0,1.0,1);
     float4 out = float4(0.0,0.0,0.0,1);
     
-    half col = in.position.x;// + 500;
-    half row = in.position.y;// + 800;
-    half width = in.viewportSize.x;// * 4;//1284.0;//in.heightWidth.x;
-    half height = in.viewportSize.y;// * 4;//2535.0;//in.heightWidth.y;
+    /// \param maxX the the width of the full mandelbrot set image
+    /// \param maxY the height of the full mandelbrot set image
+    /// \param originX the origin horizontal pixel of the sub rect of mandelbrot set we are rendering
+    /// \param originY the origin vertical pixel of the sub rect of mandelbrot set we are rendering
+    /// \param dimensionX the width of the drawing region of mandelbrot set
+    /// \param dimensionY the height of the drawing region of mandelbrot set
+//    int dimensionXMax = originX + dimensionX;
+//    int dimensionYMax = originY + dimensionY;
+//
+//    for (int row = originY; row < dimensionYMax; row++) {
+//        for (int col = originX; col < dimensionXMax; col++) {
     
-    half randomR = 1.0;
-    half randomG = 1.0;
-    half randomB = 1.0;
+// INSIDE SHADER CODE
+//            double c_re = (col - maxX / 2.0) * 4.0 / maxX;
+//            double c_im = (row - maxY / 2.0) * 4.0 / maxX;
     
-    half c_re = (col - width/2.0)*4.0/width;
-    half c_im = (row - height/2.0)*4.0/width;
-    half x = 0, y = 0;
+
+    const float pixX = in.position.x ;// + 500;
+    const float pixY = in.position.y ;// + 800;
+    const float width = in.viewportSize.x;
+    const float height = in.viewportSize.y;
+    
+    //414.315, 291.06, 8.370000000000005, 5.8799999999999955
+    
+    // createSquare(10000,10000,1300,4900,300,300, randomR, randomG, randomB);
+    
+    const float pxXScaleFactor = in.viewportSize.x / in.zoom.x; // a low number
+    const float pxYScaleFactor = in.viewportSize.y / in.zoom.y;
+
+    const float dimensionXMax = in.origin.x * pxXScaleFactor;
+    const float dimensionYMax = in.origin.y * pxYScaleFactor;
+
+    // Magic
+    //const float centerX = width / 2;
+    const float centerY = height / 2;
+    const float magicVAdjust = (centerY / in.vAdjust) * pxYScaleFactor;
+    
+    const float adjustedPixX = ((pixX / width) * (in.zoom.x * pxXScaleFactor)) + dimensionXMax;
+    const float adjustedPixY = ((pixY / height) * (in.zoom.y * pxYScaleFactor)) + dimensionYMax;// + magicVAdjust;
+
+    const float adjustedWidth = width * pxXScaleFactor;
+    const float adjustedHeight = height * pxYScaleFactor;
+    
+    const float randomR = 1.0;
+    const float randomG = 1.0;
+    const float randomB = 1.0;
+    
+    const float c_re = (adjustedPixX - adjustedWidth/2.0)*4.0/adjustedWidth;
+    const float c_im = (adjustedPixY - adjustedHeight/2.0)*4.0/adjustedWidth; //height/width constrains proportions
+    float x = 0, y = 0;
+    
     int iteration = 0;
     while (x*x+y*y <= 4 && iteration < ITERATION_MAX) {
         half x_new = x*x - y*y + c_re;
@@ -111,7 +156,7 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     if (iteration < ITERATION_MAX) {
         
         half halfiteration = iteration;
-        half normalizedIncrease = halfiteration / 100;
+        half normalizedIncrease = halfiteration / ITERATION_MAX;
         
         out.z = randomR * (normalizedIncrease / 0.333);   /* red */
         
