@@ -16,7 +16,7 @@ import UIKit
 import MetalKit
 import SwiftUI
 
-final class MetalBrotViewController: UIViewController {
+final class MetalbrotViewController: UIViewController {
     
     var metalView: MTKView {
         self.view as! MTKView
@@ -29,7 +29,6 @@ final class MetalBrotViewController: UIViewController {
     var pinchRecognizer: UIPinchGestureRecognizer?
     
     private var firstRun: Bool = true
-    
     
     override func loadView() {
         
@@ -129,10 +128,4 @@ final class MetalBrotViewController: UIViewController {
 
     }
     
-}
-
-extension MetalBrotViewController: MetalViewUpdateDelegate {
-    func translationDidUpdate(point: CGPoint) {
-        translation = point
-    }
 }
