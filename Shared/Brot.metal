@@ -125,11 +125,6 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
 
     const float dimensionXMax = in.origin.x * pxXScaleFactor;
     const float dimensionYMax = in.origin.y * pxYScaleFactor;
-
-    // Magic
-    //const float centerX = width / 2;
-    const float centerY = height / 2;
-    const float magicVAdjust = (centerY / in.vAdjust) * pxYScaleFactor;
     
     const float adjustedPixX = ((pixX / width) * (in.zoom.x * pxXScaleFactor)) + dimensionXMax;
     const float adjustedPixY = ((pixY / height) * (in.zoom.y * pxYScaleFactor)) + dimensionYMax;// + magicVAdjust;

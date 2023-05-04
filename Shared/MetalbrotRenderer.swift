@@ -45,7 +45,14 @@ class MetalbrotRenderer: NSObject {
          device.makeBuffer(length: MemoryLayout<vector_uint2>.stride))
     }()
     
-    init(device: MTLDevice,view:MTKView){
+    convenience init(view: MTKView) {
+        guard let device = view.device else {
+            fatalError("tried to use convenience initializer without MTLDevice on MTKView")
+        }
+        self.init(device: device, view: view)
+    }
+    
+    init(device: MTLDevice,view: MTKView){
         
         self.device = device
         self.library = device.makeDefaultLibrary()!
@@ -53,7 +60,7 @@ class MetalbrotRenderer: NSObject {
         
         self.view = view
         //view.preferredFramesPerSecond = 30
-        if #available(macOS 13.0, *) {
+        if #available(macOS 13.0, iOS 16.0, *) {
             (view.layer as! CAMetalLayer).developerHUDProperties = [
                 "mode":"default"
             ]
@@ -132,7 +139,7 @@ class MetalbrotRenderer: NSObject {
     // INSIDE SHADER CODE
     //            double c_re = (col - maxX / 2.0) * 4.0 / maxX;
     //            double c_im = (row - maxY / 2.0) * 4.0 / maxX;
-        print(originZoom)
+        
         let origin: vector_int2 = originZoom.getVector(.origin)
         let zoom: vector_int2 = originZoom.getVector(.zoom)
         let (viewportBuffer, originBuffer, zoomBuffer) = getBuffers
@@ -152,13 +159,13 @@ class MetalbrotRenderer: NSObject {
         
         
         var floatVAdjust: Float = 0
-        
-        #if os(macOS)
-        floatVAdjust = 2
-        #elseif os(iOS)
-        floatVAdjust = 1.5
-        #endif
-        
+//
+//        #if os(macOS)
+//        floatVAdjust = 2
+//        #elseif os(iOS)
+//        floatVAdjust = 1.5
+//        #endif
+//
         //begin actual drawing code
         
         renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
@@ -205,18 +212,12 @@ struct OriginZoom {
     }
     
     mutating func setPosition(_ newPosition: CGPoint){
-        print("got new position \(newPosition)")
         let newOrigin = CGPoint(x: newPosition.x - (frame.size.width / 2), y: newPosition.y - (frame.size.height / 2))
         frame = CGRect(origin: newOrigin, size: frame.size)
-        print("frame now \(frame)")
-        
     }
     
-    
     mutating func setZoom(_ newZoom: CGRect){
-        print("got new frame \(newZoom)")
         frame = newZoom
-        print("frame now \(frame)")
     }
     
     static var zero: OriginZoom = OriginZoom(frame: .zero)
@@ -233,16 +234,17 @@ extension OriginZoom: CustomStringConvertible {
 extension MetalbrotRenderer: MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        viewState.setZoom(.init(origin: viewState.frame.origin, size: size))
-        delegate?.translationDidUpdate(point: size.center)
+        updateZoom(.init(origin: viewState.frame.origin, size: size))
     }
     
     func updateZoom(_ newSize: CGRect){
         viewState.setZoom(newSize)
+        delegate?.translationDidUpdate(point: newSize.center)
     }
     
     func updatePan(_ position: CGPoint){
         viewState.setPosition(position)
+        delegate?.translationDidUpdate(point: position)
     }
     
     func draw(in view: MTKView) {
