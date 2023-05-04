@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		572656C52A04710A0031B46F /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA382854E7EC004D6F23 /* BasicShader.metal */; };
+		572656C62A04710A0031B46F /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC98285B534300C4B9B4 /* Data.swift */; };
+		572656C72A04710A0031B46F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC95285B531C00C4B9B4 /* Models.swift */; };
+		572656C82A04710A0031B46F /* Brot.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA352854E7A0004D6F23 /* Brot.metal */; };
+		572656C92A04710A0031B46F /* MetalbrotRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA3B2854E823004D6F23 /* MetalbrotRenderer.swift */; };
+		572656CA2A04710F0031B46F /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A033AA2A04471100EB11B2 /* Views.swift */; };
+		572656CB2A04710F0031B46F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57ACE9F52854E23E004D6F23 /* Assets.xcassets */; };
+		572656CD2A04710F0031B46F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA3E2854E87E004D6F23 /* Helpers.swift */; };
+		572656CE2A04710F0031B46F /* MetalbrotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACE9F32854E23A004D6F23 /* MetalbrotApp.swift */; };
+		572656CF2A04710F0031B46F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACE9F42854E23A004D6F23 /* MainView.swift */; };
+		572656D22A0474700031B46F /* MetalbrotBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572656D12A0474700031B46F /* MetalbrotBaseViewController.swift */; };
+		572656D32A0474700031B46F /* MetalbrotBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572656D12A0474700031B46F /* MetalbrotBaseViewController.swift */; };
+		572656D42A0476E20031B46F /* MetalbrotBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572656D12A0474700031B46F /* MetalbrotBaseViewController.swift */; };
 		57558E59285AC36500B61D64 /* MetalbrotViewController-macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57558E58285AC36500B61D64 /* MetalbrotViewController-macOS.swift */; };
 		57A033A62A04123300EB11B2 /* SwiftUIMetalKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A033A52A04123300EB11B2 /* SwiftUIMetalKitView.swift */; };
 		57A033A82A0446B000EB11B2 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A033A72A0446B000EB11B2 /* Extensions.swift */; };
@@ -54,6 +67,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		572656B62A0470FD0031B46F /* Metalbrot-Multiplatform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Metalbrot-Multiplatform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		572656D12A0474700031B46F /* MetalbrotBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MetalbrotBaseViewController.swift; path = "Metalbrot-Multiplatform/MetalbrotBaseViewController.swift"; sourceTree = SOURCE_ROOT; };
 		57558E58285AC36500B61D64 /* MetalbrotViewController-macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MetalbrotViewController-macOS.swift"; path = "macOS/MetalbrotViewController-macOS.swift"; sourceTree = SOURCE_ROOT; };
 		57A033A52A04123300EB11B2 /* SwiftUIMetalKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIMetalKitView.swift; sourceTree = "<group>"; };
 		57A033A72A0446B000EB11B2 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -84,6 +99,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		572656B32A0470FD0031B46F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57ACE9F72854E23E004D6F23 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +137,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		572656B72A0470FD0031B46F /* Metalbrot-Multiplatform */ = {
+			isa = PBXGroup;
+			children = (
+				572656D12A0474700031B46F /* MetalbrotBaseViewController.swift */,
+			);
+			path = "Metalbrot-Multiplatform";
+			sourceTree = "<group>";
+		};
 		57558E57285AC30B00B61D64 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -145,6 +175,7 @@
 				57FEEC9C285B575700C4B9B4 /* readme-assets */,
 				57A033AD2A0448D000EB11B2 /* Metal */,
 				57ACE9F22854E23A004D6F23 /* Shared */,
+				572656B72A0470FD0031B46F /* Metalbrot-Multiplatform */,
 				57558E57285AC30B00B61D64 /* iOS */,
 				57ACEA012854E23E004D6F23 /* macOS */,
 				57ACEA0A2854E23E004D6F23 /* Tests iOS */,
@@ -173,6 +204,7 @@
 				57ACEA002854E23E004D6F23 /* Metalbrot.app */,
 				57ACEA072854E23E004D6F23 /* Tests iOS.xctest */,
 				57ACEA132854E23E004D6F23 /* Tests macOS.xctest */,
+				572656B62A0470FD0031B46F /* Metalbrot-Multiplatform.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -215,6 +247,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		572656B52A0470FD0031B46F /* Metalbrot-Multiplatform */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 572656C42A0470FE0031B46F /* Build configuration list for PBXNativeTarget "Metalbrot-Multiplatform" */;
+			buildPhases = (
+				572656B22A0470FD0031B46F /* Sources */,
+				572656B32A0470FD0031B46F /* Frameworks */,
+				572656B42A0470FD0031B46F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Metalbrot-Multiplatform";
+			productName = "Metalbrot-Multiplatform";
+			productReference = 572656B62A0470FD0031B46F /* Metalbrot-Multiplatform.app */;
+			productType = "com.apple.product-type.application";
+		};
 		57ACE9F92854E23E004D6F23 /* Metalbrot (iOS) */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 57ACEA232854E23E004D6F23 /* Build configuration list for PBXNativeTarget "Metalbrot (iOS)" */;
@@ -292,9 +341,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1340;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1340;
 				TargetAttributes = {
+					572656B52A0470FD0031B46F = {
+						CreatedOnToolsVersion = 14.3;
+					};
 					57ACE9F92854E23E004D6F23 = {
 						CreatedOnToolsVersion = 13.4.1;
 					};
@@ -324,6 +376,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				572656B52A0470FD0031B46F /* Metalbrot-Multiplatform */,
 				57ACE9F92854E23E004D6F23 /* Metalbrot (iOS) */,
 				57ACE9FF2854E23E004D6F23 /* Metalbrot (macOS) */,
 				57ACEA062854E23E004D6F23 /* Tests iOS */,
@@ -333,6 +386,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		572656B42A0470FD0031B46F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				572656CB2A04710F0031B46F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57ACE9F82854E23E004D6F23 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -366,6 +427,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		572656B22A0470FD0031B46F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				572656CF2A04710F0031B46F /* MainView.swift in Sources */,
+				572656CD2A04710F0031B46F /* Helpers.swift in Sources */,
+				572656C82A04710A0031B46F /* Brot.metal in Sources */,
+				572656D32A0474700031B46F /* MetalbrotBaseViewController.swift in Sources */,
+				572656C52A04710A0031B46F /* BasicShader.metal in Sources */,
+				572656CA2A04710F0031B46F /* Views.swift in Sources */,
+				572656C62A04710A0031B46F /* Data.swift in Sources */,
+				572656C92A04710A0031B46F /* MetalbrotRenderer.swift in Sources */,
+				572656CE2A04710F0031B46F /* MetalbrotApp.swift in Sources */,
+				572656C72A04710A0031B46F /* Models.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57ACE9F62854E23E004D6F23 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -378,6 +456,7 @@
 				57ACEA422854F43C004D6F23 /* Brot.metal in Sources */,
 				57A033A82A0446B000EB11B2 /* Extensions.swift in Sources */,
 				57ACEA3C2854E823004D6F23 /* MetalbrotRenderer.swift in Sources */,
+				572656D22A0474700031B46F /* MetalbrotBaseViewController.swift in Sources */,
 				57ACEA332854E2B1004D6F23 /* MetalbrotViewController.swift in Sources */,
 				57FEEC96285B531C00C4B9B4 /* Models.swift in Sources */,
 				57FEEC99285B534300C4B9B4 /* Data.swift in Sources */,
@@ -390,6 +469,7 @@
 			files = (
 				57558E59285AC36500B61D64 /* MetalbrotViewController-macOS.swift in Sources */,
 				57A033A92A0446B000EB11B2 /* Extensions.swift in Sources */,
+				572656D42A0476E20031B46F /* MetalbrotBaseViewController.swift in Sources */,
 				57ACEA1E2854E23E004D6F23 /* MainView.swift in Sources */,
 				57ACEA402854E87E004D6F23 /* Helpers.swift in Sources */,
 				57A033AC2A04471100EB11B2 /* Views.swift in Sources */,
@@ -435,6 +515,92 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		572656C22A0470FE0031B46F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Metalbrot;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jossy.Metalbrot-Multiplatform";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,3";
+			};
+			name = Debug;
+		};
+		572656C32A0470FE0031B46F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Metalbrot;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jossy.Metalbrot-Multiplatform";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,3";
+			};
+			name = Release;
+		};
 		57ACEA212854E23E004D6F23 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -759,6 +925,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		572656C42A0470FE0031B46F /* Build configuration list for PBXNativeTarget "Metalbrot-Multiplatform" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				572656C22A0470FE0031B46F /* Debug */,
+				572656C32A0470FE0031B46F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		57ACE9F12854E23A004D6F23 /* Build configuration list for PBXProject "Metalbrot" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
