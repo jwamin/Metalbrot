@@ -29,10 +29,6 @@ class ViewController: NSViewController {
         return view
     }()
     
-    var startSize: CGRect = .zero
-    var zoomSize: CGRect! = .zero
-    
-    var totalXScale: CGFloat = 100
     var totalYScale:  CGFloat = 100
     
     var translation: NSPoint!
