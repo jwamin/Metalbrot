@@ -18,7 +18,7 @@ class MyView: NSView {
     }
 }
 
-class ViewController: NSViewController {
+class MetalbrotViewController: NSViewController {
 
     var metalView: MTKView!
     var renderer: MetalbrotRenderer?
@@ -29,10 +29,6 @@ class ViewController: NSViewController {
         return view
     }()
     
-    var startSize: CGRect = .zero
-    var zoomSize: CGRect! = .zero
-    
-    var totalXScale: CGFloat = 100
     var totalYScale:  CGFloat = 100
     
     var translation: NSPoint!
@@ -64,11 +60,6 @@ class ViewController: NSViewController {
 
     }
     
-//    override func viewDidLayout() {
-//        print("view center: \(self.view.bounds.center) \(self.view.frame.center)")
-//        translation = self.view.frame.center
-//    }
-    
     override func mouseDragged(with event: NSEvent) {
         
         let translation = CGPoint(x: translation.x - event.deltaX, y: translation.y - event.deltaY)
@@ -87,36 +78,11 @@ class ViewController: NSViewController {
         viewRect.layer?.setAffineTransform(.init(scaleX: yScale, y: yScale))
         viewRect.setNeedsDisplay(viewRect.bounds)
         translation = viewRect.layer?.position
-        renderer?.viewState.setZoom(viewRect.layer!.frame)
+        renderer?.updateZoom(viewRect.layer!.frame, updateDelegate: false)
     }
     
 }
 
-extension ViewController: MetalViewUpdateDelegate {
-    
-    func translationDidUpdate(point: CGPoint) {
-        print("got updated translation \(point)")
-        translation = point
-    }
-    
-}
 
-struct SwiftUIMetalKitView: NSViewControllerRepresentable {
 
-    typealias NSViewControllerType = ViewController
-    typealias NSViewType = NSView
-    
-    func makeNSViewController(context: Context) -> ViewController {
-        ViewController()
-    }
-    
-    func updateNSViewController(_ nsViewController: ViewController, context: Context) {
-        print("view updated")
-    }
-    
-    func makeCoordinator() -> Bool? {
-        true
-    }
-    
-}
 

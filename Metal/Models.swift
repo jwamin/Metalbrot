@@ -19,7 +19,6 @@ struct ColoredVertex{
         color = [blob.2,blob.3,blob.4,blob.5]
     }
     
-    
 }
 
 struct BasicVertex {
