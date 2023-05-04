@@ -10,7 +10,7 @@ import SwiftUI
 #if os(macOS)
 import Cocoa
 typealias VCRepresentable = NSViewControllerRepresentable
-#elseif os(iOS)
+#elseif os(iOS) || os(tvOS)
 import UIKit
 typealias VCRepresentable = UIViewControllerRepresentable
 #elseif targetEnvironment(macCatalyst)
@@ -19,7 +19,7 @@ import UIKit
 
 
 struct SwiftUIMetalKitView: VCRepresentable {
-
+    
 #if os(macOS)
     typealias NSViewControllerType = MetalbrotViewController
     typealias NSViewType = NSView
@@ -35,7 +35,7 @@ struct SwiftUIMetalKitView: VCRepresentable {
     func makeCoordinator() -> Bool? {
         true
     }
-
+    
 #elseif os(iOS) || targetEnvironment(macCatalyst)
     typealias UIViewControllerType = MetalbrotViewController
     typealias UIViewType = UIView
@@ -52,9 +52,22 @@ struct SwiftUIMetalKitView: VCRepresentable {
         Setting()
     }
     
-    #endif
+#else
+    typealias UIViewControllerType = MetalbrotBaseViewController
+    typealias UIViewType = UIView
+    
+    func makeUIViewController(context: Context) -> MetalbrotBaseViewController {
+        MetalbrotBaseViewController()
+    }
+    
+    func updateUIViewController(_ uiViewController: MetalbrotBaseViewController, context: Context) {
+        print("view updated")
+    }
+    
+#endif
     
 }
+
 
 struct SwiftUIMetalKitView_Previews: PreviewProvider {
     static var previews: some View {

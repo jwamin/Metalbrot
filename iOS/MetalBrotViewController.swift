@@ -5,55 +5,31 @@
 //  Created by Joss Manger on 6/11/22.
 //
 
-#if os(macOS)
-import Cocoa
-#elseif os(iOS)
 import UIKit
-#elseif targetEnvironment(macCatalyst)
-import UIKit
-#endif
-
 import MetalKit
 import SwiftUI
 
-final class MetalbrotViewController: UIViewController {
+final class MetalbrotViewController: MetalbrotBaseViewController {
     
-    var metalView: MTKView {
-        self.view as! MTKView
-    }
     var guideLayer: CALayer!
     var translation: CGPoint!
-    
-    var renderer: MetalbrotRenderer?
     var panRecognizer: UIPanGestureRecognizer?
     var pinchRecognizer: UIPinchGestureRecognizer?
     
     private var firstRun: Bool = true
     
-    override func loadView() {
-        
-        guard let device = MTLCreateSystemDefaultDevice() else {
-            fatalError("No Metal Device")
-        }
-        
-        let metalView = MTKView(frame: .zero, device: device)
-        self.view = metalView
-        metalView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
-    }
-    
     override func viewDidLoad() {
-
-        renderer = MetalbrotRenderer(view: metalView)
+        super.viewDidLoad()
         renderer?.delegate = self
         
         print("hello world")
     
         setupGuideLayer()
         setupGestures()
-        
     }
     
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         if firstRun{
             guideLayer.frame = self.view.frame
             firstRun = false
