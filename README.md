@@ -10,13 +10,12 @@
 * Metal Shaders to draw set
 * Viewport Sizing
 * Basic coloring
-* Pan and Zoom on MacOS
+* Pan and Zoom on MacOS, iOS
 
 ## TODO
 
-* Reset on macOS
-* Pan, Zoom, Reset on iOS
-* Reset Zoom w/ Animation
+* Reset on macOS, iOS
+* Reset Zoom w/ Animation, interpolation
 * Color options
 * Print
 * Settings, Disable Metal HUD etc
