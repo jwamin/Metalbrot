@@ -11,7 +11,7 @@ import SwiftUI
 struct MetalbrotApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
                 .edgesIgnoringSafeArea(.all)
         }
     }

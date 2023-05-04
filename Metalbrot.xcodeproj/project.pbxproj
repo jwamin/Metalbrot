@@ -19,8 +19,8 @@
 		57ACEA1A2854E23E004D6F23 /* Tests_macOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA192854E23E004D6F23 /* Tests_macOSLaunchTests.swift */; };
 		57ACEA1B2854E23E004D6F23 /* MetalbrotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACE9F32854E23A004D6F23 /* MetalbrotApp.swift */; };
 		57ACEA1C2854E23E004D6F23 /* MetalbrotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACE9F32854E23A004D6F23 /* MetalbrotApp.swift */; };
-		57ACEA1D2854E23E004D6F23 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACE9F42854E23A004D6F23 /* ContentView.swift */; };
-		57ACEA1E2854E23E004D6F23 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACE9F42854E23A004D6F23 /* ContentView.swift */; };
+		57ACEA1D2854E23E004D6F23 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACE9F42854E23A004D6F23 /* MainView.swift */; };
+		57ACEA1E2854E23E004D6F23 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACE9F42854E23A004D6F23 /* MainView.swift */; };
 		57ACEA1F2854E23E004D6F23 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57ACE9F52854E23E004D6F23 /* Assets.xcassets */; };
 		57ACEA202854E23E004D6F23 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57ACE9F52854E23E004D6F23 /* Assets.xcassets */; };
 		57ACEA332854E2B1004D6F23 /* MetalbrotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA322854E2B1004D6F23 /* MetalbrotViewController.swift */; };
@@ -59,7 +59,7 @@
 		57A033A72A0446B000EB11B2 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		57A033AA2A04471100EB11B2 /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
 		57ACE9F32854E23A004D6F23 /* MetalbrotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalbrotApp.swift; sourceTree = "<group>"; };
-		57ACE9F42854E23A004D6F23 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		57ACE9F42854E23A004D6F23 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		57ACE9F52854E23E004D6F23 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		57ACE9FA2854E23E004D6F23 /* Metalbrot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metalbrot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57ACEA002854E23E004D6F23 /* Metalbrot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metalbrot.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,8 +157,8 @@
 			isa = PBXGroup;
 			children = (
 				57ACE9F32854E23A004D6F23 /* MetalbrotApp.swift */,
+				57ACE9F42854E23A004D6F23 /* MainView.swift */,
 				57A033AA2A04471100EB11B2 /* Views.swift */,
-				57ACE9F42854E23A004D6F23 /* ContentView.swift */,
 				57A033A72A0446B000EB11B2 /* Extensions.swift */,
 				57ACEA3E2854E87E004D6F23 /* Helpers.swift */,
 				57ACE9F52854E23E004D6F23 /* Assets.xcassets */,
@@ -370,7 +370,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57ACEA1D2854E23E004D6F23 /* ContentView.swift in Sources */,
+				57ACEA1D2854E23E004D6F23 /* MainView.swift in Sources */,
 				57A033A62A04123300EB11B2 /* SwiftUIMetalKitView.swift in Sources */,
 				57ACEA3F2854E87E004D6F23 /* Helpers.swift in Sources */,
 				57A033AB2A04471100EB11B2 /* Views.swift in Sources */,
@@ -390,7 +390,7 @@
 			files = (
 				57558E59285AC36500B61D64 /* MetalbrotViewController-macOS.swift in Sources */,
 				57A033A92A0446B000EB11B2 /* Extensions.swift in Sources */,
-				57ACEA1E2854E23E004D6F23 /* ContentView.swift in Sources */,
+				57ACEA1E2854E23E004D6F23 /* MainView.swift in Sources */,
 				57ACEA402854E87E004D6F23 /* Helpers.swift in Sources */,
 				57A033AC2A04471100EB11B2 /* Views.swift in Sources */,
 				57ACEA1C2854E23E004D6F23 /* MetalbrotApp.swift in Sources */,
@@ -485,8 +485,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -540,8 +540,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -562,12 +562,13 @@
 				DEVELOPMENT_TEAM = 3C42F7N9CQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -595,12 +596,13 @@
 				DEVELOPMENT_TEAM = 3C42F7N9CQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -630,12 +632,13 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.jossy.Metalbrot;
 				PRODUCT_NAME = Metalbrot;
@@ -658,12 +661,13 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.jossy.Metalbrot;
 				PRODUCT_NAME = Metalbrot;

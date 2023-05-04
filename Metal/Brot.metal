@@ -63,8 +63,7 @@ using namespace metal;
 vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
                                       constant vector_uint2 *viewportSizePointer [[buffer(AAPLVertexInputIndexViewportSize)]],
                                       constant vector_int2 *originPointer [[buffer(2)]],
-                                      constant vector_int2 *zoomPointer [[buffer(3)]],
-                                      constant float *floater [[buffer(4)]]
+                                      constant vector_int2 *zoomPointer [[buffer(3)]]
                                       ) {
     
     //define vertexOut struct
@@ -79,7 +78,6 @@ vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
     out.viewportSize = viewportSize;
     out.origin = vector_float2(*originPointer);
     out.zoom = vector_float2(*zoomPointer);
-    out.vAdjust = float(*floater);
     //pass vertex on
     return out;
     
