@@ -18,43 +18,78 @@ import SwiftUI
 
 final class MetalBrotViewController: UIViewController {
     
-    var metalView: MTKView!
+    var metalView: MTKView {
+        self.view as! MTKView
+    }
+    var guideLayer: CALayer!
+    var translation: CGPoint!
+    
     var renderer: MetalbrotRenderer?
     var panRecognizer: UIPanGestureRecognizer?
     var pinchRecognizer: UIPinchGestureRecognizer?
-    var currentPosition: CGPoint = .zero
-    var endPosition: CGPoint = .zero
+    
     private var firstRun: Bool = true
-    var guideLayer: CALayer!
-    override func viewDidLoad() {
-        let device = MTLCreateSystemDefaultDevice()!
-        metalView = MTKView(frame: self.view.bounds, device: device)
-        self.view.addSubview(metalView)
-        metalView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
-        metalView.presentsWithTransaction = true
+    
+    
+    override func loadView() {
         
-        renderer = MetalbrotRenderer(device: device, view: metalView)
-        panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan(_:)))
-        panRecognizer?.maximumNumberOfTouches = 1
-        metalView.addGestureRecognizer(panRecognizer!)
-        pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch(_:)))
-        metalView.addGestureRecognizer(pinchRecognizer!)
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            fatalError("No Metal Device")
+        }
+        
+        let metalView = MTKView(frame: .zero, device: device)
+        self.view = metalView
+        metalView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+    }
+    
+    override func viewDidLoad() {
+
+        renderer = MetalbrotRenderer(view: metalView)
+        renderer?.delegate = self
+        
         print("hello world")
-        guideLayer = CALayer()
-//        guideLayer.backgroundColor = UIColor.magenta.cgColor
-//        guideLayer.opacity = 0.2
-        guideLayer.frame = self.view.bounds
-        guideLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5) //TODO: centerAnchor
-        self.view.layer.addSublayer(guideLayer)
+    
+        setupGuideLayer()
+        setupGestures()
         
     }
     
     override func viewDidLayoutSubviews() {
         if firstRun{
-            renderer?.updateZoom(self.view.bounds)
+            guideLayer.frame = self.view.frame
             firstRun = false
         }
     }
+    
+    func setupGuideLayer(){
+        guideLayer = CALayer()
+        guideLayer.frame = self.view.bounds
+        
+        //DEBUGGING
+//        guideLayer.backgroundColor = UIColor.magenta.cgColor
+//        guideLayer.opacity = 0.5
+        view.layer.addSublayer(guideLayer)
+    }
+    
+    func setupGestures(){
+        panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan(_:)))
+        panRecognizer?.maximumNumberOfTouches = 1
+        view.addGestureRecognizer(panRecognizer!)
+        pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch(_:)))
+        view.addGestureRecognizer(pinchRecognizer!)
+    }
+    
+//    override func mouseDragged(with event: NSEvent) {
+//
+//        let translation = CGPoint(x: translation.x - event.deltaX, y: translation.y - event.deltaY)
+//        viewRect.layer?.position = translation
+//        self.translation = translation
+//        renderer?.updatePan(translation)
+//
+//    }
+    
+    var startPosition: CGPoint!
+    var endPosition: CGPoint!
     
     @objc
     func handlePan(_ recognizer: UIPanGestureRecognizer){
@@ -71,120 +106,53 @@ final class MetalBrotViewController: UIViewController {
             let dY = gestureTranslation.y * multiplyer
             
             
-            let translation = CGPoint(x: currentPosition.x - dX, y: currentPosition.y - dY)
-            self.renderer?.updatePan(translation)
+            let translation = CGPoint(x: translation.x - dX, y: translation.y - dY)
+            
+            self.renderer?.updatePan(translation, updateDelegate: false)
             endPosition = translation
         case.ended, .cancelled, .failed:
-            currentPosition = endPosition
-            //let velocity = recognizer.velocity(in: metalView)
-            //            //animate back to center
-            //            // 1
-            //            let velocity = recognizer.velocity(in: view)
-            //            let magnitude = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y))
-            //            let slideMultiplier = magnitude / 200
-            //
-            //            // 2
-            //            let slideFactor = 0.1 * slideMultiplier
-            //            // 3
-            //            var finalPoint = CGPoint(
-            //              x: metalView.center.x + (velocity.x * slideFactor),
-            //              y: metalView.center.y + (velocity.y * slideFactor)
-            //            )
-            //
-            //            // 4
-            //            finalPoint.x = min(max(finalPoint.x, 0), view.bounds.width)
-            //            finalPoint.y = min(max(finalPoint.y, 0), view.bounds.height)
-            //
-            //            // 5
-            //            print("ended at \(gesturePosition)")
-            //
-            //            let animation = CABasicAnimation(keyPath: "customSize")
-            //            animation.fromValue = currentPosition
-            //            animation.toValue = CGPoint.zero
-            //            animation.duration = 2
-            //            animation.isRemovedOnCompletion = true
-            //            metalView.layer
-            //            UIView.animate(
-            //              //withDuration: Double(slideFactor * 2),
-            //                withDuration: 2,
-            //              delay: 0,
-            //              // 6
-            //              options: .curveEaseOut,
-            //              animations: { [weak self] in
-            //                  self?.renderer?.customSize = .zero
-            //            })
-            
-//            UIView.animate(
-//                //withDuration: Double(slideFactor * 2),
-//                withDuration: 2,
-//                delay: 0,
-//                // 6
-//                options: .curveEaseOut,
-//                animations: { [weak self] in
-//                    CATransaction.begin()
-//                    CATransaction.setAnimationDuration(2)
-//
-//                    CATransaction.setCompletionBlock({ [weak self] in
-//                        self?.currentPosition = .zero
-//                        print("done?")
-//                    })
-//                    //CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut))
-//
-//                    CATransaction.commit()
-//                })
+            translation = endPosition
+
         default:
             print("do nothing with gesture state \(recognizer.state)")
         }
     }
     
+    //    override func scrollWheel(with event: NSEvent) {
+    //
+    //        totalYScale += event.scrollingDeltaY
+    //        let yScale: CGFloat = totalYScale / 100
+    //        viewRect.layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+    //        viewRect.layer?.position = translation
+    //        viewRect.layer?.setAffineTransform(.init(scaleX: yScale, y: yScale))
+    //        viewRect.setNeedsDisplay(viewRect.bounds)
+    //        translation = viewRect.layer?.position
+    //        renderer?.viewState.setZoom(viewRect.layer!.frame)
+    //    }
+    
     @objc
     func handlePinch(_ recognizer: UIPinchGestureRecognizer){
         
-        switch(recognizer.state){
-        case .changed:
-            let scale = recognizer.scale
-            print(scale)
-            
-            CATransaction.begin()
-            CATransaction.setDisableActions(true)
-            
-            guideLayer.position = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
-            guideLayer.setAffineTransform(.init(scaleX: -scale, y: -scale))
-            print("glfram",guideLayer.frame)
-            self.view.layer.layoutSublayers()
-            CATransaction.commit()
-            renderer?.updateZoom(guideLayer.frame)
-        default:
-            print("do nothing")
-        }
-        
+//        switch(recognizer.state){
+//        case .began,.changed:
+//            let scale = recognizer.scale
+//            guideLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5) //TODO: centerAnchor
+//            guideLayer.setAffineTransform(.init(scaleX: scale, y: scale))
+////            self.view.layer.setNeedsLayout()
+////            self.view.layer.layoutSublayers()
+//            renderer?.updateZoom(guideLayer.frame)
+//            recognizer.scale = 1.0
+//        default:
+//            print("do nothing gestureState: \(recognizer.state)")
+//        }
+//
     }
     
 }
 
-class Setting {
-    let bool: Bool
-    init(newBool: Bool = false){
-        self.bool = newBool
+extension MetalBrotViewController: MetalViewUpdateDelegate {
+    func translationDidUpdate(point: CGPoint) {
+        translation = point
+        guideLayer.position = point
     }
-}
-
-struct SwiftUIMetalKitView: UIViewControllerRepresentable {
-    
-    typealias UIViewControllerType = MetalBrotViewController
-    typealias UIViewType = UIView
-    
-    func makeUIViewController(context: Context) -> MetalBrotViewController {
-        MetalBrotViewController()
-    }
-    
-    func updateUIViewController(_ uiViewController: MetalBrotViewController, context: Context) {
-        print("view updated")
-    }
-    
-    func makeCoordinator() -> Setting {
-        Setting()
-    }
-    
-    
 }

@@ -23,7 +23,7 @@ class MetalbrotRenderer: NSObject {
     
     var delegate: MetalViewUpdateDelegate?
     
-    var viewState: OriginZoom = .zero {
+    private var viewState: OriginZoom = .zero {
         didSet{
             view.setNeedsDisplay(view.bounds)
         }
@@ -237,14 +237,18 @@ extension MetalbrotRenderer: MTKViewDelegate {
         updateZoom(.init(origin: viewState.frame.origin, size: size))
     }
     
-    func updateZoom(_ newSize: CGRect){
+    func updateZoom(_ newSize: CGRect, updateDelegate: Bool = true){
         viewState.setZoom(newSize)
-        delegate?.translationDidUpdate(point: newSize.center)
+        if updateDelegate {
+            delegate?.translationDidUpdate(point: newSize.center)
+        }
     }
     
-    func updatePan(_ position: CGPoint){
+    func updatePan(_ position: CGPoint, updateDelegate: Bool = true){
         viewState.setPosition(position)
-        delegate?.translationDidUpdate(point: position)
+        if updateDelegate {
+            delegate?.translationDidUpdate(point: position)
+        }
     }
     
     func draw(in view: MTKView) {

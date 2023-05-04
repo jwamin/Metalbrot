@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		57558E59285AC36500B61D64 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57558E58285AC36500B61D64 /* ViewController.swift */; };
+		57A033A62A04123300EB11B2 /* SwiftUIMetalKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A033A52A04123300EB11B2 /* SwiftUIMetalKitView.swift */; };
 		57ACEA0C2854E23E004D6F23 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA0B2854E23E004D6F23 /* Tests_iOS.swift */; };
 		57ACEA0E2854E23E004D6F23 /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA0D2854E23E004D6F23 /* Tests_iOSLaunchTests.swift */; };
 		57ACEA182854E23E004D6F23 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA172854E23E004D6F23 /* Tests_macOS.swift */; };
@@ -50,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		57558E58285AC36500B61D64 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = macOS/ViewController.swift; sourceTree = SOURCE_ROOT; };
+		57A033A52A04123300EB11B2 /* SwiftUIMetalKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIMetalKitView.swift; sourceTree = "<group>"; };
 		57ACE9F32854E23A004D6F23 /* MetalbrotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalbrotApp.swift; sourceTree = "<group>"; };
 		57ACE9F42854E23A004D6F23 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		57ACE9F52854E23E004D6F23 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				57ACEA322854E2B1004D6F23 /* MetalBrotViewController.swift */,
+				57A033A52A04123300EB11B2 /* SwiftUIMetalKitView.swift */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57ACEA1D2854E23E004D6F23 /* ContentView.swift in Sources */,
+				57A033A62A04123300EB11B2 /* SwiftUIMetalKitView.swift in Sources */,
 				57ACEA3F2854E87E004D6F23 /* Helpers.swift in Sources */,
 				57ACEA1B2854E23E004D6F23 /* MetalbrotApp.swift in Sources */,
 				57ACEA422854F43C004D6F23 /* Brot.metal in Sources */,

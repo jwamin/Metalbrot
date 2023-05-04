@@ -87,7 +87,7 @@ class ViewController: NSViewController {
         viewRect.layer?.setAffineTransform(.init(scaleX: yScale, y: yScale))
         viewRect.setNeedsDisplay(viewRect.bounds)
         translation = viewRect.layer?.position
-        renderer?.viewState.setZoom(viewRect.layer!.frame)
+        renderer?.updateZoom(viewRect.layer!.frame, updateDelegate: false)
     }
     
 }
