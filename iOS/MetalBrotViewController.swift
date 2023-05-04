@@ -79,15 +79,6 @@ final class MetalBrotViewController: UIViewController {
         view.addGestureRecognizer(pinchRecognizer!)
     }
     
-//    override func mouseDragged(with event: NSEvent) {
-//
-//        let translation = CGPoint(x: translation.x - event.deltaX, y: translation.y - event.deltaY)
-//        viewRect.layer?.position = translation
-//        self.translation = translation
-//        renderer?.updatePan(translation)
-//
-//    }
-    
     var startPosition: CGPoint!
     var endPosition: CGPoint!
     
@@ -105,7 +96,6 @@ final class MetalBrotViewController: UIViewController {
             let dX = gestureTranslation.x * multiplyer
             let dY = gestureTranslation.y * multiplyer
             
-            
             let translation = CGPoint(x: translation.x - dX, y: translation.y - dY)
             
             self.renderer?.updatePan(translation, updateDelegate: false)
@@ -117,35 +107,26 @@ final class MetalBrotViewController: UIViewController {
             print("do nothing with gesture state \(recognizer.state)")
         }
     }
-    
-    //    override func scrollWheel(with event: NSEvent) {
-    //
-    //        totalYScale += event.scrollingDeltaY
-    //        let yScale: CGFloat = totalYScale / 100
-    //        viewRect.layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    //        viewRect.layer?.position = translation
-    //        viewRect.layer?.setAffineTransform(.init(scaleX: yScale, y: yScale))
-    //        viewRect.setNeedsDisplay(viewRect.bounds)
-    //        translation = viewRect.layer?.position
-    //        renderer?.viewState.setZoom(viewRect.layer!.frame)
-    //    }
-    
+
     @objc
     func handlePinch(_ recognizer: UIPinchGestureRecognizer){
-        
-//        switch(recognizer.state){
-//        case .began,.changed:
-//            let scale = recognizer.scale
-//            guideLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5) //TODO: centerAnchor
-//            guideLayer.setAffineTransform(.init(scaleX: scale, y: scale))
-////            self.view.layer.setNeedsLayout()
-////            self.view.layer.layoutSublayers()
-//            renderer?.updateZoom(guideLayer.frame)
-//            recognizer.scale = 1.0
-//        default:
-//            print("do nothing gestureState: \(recognizer.state)")
-//        }
-//
+        let scale = recognizer.scale
+        switch(recognizer.state){
+        case .began,.changed:
+            
+            guideLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5) //TODO: centerAnchor
+            guideLayer.position = translation
+            guideLayer.setAffineTransform(.init(scaleX: -scale, y: -scale))
+            renderer?.updateZoom(guideLayer.frame, updateDelegate: false)
+            //recognizer.scale = 1.0
+        case .ended:
+            //self.scale = scale
+            //renderer?.updateZoom(guideLayer.frame)
+            fallthrough
+        default:
+            print("do nothing gestureState: \(recognizer.state)")
+        }
+
     }
     
 }
@@ -153,6 +134,5 @@ final class MetalBrotViewController: UIViewController {
 extension MetalBrotViewController: MetalViewUpdateDelegate {
     func translationDidUpdate(point: CGPoint) {
         translation = point
-        guideLayer.position = point
     }
 }
