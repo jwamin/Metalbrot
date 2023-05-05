@@ -6,7 +6,7 @@
 
 ## DONE
 
-* Basic Apple Platforms targets
+* Basic Apple Platforms targets (macOS, iOS/iPadOS, tvOS)
 * Metal Shaders to draw set
 * Viewport Sizing
 * Basic coloring

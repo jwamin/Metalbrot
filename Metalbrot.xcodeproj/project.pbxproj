@@ -24,8 +24,6 @@
 		57A033A62A04123300EB11B2 /* SwiftUIMetalKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A033A52A04123300EB11B2 /* SwiftUIMetalKitView.swift */; };
 		57A033A82A0446B000EB11B2 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A033A72A0446B000EB11B2 /* Extensions.swift */; };
 		57A033A92A0446B000EB11B2 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A033A72A0446B000EB11B2 /* Extensions.swift */; };
-		57A033AB2A04471100EB11B2 /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A033AA2A04471100EB11B2 /* Views.swift */; };
-		57A033AC2A04471100EB11B2 /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A033AA2A04471100EB11B2 /* Views.swift */; };
 		57ACEA0C2854E23E004D6F23 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA0B2854E23E004D6F23 /* Tests_iOS.swift */; };
 		57ACEA0E2854E23E004D6F23 /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA0D2854E23E004D6F23 /* Tests_iOSLaunchTests.swift */; };
 		57ACEA182854E23E004D6F23 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA172854E23E004D6F23 /* Tests_macOS.swift */; };
@@ -72,7 +70,6 @@
 		57558E58285AC36500B61D64 /* MetalbrotViewController-macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MetalbrotViewController-macOS.swift"; path = "macOS/MetalbrotViewController-macOS.swift"; sourceTree = SOURCE_ROOT; };
 		57A033A52A04123300EB11B2 /* SwiftUIMetalKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIMetalKitView.swift; sourceTree = "<group>"; };
 		57A033A72A0446B000EB11B2 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		57A033AA2A04471100EB11B2 /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
 		57ACE9F32854E23A004D6F23 /* MetalbrotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalbrotApp.swift; sourceTree = "<group>"; };
 		57ACE9F42854E23A004D6F23 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		57ACE9F52854E23E004D6F23 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -171,6 +168,7 @@
 		57ACE9ED2854E23A004D6F23 = {
 			isa = PBXGroup;
 			children = (
+				572656D92A047CF20031B46F /* .gitignore */,
 				57FEEC9B285B563900C4B9B4 /* README.md */,
 				57FEEC9C285B575700C4B9B4 /* readme-assets */,
 				57A033AD2A0448D000EB11B2 /* Metal */,
@@ -189,9 +187,9 @@
 			children = (
 				57ACE9F32854E23A004D6F23 /* MetalbrotApp.swift */,
 				57ACE9F42854E23A004D6F23 /* MainView.swift */,
-				57A033AA2A04471100EB11B2 /* Views.swift */,
 				57A033A72A0446B000EB11B2 /* Extensions.swift */,
 				57ACEA3E2854E87E004D6F23 /* Helpers.swift */,
+				572656D52A047CA20031B46F /* Views.swift */,
 				57ACE9F52854E23E004D6F23 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -451,7 +449,6 @@
 				57ACEA1D2854E23E004D6F23 /* MainView.swift in Sources */,
 				57A033A62A04123300EB11B2 /* SwiftUIMetalKitView.swift in Sources */,
 				57ACEA3F2854E87E004D6F23 /* Helpers.swift in Sources */,
-				57A033AB2A04471100EB11B2 /* Views.swift in Sources */,
 				57ACEA1B2854E23E004D6F23 /* MetalbrotApp.swift in Sources */,
 				57ACEA422854F43C004D6F23 /* Brot.metal in Sources */,
 				57A033A82A0446B000EB11B2 /* Extensions.swift in Sources */,
@@ -468,11 +465,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				57558E59285AC36500B61D64 /* MetalbrotViewController-macOS.swift in Sources */,
+				572656D82A047CA20031B46F /* Views.swift in Sources */,
 				57A033A92A0446B000EB11B2 /* Extensions.swift in Sources */,
 				572656D42A0476E20031B46F /* MetalbrotBaseViewController.swift in Sources */,
 				57ACEA1E2854E23E004D6F23 /* MainView.swift in Sources */,
 				57ACEA402854E87E004D6F23 /* Helpers.swift in Sources */,
-				57A033AC2A04471100EB11B2 /* Views.swift in Sources */,
 				57ACEA1C2854E23E004D6F23 /* MetalbrotApp.swift in Sources */,
 				57ACEA432854F43D004D6F23 /* Brot.metal in Sources */,
 				57ACEA3D2854E823004D6F23 /* MetalbrotRenderer.swift in Sources */,

@@ -10,11 +10,9 @@ import SwiftUI
 #if os(macOS)
 import Cocoa
 typealias VCRepresentable = NSViewControllerRepresentable
-#elseif os(iOS) || os(tvOS)
+#elseif os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIKit
 typealias VCRepresentable = UIViewControllerRepresentable
-#elseif targetEnvironment(macCatalyst)
-import UIKit
 #endif
 
 
