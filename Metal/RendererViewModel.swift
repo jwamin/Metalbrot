@@ -45,6 +45,7 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     //GET
     func getAdjustedSize(viewSize: vector_uint2) -> vector_uint2 {
         //let zoomSize: vector_uint2 = view.frame.size.vector_uint2_32 &* 2
+        // Int lacks precision here, needs to be decimal
         viewSize / UInt32(zoomLevel)
     }
     
