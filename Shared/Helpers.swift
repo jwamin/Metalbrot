@@ -13,9 +13,11 @@ import UIKit
 typealias Color = UIColor
 #endif
 
+import simd
+
 extension Color {
     
-  func metalClearColor()->MTLClearColor{
+  func metalClearColor() -> MTLClearColor {
     
     let colors = self.cgColor.components!.map({ color in
         return Double(color)
@@ -57,4 +59,16 @@ extension CGSize: PositionInSuperView {
     var positionInSuperView: CGPoint{
         center
     }
+    
+    var vector_uint2_32: vector_uint2 {
+        [UInt32(self.width),UInt32(self.height)]
+    }
+    
+}
+
+extension CGPoint {
+    var vector_uint2_32: vector_uint2 {
+        [UInt32(self.x),UInt32(self.y)]
+    }
+    
 }

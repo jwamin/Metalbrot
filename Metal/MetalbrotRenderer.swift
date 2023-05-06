@@ -18,16 +18,12 @@ class MetalbrotRenderer: NSObject {
     unowned let view:MTKView
     let library:MTLLibrary
     let descriptor:MTLRenderPipelineDescriptor
-    let pipelineState:MTLRenderPipelineState
+    private var pipelineState: MTLRenderPipelineState?
     let commandQueue:MTLCommandQueue
     
-    var delegate: MetalViewUpdateDelegate?
+    private var viewState: OriginZoom?
     
-    private var viewState: OriginZoom = .zero {
-        didSet{
-            view.setNeedsDisplay(view.bounds)
-        }
-    }
+    var delegate: MetalViewUpdateDelegate?
     
     //use semaphore to synchronize CPU and GPU work?
     private var manuallySynchronize: Bool = false
@@ -51,44 +47,67 @@ class MetalbrotRenderer: NSObject {
     
     init(device: MTLDevice,view: MTKView){
         
+        self.view = view
         self.device = device
         self.library = device.makeDefaultLibrary()!
         self.commandQueue = device.makeCommandQueue()!
+        self.descriptor = MTLRenderPipelineDescriptor()
+
+        super.init()
+    
+        configureView()
+        setupRenderPipeline()
+    
+        //hooking up delegate causes view to begin rendering on resize / vm update
+        view.delegate = self
         
-        self.view = view
-        //view.preferredFramesPerSecond = 30
+    }
+    
+    private func configureView(){
+        view.clearColor = Color.systemBlue.metalClearColor()
         if #available(macOS 13.0, iOS 16.0, *) {
             (view.layer as! CAMetalLayer).developerHUDProperties = [
                 "mode":"default"
             ]
         }
-        view.clearColor = Color.systemBlue.metalClearColor()
+    }
+    
+    private func setupRenderPipeline(){
+
         
         let vertexFunction = library.makeFunction(name: "brot_vertex_main")
         let fragmentFunction = library.makeFunction(name: "brot_fragment_main")
         
-        descriptor = MTLRenderPipelineDescriptor()
-        descriptor.vertexFunction = vertexFunction
+        if #available(macOS 13.0, iOS 16.0, *) {
+            (view.layer as! CAMetalLayer).developerHUDProperties = [
+                "mode":"default"
+            ]
+        }
         
+        descriptor.vertexFunction = vertexFunction
         descriptor.fragmentFunction = fragmentFunction
         descriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
         
+        //Vertex
         let vertexDescriptor = MTLVertexDescriptor()
         vertexDescriptor.attributes[0].format = .float2
         vertexDescriptor.attributes[0].offset = 0
         vertexDescriptor.attributes[0].bufferIndex = 0
         vertexDescriptor.layouts[0].stride = MemoryLayout<vector_float2>.stride
         
+        //Viewport
         vertexDescriptor.attributes[1].format = .uint2
         vertexDescriptor.attributes[1].offset = 0
         vertexDescriptor.attributes[1].bufferIndex = 1
         vertexDescriptor.layouts[1].stride = MemoryLayout<vector_uint2>.stride
         
+        //Origin
         vertexDescriptor.attributes[2].format = .int2
         vertexDescriptor.attributes[2].offset = 0
         vertexDescriptor.attributes[2].bufferIndex = 2
         vertexDescriptor.layouts[2].stride = MemoryLayout<vector_int2>.stride
         
+        //Zoom
         vertexDescriptor.attributes[3].format = .int2
         vertexDescriptor.attributes[3].offset = 0
         vertexDescriptor.attributes[3].bufferIndex = 3
@@ -100,19 +119,15 @@ class MetalbrotRenderer: NSObject {
         view.isPaused = true
         
         pipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
-        
-        super.init()
-        viewState = OriginZoom(frame: self.view.bounds)
-        view.delegate = self
-        
     }
     
-    func render(view: MTKView, originZoom: OriginZoom){
+    func render(view: MTKView){
         
         guard let descriptor = view.currentRenderPassDescriptor,
+              let pipelineState = pipelineState,
               let commandBuffer = commandQueue.makeCommandBuffer(),
               let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
-            fatalError()
+            fatalError("Unable to create render encoder")
         }
         
         /// \param maxX the the width of the full mandelbrot set image
@@ -131,29 +146,29 @@ class MetalbrotRenderer: NSObject {
     //            double c_re = (col - maxX / 2.0) * 4.0 / maxX;
     //            double c_im = (row - maxY / 2.0) * 4.0 / maxX;
         
-        let origin: vector_int2 = originZoom.getVector(.origin)
-        let zoom: vector_int2 = originZoom.getVector(.zoom)
+        
         let (vertexBuffer, viewportBuffer, originBuffer, zoomBuffer) = getBuffers
-
-        let size = view.drawableSize
-        let viewportSize: vector_uint2 = vector_uint2(x: UInt32(size.width), y: UInt32(size.height))
+        
+        let origin: vector_uint2 = view.frame.origin.vector_uint2_32 &* 2
+        let zoomSize: vector_uint2 = view.frame.size.vector_uint2_32 &* 2
+        let drawableSize: vector_uint2 = view.drawableSize.vector_uint2_32
+        
         let sizePtr = viewportBuffer?.contents()
-        sizePtr?.storeBytes(of: viewportSize, as: vector_uint2.self)
+        sizePtr?.storeBytes(of: drawableSize, as: vector_uint2.self)
         
         let originPtr = originBuffer?.contents()
-        originPtr?.storeBytes(of: origin, as: vector_int2.self)
+        originPtr?.storeBytes(of: origin, as: vector_uint2.self)
 
         let zoomPtr = zoomBuffer?.contents()
-        zoomPtr?.storeBytes(of: zoom, as: vector_int2.self)
+        zoomPtr?.storeBytes(of: zoomSize, as: vector_uint2.self)
         
         renderEncoder.setRenderPipelineState(pipelineState)
         
         //begin actual drawing code
+        for (bufferIndex,buffer) in [vertexBuffer,viewportBuffer,originBuffer,zoomBuffer].enumerated(){
+            renderEncoder.setVertexBuffer(buffer, offset: 0, index: bufferIndex)
+        }
         
-        renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
-        renderEncoder.setVertexBuffer(viewportBuffer, offset:0, index: 1)
-        renderEncoder.setVertexBuffer(originBuffer, offset: 0, index: 2)
-        renderEncoder.setVertexBuffer(zoomBuffer, offset: 0, index: 3)
         renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
     
         //END actual draw code
@@ -186,25 +201,26 @@ class MetalbrotRenderer: NSObject {
 extension MetalbrotRenderer: MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        updateZoom(.init(origin: viewState.frame.origin, size: size),updateDelegate: true)
+        //updateZoom(.init(origin: viewState?.frame.origin, size: size),updateDelegate: true)
+        view.setNeedsDisplay(view.bounds)
     }
     
     func updateZoom(_ newSize: CGRect, updateDelegate: Bool = true){
-        viewState.setZoom(newSize)
+        viewState?.setZoom(newSize)
         if updateDelegate {
             delegate?.translationDidUpdate(point: newSize.center)
         }
     }
     
     func updatePan(_ position: CGPoint, updateDelegate: Bool = true){
-        viewState.setPosition(position)
+        viewState?.setPosition(position)
         if updateDelegate {
             delegate?.translationDidUpdate(point: position)
         }
     }
     
     func draw(in view: MTKView) {
-        render(view: view, originZoom: self.viewState)
+        render(view: view)
     }
     
 }
