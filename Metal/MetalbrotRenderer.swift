@@ -30,6 +30,7 @@ class MetalbrotRenderer: NSObject {
     }
     
     //use semaphore to synchronize CPU and GPU work?
+    private var manuallySynchronize: Bool = false
     let semaphore = DispatchSemaphore(value: 0)
     
     typealias metalbuffers = (vertexBuffer: MTLBuffer?, viewportBuffer: MTLBuffer?, originBuffer: MTLBuffer?, zoomBuffer: MTLBuffer?)
@@ -161,10 +162,20 @@ class MetalbrotRenderer: NSObject {
             
             renderEncoder.endEncoding()
             commandBuffer.present(drawable)
-            commandBuffer.commit()
-            commandBuffer.waitUntilScheduled()
-            commandBuffer.waitUntilCompleted()
-            
+            if manuallySynchronize {
+                commandBuffer.addCompletedHandler {[weak self] buffer in
+                    print("2 finished waiting")
+                    self?.semaphore.signal()
+                }
+                commandBuffer.commit()
+                print("1 waiting")
+                semaphore.wait()
+                print("3 waited")
+            } else {
+                commandBuffer.commit()
+                commandBuffer.waitUntilScheduled()
+                commandBuffer.waitUntilCompleted()
+            }
         }
         
     }
