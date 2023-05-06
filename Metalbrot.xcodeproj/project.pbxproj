@@ -13,6 +13,7 @@
 		570883F62A06D5A700292AA1 /* RendererViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F52A06D5A700292AA1 /* RendererViewModel.swift */; };
 		570883F72A06D5A700292AA1 /* RendererViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F52A06D5A700292AA1 /* RendererViewModel.swift */; };
 		570883F82A06D5A700292AA1 /* RendererViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F52A06D5A700292AA1 /* RendererViewModel.swift */; };
+		570883FA2A06FC8000292AA1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A033A72A0446B000EB11B2 /* Extensions.swift */; };
 		572656C52A04710A0031B46F /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA382854E7EC004D6F23 /* BasicShader.metal */; };
 		572656C62A04710A0031B46F /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC98285B534300C4B9B4 /* Data.swift */; };
 		572656C82A04710A0031B46F /* Brot.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA352854E7A0004D6F23 /* Brot.metal */; };
@@ -447,6 +448,7 @@
 				572656D32A0474700031B46F /* MetalbrotBaseViewController.swift in Sources */,
 				570883F22A06D56100292AA1 /* BrotRendererModels.swift in Sources */,
 				572656C52A04710A0031B46F /* BasicShader.metal in Sources */,
+				570883FA2A06FC8000292AA1 /* Extensions.swift in Sources */,
 				572656CA2A04710F0031B46F /* (null) in Sources */,
 				572656C62A04710A0031B46F /* Data.swift in Sources */,
 				572656C92A04710A0031B46F /* MetalbrotRenderer.swift in Sources */,

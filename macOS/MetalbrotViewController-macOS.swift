@@ -20,14 +20,6 @@ class MyView: NSView {
 
 class MetalbrotViewController: MetalbrotBaseViewController {
     
-    override init(){
-        super.init()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
     override func loadView() {
         super.loadView()
 
