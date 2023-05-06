@@ -29,7 +29,6 @@ class MetalbrotViewController: MetalbrotBaseViewController {
     var totalYScale:  CGFloat = 100
     
     var translation: NSPoint!
-    var gesture: NSPanGestureRecognizer!
     
     override init(){
         super.init()
@@ -49,7 +48,6 @@ class MetalbrotViewController: MetalbrotBaseViewController {
     }
     
     override func viewDidLoad() {
-        gesture = NSPanGestureRecognizer(target: self, action: nil)
         print("hello world")
 
     }
