@@ -20,7 +20,7 @@ final class MetalbrotViewController: MetalbrotBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        renderer?.delegate = self
+        //renderer?.delegate = self
         
         print("hello world - iOS")
     
@@ -73,7 +73,7 @@ final class MetalbrotViewController: MetalbrotBaseViewController {
             
             let translation = CGPoint(x: translation.x - dX, y: translation.y - dY)
             
-            self.renderer?.updatePan(translation, updateDelegate: false)
+            //self.renderer?.updatePan(translation, updateDelegate: false)
             endPosition = translation
         case.ended, .cancelled, .failed:
             translation = endPosition
@@ -92,7 +92,7 @@ final class MetalbrotViewController: MetalbrotBaseViewController {
             guideLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5) //TODO: centerAnchor
             guideLayer.position = translation
             guideLayer.setAffineTransform(.init(scaleX: -scale, y: -scale))
-            renderer?.updateZoom(guideLayer.frame, updateDelegate: false)
+            //renderer?.updateZoom(guideLayer.frame, updateDelegate: false)
             //recognizer.scale = 1.0
         case .ended:
             //self.scale = scale
