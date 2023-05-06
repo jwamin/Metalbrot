@@ -10,6 +10,9 @@
 		570883F22A06D56100292AA1 /* BrotRendererModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F12A06D56100292AA1 /* BrotRendererModels.swift */; };
 		570883F32A06D56100292AA1 /* BrotRendererModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F12A06D56100292AA1 /* BrotRendererModels.swift */; };
 		570883F42A06D56100292AA1 /* BrotRendererModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F12A06D56100292AA1 /* BrotRendererModels.swift */; };
+		570883F62A06D5A700292AA1 /* RendererViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F52A06D5A700292AA1 /* RendererViewModel.swift */; };
+		570883F72A06D5A700292AA1 /* RendererViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F52A06D5A700292AA1 /* RendererViewModel.swift */; };
+		570883F82A06D5A700292AA1 /* RendererViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F52A06D5A700292AA1 /* RendererViewModel.swift */; };
 		572656C52A04710A0031B46F /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA382854E7EC004D6F23 /* BasicShader.metal */; };
 		572656C62A04710A0031B46F /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC98285B534300C4B9B4 /* Data.swift */; };
 		572656C82A04710A0031B46F /* Brot.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA352854E7A0004D6F23 /* Brot.metal */; };
@@ -43,9 +46,9 @@
 		57ACEA402854E87E004D6F23 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA3E2854E87E004D6F23 /* Helpers.swift */; };
 		57ACEA422854F43C004D6F23 /* Brot.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA352854E7A0004D6F23 /* Brot.metal */; };
 		57ACEA432854F43D004D6F23 /* Brot.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA352854E7A0004D6F23 /* Brot.metal */; };
-		57B8F5992A0480E0002C104A /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* Views.swift */; };
-		57B8F59A2A0480E0002C104A /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* Views.swift */; };
-		57B8F59B2A0480E0002C104A /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* Views.swift */; };
+		57B8F5992A0480E0002C104A /* ViewControllerAdapters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* ViewControllerAdapters.swift */; };
+		57B8F59A2A0480E0002C104A /* ViewControllerAdapters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* ViewControllerAdapters.swift */; };
+		57B8F59B2A0480E0002C104A /* ViewControllerAdapters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* ViewControllerAdapters.swift */; };
 		57FEEC99285B534300C4B9B4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC98285B534300C4B9B4 /* Data.swift */; };
 		57FEEC9A285B534300C4B9B4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC98285B534300C4B9B4 /* Data.swift */; };
 /* End PBXBuildFile section */
@@ -69,6 +72,8 @@
 
 /* Begin PBXFileReference section */
 		570883F12A06D56100292AA1 /* BrotRendererModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrotRendererModels.swift; sourceTree = "<group>"; };
+		570883F52A06D5A700292AA1 /* RendererViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererViewModel.swift; sourceTree = "<group>"; };
+		570883F92A06E7AA00292AA1 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		572656B62A0470FD0031B46F /* Metalbrot-Multiplatform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Metalbrot-Multiplatform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		572656D12A0474700031B46F /* MetalbrotBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MetalbrotBaseViewController.swift; path = "Metalbrot-Multiplatform/MetalbrotBaseViewController.swift"; sourceTree = SOURCE_ROOT; };
 		57558E58285AC36500B61D64 /* MetalbrotViewController-macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MetalbrotViewController-macOS.swift"; path = "macOS/MetalbrotViewController-macOS.swift"; sourceTree = SOURCE_ROOT; };
@@ -93,7 +98,7 @@
 		57ACEA3E2854E87E004D6F23 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		57ACEA412854EB89004D6F23 /* Metalbrot (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Metalbrot (iOS).entitlements"; sourceTree = "<group>"; };
 		57ACEA442854F481004D6F23 /* MetalHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalHeaders.h; sourceTree = "<group>"; };
-		57B8F5982A0480E0002C104A /* Views.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
+		57B8F5982A0480E0002C104A /* ViewControllerAdapters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerAdapters.swift; sourceTree = "<group>"; };
 		57FEEC98285B534300C4B9B4 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		57FEEC9B285B563900C4B9B4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		57FEEC9D285B57BB00C4B9B4 /* mbrot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbrot.png; sourceTree = "<group>"; };
@@ -164,6 +169,7 @@
 				57ACEA382854E7EC004D6F23 /* BasicShader.metal */,
 				57ACEA352854E7A0004D6F23 /* Brot.metal */,
 				57FEEC98285B534300C4B9B4 /* Data.swift */,
+				570883F52A06D5A700292AA1 /* RendererViewModel.swift */,
 				570883F12A06D56100292AA1 /* BrotRendererModels.swift */,
 			);
 			path = Metal;
@@ -172,6 +178,7 @@
 		57ACE9ED2854E23A004D6F23 = {
 			isa = PBXGroup;
 			children = (
+				570883F92A06E7AA00292AA1 /* .gitignore */,
 				57FEEC9B285B563900C4B9B4 /* README.md */,
 				57FEEC9C285B575700C4B9B4 /* readme-assets */,
 				57A033AD2A0448D000EB11B2 /* Metal */,
@@ -188,8 +195,8 @@
 		57ACE9F22854E23A004D6F23 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				57B8F5982A0480E0002C104A /* Views.swift */,
 				57ACE9F32854E23A004D6F23 /* MetalbrotApp.swift */,
+				57B8F5982A0480E0002C104A /* ViewControllerAdapters.swift */,
 				57ACE9F42854E23A004D6F23 /* MainView.swift */,
 				57A033A72A0446B000EB11B2 /* Extensions.swift */,
 				57ACEA3E2854E87E004D6F23 /* Helpers.swift */,
@@ -433,7 +440,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				572656CF2A04710F0031B46F /* MainView.swift in Sources */,
-				57B8F5992A0480E0002C104A /* Views.swift in Sources */,
+				570883F62A06D5A700292AA1 /* RendererViewModel.swift in Sources */,
+				57B8F5992A0480E0002C104A /* ViewControllerAdapters.swift in Sources */,
 				572656CD2A04710F0031B46F /* Helpers.swift in Sources */,
 				572656C82A04710A0031B46F /* Brot.metal in Sources */,
 				572656D32A0474700031B46F /* MetalbrotBaseViewController.swift in Sources */,
@@ -458,10 +466,11 @@
 				57A033A82A0446B000EB11B2 /* Extensions.swift in Sources */,
 				57ACEA3C2854E823004D6F23 /* MetalbrotRenderer.swift in Sources */,
 				572656D22A0474700031B46F /* MetalbrotBaseViewController.swift in Sources */,
-				57B8F59A2A0480E0002C104A /* Views.swift in Sources */,
+				57B8F59A2A0480E0002C104A /* ViewControllerAdapters.swift in Sources */,
 				570883F32A06D56100292AA1 /* BrotRendererModels.swift in Sources */,
 				57ACEA332854E2B1004D6F23 /* MetalbrotViewController.swift in Sources */,
 				57FEEC99285B534300C4B9B4 /* Data.swift in Sources */,
+				570883F72A06D5A700292AA1 /* RendererViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,7 +479,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				57558E59285AC36500B61D64 /* MetalbrotViewController-macOS.swift in Sources */,
-				57B8F59B2A0480E0002C104A /* Views.swift in Sources */,
+				570883F82A06D5A700292AA1 /* RendererViewModel.swift in Sources */,
+				57B8F59B2A0480E0002C104A /* ViewControllerAdapters.swift in Sources */,
 				57A033A92A0446B000EB11B2 /* Extensions.swift in Sources */,
 				572656D42A0476E20031B46F /* MetalbrotBaseViewController.swift in Sources */,
 				57ACEA1E2854E23E004D6F23 /* MainView.swift in Sources */,

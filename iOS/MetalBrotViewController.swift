@@ -22,7 +22,7 @@ final class MetalbrotViewController: MetalbrotBaseViewController {
         super.viewDidLoad()
         renderer?.delegate = self
         
-        print("hello world")
+        print("hello world - iOS")
     
         setupGuideLayer()
         setupGestures()

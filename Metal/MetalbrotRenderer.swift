@@ -7,49 +7,46 @@
 //
 
 import MetalKit
-
-protocol MetalViewUpdateDelegate {
-    func translationDidUpdate(point: CGPoint)
-}
+import Combine
 
 class MetalbrotRenderer: NSObject {
     
-    let device:MTLDevice
-    unowned let view:MTKView
-    let library:MTLLibrary
-    let descriptor:MTLRenderPipelineDescriptor
+    let device: MTLDevice
+    unowned let metalKitView: MTKView
+    let descriptor: MTLRenderPipelineDescriptor
     private var pipelineState: MTLRenderPipelineState?
-    let commandQueue:MTLCommandQueue
+    let commandQueue: MTLCommandQueue
     
-    private var viewState: OriginZoom?
+    weak var viewModel: MetalbrotViewModelInterface? {
+        didSet{
+            setupViewModel()
+        }
+    }
     
-    var delegate: MetalViewUpdateDelegate?
+    ///Combine
+    private var storage: Set<AnyCancellable> = Set<AnyCancellable>()
     
+    //Timing
     //use semaphore to synchronize CPU and GPU work?
     private var manuallySynchronize: Bool = false
     let semaphore = DispatchSemaphore(value: 0)
     
-    typealias metalbuffers = (vertexBuffer: MTLBuffer?, viewportBuffer: MTLBuffer?, originBuffer: MTLBuffer?, zoomBuffer: MTLBuffer?)
     
-    lazy var getBuffers: metalbuffers = {
+    ///Metal Variables
+    private typealias metalbuffers = (vertexBuffer: MTLBuffer?, viewportBuffer: MTLBuffer?, originBuffer: MTLBuffer?, zoomBuffer: MTLBuffer?)
+    
+    private lazy var getBuffers: metalbuffers = {
         (device.makeBuffer(bytes: MetalbrotConstants.data.vertices, length: MemoryLayout<vector_float2>.size * MetalbrotConstants.data.vertices.count),
          device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
          device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
          device.makeBuffer(length: MemoryLayout<vector_uint2>.stride))
     }()
     
-    convenience init(view: MTKView) {
-        guard let device = view.device else {
-            fatalError("tried to use convenience initializer without MTLDevice on MTKView")
-        }
-        self.init(device: device, view: view)
-    }
-    
+
     init(device: MTLDevice,view: MTKView){
         
-        self.view = view
+        self.metalKitView = view
         self.device = device
-        self.library = device.makeDefaultLibrary()!
         self.commandQueue = device.makeCommandQueue()!
         self.descriptor = MTLRenderPipelineDescriptor()
 
@@ -63,10 +60,35 @@ class MetalbrotRenderer: NSObject {
         
     }
     
+    convenience init(view: MTKView) {
+        guard let device = view.device else {
+            fatalError("tried to use convenience initializer without MTLDevice on MTKView")
+        }
+        self.init(device: device, view: view)
+    }
+    
+    
+    private func setupViewModel(){
+        guard let viewModel = viewModel else {
+            fatalError("cannot setup view model bindings with viewmodel nil")
+        }
+        
+        Publishers.CombineLatest(viewModel.centerPublisher, viewModel.zoomLevelPublisher)
+            .map { _ in
+                Void()
+            }
+            .sink(receiveValue: { [weak self] _ in
+                self?.renderAll()
+            }).store(in: &storage)
+        
+        //Set view model bindings
+        
+    }
+    
     private func configureView(){
-        view.clearColor = Color.systemBlue.metalClearColor()
+        metalKitView.clearColor = Color.systemBlue.metalClearColor()
         if #available(macOS 13.0, iOS 16.0, *) {
-            (view.layer as! CAMetalLayer).developerHUDProperties = [
+            (metalKitView.layer as! CAMetalLayer).developerHUDProperties = [
                 "mode":"default"
             ]
         }
@@ -74,19 +96,19 @@ class MetalbrotRenderer: NSObject {
     
     private func setupRenderPipeline(){
 
-        
+        let library = device.makeDefaultLibrary()!
         let vertexFunction = library.makeFunction(name: "brot_vertex_main")
         let fragmentFunction = library.makeFunction(name: "brot_fragment_main")
         
         if #available(macOS 13.0, iOS 16.0, *) {
-            (view.layer as! CAMetalLayer).developerHUDProperties = [
+            (metalKitView.layer as! CAMetalLayer).developerHUDProperties = [
                 "mode":"default"
             ]
         }
         
         descriptor.vertexFunction = vertexFunction
         descriptor.fragmentFunction = fragmentFunction
-        descriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
+        descriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
         
         //Vertex
         let vertexDescriptor = MTLVertexDescriptor()
@@ -115,8 +137,8 @@ class MetalbrotRenderer: NSObject {
         
         descriptor.vertexDescriptor = vertexDescriptor
         
-        view.enableSetNeedsDisplay = true
-        view.isPaused = true
+        metalKitView.enableSetNeedsDisplay = true
+        metalKitView.isPaused = true
         
         pipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
     }
@@ -148,16 +170,17 @@ class MetalbrotRenderer: NSObject {
         
         
         let (vertexBuffer, viewportBuffer, originBuffer, zoomBuffer) = getBuffers
-        
-        let origin: vector_uint2 = view.frame.origin.vector_uint2_32 &* 2
-        let zoomSize: vector_uint2 = view.frame.size.vector_uint2_32 &* 2
         let drawableSize: vector_uint2 = view.drawableSize.vector_uint2_32
+        
+        let origin: vector_int2 = viewModel?.getAdjustedPosition(viewSize: drawableSize) ?? [0, 0]
+        let zoomSize: vector_uint2 = viewModel?.getAdjustedSize(viewSize: drawableSize) ?? [0, 0] 
+        
         
         let sizePtr = viewportBuffer?.contents()
         sizePtr?.storeBytes(of: drawableSize, as: vector_uint2.self)
         
         let originPtr = originBuffer?.contents()
-        originPtr?.storeBytes(of: origin, as: vector_uint2.self)
+        originPtr?.storeBytes(of: origin, as: vector_int2.self)
 
         let zoomPtr = zoomBuffer?.contents()
         zoomPtr?.storeBytes(of: zoomSize, as: vector_uint2.self)
@@ -200,23 +223,12 @@ class MetalbrotRenderer: NSObject {
 //MARK: Metal Kit
 extension MetalbrotRenderer: MTKViewDelegate {
     
+    func renderAll(){
+        metalKitView.setNeedsDisplay(metalKitView.bounds)
+    }
+    
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        //updateZoom(.init(origin: viewState?.frame.origin, size: size),updateDelegate: true)
         view.setNeedsDisplay(view.bounds)
-    }
-    
-    func updateZoom(_ newSize: CGRect, updateDelegate: Bool = true){
-        viewState?.setZoom(newSize)
-        if updateDelegate {
-            delegate?.translationDidUpdate(point: newSize.center)
-        }
-    }
-    
-    func updatePan(_ position: CGPoint, updateDelegate: Bool = true){
-        viewState?.setPosition(position)
-        if updateDelegate {
-            delegate?.translationDidUpdate(point: position)
-        }
     }
     
     func draw(in view: MTKView) {

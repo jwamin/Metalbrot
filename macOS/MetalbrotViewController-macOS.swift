@@ -20,16 +20,6 @@ class MyView: NSView {
 
 class MetalbrotViewController: MetalbrotBaseViewController {
     
-    let viewRect: MyView = {
-        let view = MyView(frame: NSRect(origin: .zero, size: CGSize(width: 30, height: 30)))
-        
-        return view
-    }()
-    
-    var totalYScale:  CGFloat = 100
-    
-    var translation: NSPoint!
-    
     override init(){
         super.init()
     }
@@ -40,37 +30,26 @@ class MetalbrotViewController: MetalbrotBaseViewController {
     
     override func loadView() {
         super.loadView()
-        metalView.autoresizingMask = [.height,.width]
-        renderer?.delegate = self
-        viewRect.frame = self.view.bounds
-        viewRect.autoresizingMask = [.height,.width]
-        self.view.addSubview(viewRect)
+
     }
     
     override func viewDidLoad() {
-        print("hello world")
+        super.viewDidLoad()
+        print("hello world - macOS")
 
     }
     
     override func mouseDragged(with event: NSEvent) {
-        
-        let translation = CGPoint(x: translation.x - event.deltaX, y: translation.y - event.deltaY)
-        viewRect.layer?.position = translation
-        self.translation = translation
-        renderer?.updatePan(translation)
+
         
     }
     
     override func scrollWheel(with event: NSEvent) {
         
-        totalYScale += event.scrollingDeltaY
-        let yScale: CGFloat = totalYScale / 100
-        viewRect.layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        viewRect.layer?.position = translation
-        viewRect.layer?.setAffineTransform(.init(scaleX: yScale, y: yScale))
-        viewRect.setNeedsDisplay(viewRect.bounds)
-        translation = viewRect.layer?.position
-        renderer?.updateZoom(viewRect.layer!.frame, updateDelegate: false)
+        let scrollzoom = max(Int(event.scrollingDeltaY), 1)
+        print(scrollzoom)
+        viewModel?.updateZoom(scrollzoom)
+        
     }
     
 }

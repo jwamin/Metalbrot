@@ -25,6 +25,7 @@ class MetalbrotBaseViewController: ViewController {
     }
     
     var renderer: MetalbrotRenderer?
+    var viewModel: MetalbrotViewModelInterface?
     
     init(){
         super.init(nibName: nil, bundle: nil)
@@ -45,6 +46,11 @@ class MetalbrotBaseViewController: ViewController {
         metalView.autoresizingMask = basicPinning
         
         renderer = MetalbrotRenderer(view: metalView)
+    }
+    
+    override func viewDidLoad() {
+        viewModel = MetalbrotRendererViewModel()
+        renderer?.viewModel = viewModel
     }
     
 }
