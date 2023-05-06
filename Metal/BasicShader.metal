@@ -8,7 +8,7 @@
 
 #include "MetalHeaders.h"
 
-vertex VertexOut vertex_main(const VertexIn vertex_in [[ stage_in ]]) {
+vertex VertexOut vertex_basic(const VertexIn vertex_in [[ stage_in ]]) {
   
   //define vertexOut struct
   VertexOut out;
@@ -24,7 +24,7 @@ vertex VertexOut vertex_main(const VertexIn vertex_in [[ stage_in ]]) {
   
 };
 
-fragment float4 fragment_main(VertexOut in [[stage_in]]) {
+fragment float4 fragment_basic(VertexOut in [[stage_in]]) {
 
   //pass on color to fragment
   return in.color;

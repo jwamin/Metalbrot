@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		572656C52A04710A0031B46F /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA382854E7EC004D6F23 /* BasicShader.metal */; };
 		572656C62A04710A0031B46F /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC98285B534300C4B9B4 /* Data.swift */; };
-		572656C72A04710A0031B46F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC95285B531C00C4B9B4 /* Models.swift */; };
 		572656C82A04710A0031B46F /* Brot.metal in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA352854E7A0004D6F23 /* Brot.metal */; };
 		572656C92A04710A0031B46F /* MetalbrotRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ACEA3B2854E823004D6F23 /* MetalbrotRenderer.swift */; };
 		572656CA2A04710F0031B46F /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -44,8 +43,6 @@
 		57B8F5992A0480E0002C104A /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* Views.swift */; };
 		57B8F59A2A0480E0002C104A /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* Views.swift */; };
 		57B8F59B2A0480E0002C104A /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* Views.swift */; };
-		57FEEC96285B531C00C4B9B4 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC95285B531C00C4B9B4 /* Models.swift */; };
-		57FEEC97285B531C00C4B9B4 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC95285B531C00C4B9B4 /* Models.swift */; };
 		57FEEC99285B534300C4B9B4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC98285B534300C4B9B4 /* Data.swift */; };
 		57FEEC9A285B534300C4B9B4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC98285B534300C4B9B4 /* Data.swift */; };
 /* End PBXBuildFile section */
@@ -93,7 +90,6 @@
 		57ACEA412854EB89004D6F23 /* Metalbrot (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Metalbrot (iOS).entitlements"; sourceTree = "<group>"; };
 		57ACEA442854F481004D6F23 /* MetalHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalHeaders.h; sourceTree = "<group>"; };
 		57B8F5982A0480E0002C104A /* Views.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
-		57FEEC95285B531C00C4B9B4 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		57FEEC98285B534300C4B9B4 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		57FEEC9B285B563900C4B9B4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		57FEEC9D285B57BB00C4B9B4 /* mbrot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbrot.png; sourceTree = "<group>"; };
@@ -164,7 +160,6 @@
 				57ACEA382854E7EC004D6F23 /* BasicShader.metal */,
 				57ACEA352854E7A0004D6F23 /* Brot.metal */,
 				57FEEC98285B534300C4B9B4 /* Data.swift */,
-				57FEEC95285B531C00C4B9B4 /* Models.swift */,
 			);
 			path = Metal;
 			sourceTree = "<group>";
@@ -442,7 +437,6 @@
 				572656C62A04710A0031B46F /* Data.swift in Sources */,
 				572656C92A04710A0031B46F /* MetalbrotRenderer.swift in Sources */,
 				572656CE2A04710F0031B46F /* MetalbrotApp.swift in Sources */,
-				572656C72A04710A0031B46F /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -460,7 +454,6 @@
 				572656D22A0474700031B46F /* MetalbrotBaseViewController.swift in Sources */,
 				57B8F59A2A0480E0002C104A /* Views.swift in Sources */,
 				57ACEA332854E2B1004D6F23 /* MetalbrotViewController.swift in Sources */,
-				57FEEC96285B531C00C4B9B4 /* Models.swift in Sources */,
 				57FEEC99285B534300C4B9B4 /* Data.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,7 +471,6 @@
 				57ACEA1C2854E23E004D6F23 /* MetalbrotApp.swift in Sources */,
 				57ACEA432854F43D004D6F23 /* Brot.metal in Sources */,
 				57ACEA3D2854E823004D6F23 /* MetalbrotRenderer.swift in Sources */,
-				57FEEC97285B531C00C4B9B4 /* Models.swift in Sources */,
 				57FEEC9A285B534300C4B9B4 /* Data.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

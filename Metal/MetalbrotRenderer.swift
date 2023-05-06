@@ -32,15 +32,11 @@ class MetalbrotRenderer: NSObject {
     //use semaphore to synchronize CPU and GPU work?
     let semaphore = DispatchSemaphore(value: 0)
     
-    lazy var vertexBuffer: MTLBuffer = {
-        let gon2 = gon.map({
-            BasicVertex(position: $0.position)
-        })
-        return device.makeBuffer(bytes: gon2, length: gon2.count * MemoryLayout<BasicVertex>.stride, options: [])!
-    }()
+    typealias metalbuffers = (vertexBuffer: MTLBuffer?, viewportBuffer: MTLBuffer?, originBuffer: MTLBuffer?, zoomBuffer: MTLBuffer?)
     
-    lazy var getBuffers = {
-        (device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
+    lazy var getBuffers: metalbuffers = {
+        (device.makeBuffer(bytes: MetalbrotConstants.data.vertices, length: MemoryLayout<vector_float2>.size * MetalbrotConstants.data.vertices.count),
+         device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
          device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
          device.makeBuffer(length: MemoryLayout<vector_uint2>.stride))
     }()
@@ -80,7 +76,7 @@ class MetalbrotRenderer: NSObject {
         vertexDescriptor.attributes[0].format = .float2
         vertexDescriptor.attributes[0].offset = 0
         vertexDescriptor.attributes[0].bufferIndex = 0
-        vertexDescriptor.layouts[0].stride = MemoryLayout<BasicVertex>.stride
+        vertexDescriptor.layouts[0].stride = MemoryLayout<vector_float2>.stride
         
         vertexDescriptor.attributes[1].format = .uint2
         vertexDescriptor.attributes[1].offset = 0
@@ -136,7 +132,7 @@ class MetalbrotRenderer: NSObject {
         
         let origin: vector_int2 = originZoom.getVector(.origin)
         let zoom: vector_int2 = originZoom.getVector(.zoom)
-        let (viewportBuffer, originBuffer, zoomBuffer) = getBuffers
+        let (vertexBuffer, viewportBuffer, originBuffer, zoomBuffer) = getBuffers
 
         let size = view.drawableSize
         let viewportSize: vector_uint2 = vector_uint2(x: UInt32(size.width), y: UInt32(size.height))
