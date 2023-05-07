@@ -23,6 +23,9 @@ protocol MetalbrotViewModelInterface: AnyObject {
     
     func updateCenter(_ newPoint: CGPoint)
     func updateZoom(_ newZoomLevel: CGFloat)
+    func setZoom(_ newZoomLevel: CGFloat)
+    
+    func requestUpdate()
     
     func getAdjustedRect(viewSize: vector_uint2) -> (vector_int2, vector_float2)
     
@@ -67,6 +70,11 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     
     func setZoom(_ newZoomLevel: CGFloat){
         zoomLevelConcretePublished = newZoomLevel
+    }
+    
+    func requestUpdate() {
+        let concrete = zoomLevel
+        zoomLevelConcretePublished = concrete
     }
     
     //Concrete Implementation

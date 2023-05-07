@@ -6,8 +6,14 @@
 //
 
 #include "MetalHeaders.h"
+#include <TargetConditionals.h>
 
+#if TARGET_OS_TV
+#define ITERATION_MAX 200
+#else
 #define ITERATION_MAX 100
+#endif
+
 #define MODULO_MAX 256
 #define AAPLVertexInputIndexViewportSize 1
 using namespace metal;
@@ -140,6 +146,7 @@ fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     float x = 0, y = 0;
     
     uint iteration = 0;
+
     while (x*x+y*y <= 4 && iteration < ITERATION_MAX) {
         half x_new = x*x - y*y + c_re;
         y = 2*x*y + c_im;

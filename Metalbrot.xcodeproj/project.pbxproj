@@ -50,6 +50,7 @@
 		57B8F5992A0480E0002C104A /* ViewControllerAdapters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* ViewControllerAdapters.swift */; };
 		57B8F59A2A0480E0002C104A /* ViewControllerAdapters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* ViewControllerAdapters.swift */; };
 		57B8F59B2A0480E0002C104A /* ViewControllerAdapters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8F5982A0480E0002C104A /* ViewControllerAdapters.swift */; };
+		57BBA1802A084FD100D9A92E /* MetalbrotTVViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBA17F2A084FD100D9A92E /* MetalbrotTVViewController.swift */; };
 		57FEEC99285B534300C4B9B4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC98285B534300C4B9B4 /* Data.swift */; };
 		57FEEC9A285B534300C4B9B4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEEC98285B534300C4B9B4 /* Data.swift */; };
 /* End PBXBuildFile section */
@@ -100,6 +101,7 @@
 		57ACEA412854EB89004D6F23 /* Metalbrot (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Metalbrot (iOS).entitlements"; sourceTree = "<group>"; };
 		57ACEA442854F481004D6F23 /* MetalHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalHeaders.h; sourceTree = "<group>"; };
 		57B8F5982A0480E0002C104A /* ViewControllerAdapters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerAdapters.swift; sourceTree = "<group>"; };
+		57BBA17F2A084FD100D9A92E /* MetalbrotTVViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalbrotTVViewController.swift; sourceTree = "<group>"; };
 		57FEEC98285B534300C4B9B4 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		57FEEC9B285B563900C4B9B4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		57FEEC9D285B57BB00C4B9B4 /* mbrot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbrot.png; sourceTree = "<group>"; };
@@ -162,6 +164,14 @@
 			path = iOS;
 			sourceTree = "<group>";
 		};
+		577EC0F12A0852CA003812AD /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				57BBA17F2A084FD100D9A92E /* MetalbrotTVViewController.swift */,
+			);
+			path = tvOS;
+			sourceTree = "<group>";
+		};
 		57A033AD2A0448D000EB11B2 /* Metal */ = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +197,7 @@
 				572656B72A0470FD0031B46F /* Metalbrot-Multiplatform */,
 				57558E57285AC30B00B61D64 /* iOS */,
 				57ACEA012854E23E004D6F23 /* macOS */,
+				577EC0F12A0852CA003812AD /* tvOS */,
 				57ACEA0A2854E23E004D6F23 /* Tests iOS */,
 				57ACEA162854E23E004D6F23 /* Tests macOS */,
 				57ACE9FB2854E23E004D6F23 /* Products */,
@@ -446,6 +457,7 @@
 				572656CD2A04710F0031B46F /* Helpers.swift in Sources */,
 				572656C82A04710A0031B46F /* Brot.metal in Sources */,
 				572656D32A0474700031B46F /* MetalbrotBaseViewController.swift in Sources */,
+				57BBA1802A084FD100D9A92E /* MetalbrotTVViewController.swift in Sources */,
 				570883F22A06D56100292AA1 /* BrotRendererModels.swift in Sources */,
 				572656C52A04710A0031B46F /* BasicShader.metal in Sources */,
 				570883FA2A06FC8000292AA1 /* Extensions.swift in Sources */,

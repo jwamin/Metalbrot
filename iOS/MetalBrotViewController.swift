@@ -34,6 +34,7 @@ final class MetalbrotViewController: MetalbrotBaseViewController {
     func handlePan(_ recognizer: UIPanGestureRecognizer){
         switch(recognizer.state){
         case .began, .changed, .ended:
+            //TODO: Move to viewmodel
             let gestureTranslation = recognizer.translation(in: metalView)
             let updateTranslation = CGPoint(x: -gestureTranslation.x, y: -gestureTranslation.y)
             viewModel?.updateCenter(updateTranslation)
