@@ -38,8 +38,8 @@ class MetalbrotRenderer: NSObject {
     private lazy var getBuffers: metalbuffers = {
         (device.makeBuffer(bytes: MetalbrotConstants.data.vertices, length: MemoryLayout<vector_float2>.size * MetalbrotConstants.data.vertices.count),
          device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
-         device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
-         device.makeBuffer(length: MemoryLayout<vector_uint2>.stride))
+         device.makeBuffer(length: MemoryLayout<vector_int2>.stride),
+         device.makeBuffer(length: MemoryLayout<vector_int2>.stride))
     }()
     
 
@@ -173,7 +173,7 @@ class MetalbrotRenderer: NSObject {
         let drawableSize: vector_uint2 = view.drawableSize.vector_uint2_32
         
         let origin: vector_int2 = viewModel?.getAdjustedPosition(viewSize: drawableSize) ?? [0, 0]
-        let zoomSize: vector_uint2 = viewModel?.getAdjustedSize(viewSize: drawableSize) ?? [0, 0] 
+        let zoomSize: vector_int2 = viewModel?.getAdjustedSize(viewSize: drawableSize) ?? [0, 0]
         
         
         let sizePtr = viewportBuffer?.contents()
@@ -183,7 +183,7 @@ class MetalbrotRenderer: NSObject {
         originPtr?.storeBytes(of: origin, as: vector_int2.self)
 
         let zoomPtr = zoomBuffer?.contents()
-        zoomPtr?.storeBytes(of: zoomSize, as: vector_uint2.self)
+        zoomPtr?.storeBytes(of: zoomSize, as: vector_int2.self)
         
         renderEncoder.setRenderPipelineState(pipelineState)
         

@@ -25,10 +25,16 @@ class MetalbrotViewController: MetalbrotBaseViewController {
 
     }
     
+    override var acceptsFirstResponder: Bool {
+        true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("hello world - macOS")
-
+        
+        print("hello world - macOS \(acceptsFirstResponder)")
+        becomeFirstResponder()
+        
     }
     
     override func mouseDragged(with event: NSEvent) {
@@ -38,9 +44,25 @@ class MetalbrotViewController: MetalbrotBaseViewController {
     
     override func scrollWheel(with event: NSEvent) {
         
-        let scrollzoom = max(CGFloat(event.scrollingDeltaY), 1)
-        print(scrollzoom)
+        let scrollzoom = CGFloat(event.scrollingDeltaY)
+        //print(scrollzoom)
         viewModel?.updateZoom(scrollzoom)
+        
+    }
+    
+    override func interpretKeyEvents(_ eventArray: [NSEvent]) {
+        print(eventArray)
+    }
+    
+    override func keyDown(with event: NSEvent) {
+        super.keyDown(with: event)
+        print(event.keyCode)
+    }
+    
+    override func keyUp(with event: NSEvent) {
+        super.keyUp(with: event)
+        print(event.keyCode)
+        //if event.keyCode == .
         
     }
     
