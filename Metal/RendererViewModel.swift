@@ -47,17 +47,22 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
         //let zoomSize: vector_uint2 = view.frame.size.vector_uint2_32 &* 2
         // Int lacks precision here, needs to be decimal
         //print(zoomLevel)
+        //        newX = x + width/2 - newWidth/2
+        //        newY = y + height/2 - newHeight/2
         let signed_vector = vector_float2(Float(viewSize.x), Float(viewSize.y))
-        //let fixedZoomLevel = zoomLevel == 0 ? 1 : Float(zoomLevel)
-        return signed_vector
+        let fixedZoomLevel = zoomLevel == 0 ? 1 : Float(zoomLevel)
+        print(signed_vector, fixedZoomLevel, signed_vector * fixedZoomLevel)
+        return signed_vector * fixedZoomLevel
     
     }
     
     func getAdjustedPosition(viewSize: vector_uint2) -> vector_int2 {
         //let origin: vector_uint2 = view.frame.origin.vector_uint2_32 &* 2
-        let x = Int32(center.x) - Int32(viewSize.x / 2)
-        let y = Int32(center.y) - Int32(viewSize.y / 2)
-        return [x , y]// &* Int32(zoomLevel)
+        let xWidth = Int32(viewSize.x / 2)
+        let yHeight = Int32(viewSize.y / 2)
+        let x = Int32(center.x) + xWidth - xWidth
+        let y = Int32(center.y) + yHeight - yHeight
+        return [-x , y]// &* Int32(zoomLevel)
     }
     
     //SET

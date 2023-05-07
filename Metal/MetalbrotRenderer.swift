@@ -175,7 +175,7 @@ class MetalbrotRenderer: NSObject {
         let origin: vector_int2 = viewModel?.getAdjustedPosition(viewSize: drawableSize) ?? [0, 0]
         let zoomSize: vector_float2 = viewModel?.getAdjustedSize(viewSize: drawableSize) ?? [0, 0]
         
-        
+        //print(drawableSize,origin,zoomSize)
         let sizePtr = viewportBuffer?.contents()
         sizePtr?.storeBytes(of: drawableSize, as: vector_uint2.self)
         

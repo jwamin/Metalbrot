@@ -44,8 +44,8 @@ class MetalbrotViewController: MetalbrotBaseViewController {
     
     override func scrollWheel(with event: NSEvent) {
         
-        let scrollzoom = CGFloat(event.scrollingDeltaY)
-        print(scrollzoom)
+        let scrollzoom = CGFloat(event.scrollingDeltaY) / 100
+        //print(scrollzoom)
         viewModel?.updateZoom(scrollzoom)
         
     }
