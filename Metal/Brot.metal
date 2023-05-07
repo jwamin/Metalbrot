@@ -85,8 +85,9 @@ vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
 
 
 /// Fragment Function - assigns colors to individually rasterized pixels in the form of the Mandelbrot set
-fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
+fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     
+    FragmentOut fragOut;
     //pass on color to fragment
     float4 black = float4(0,0,0,1);
     //float4 error = float4(1.0,0.0,1.0,1);
@@ -138,7 +139,7 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     const float c_im = (adjustedPixY - adjustedHeight/2.0)*4.0/adjustedWidth; //height/width constrains proportions
     float x = 0, y = 0;
     
-    int iteration = 0;
+    uint iteration = 0;
     while (x*x+y*y <= 4 && iteration < ITERATION_MAX) {
         half x_new = x*x - y*y + c_re;
         y = 2*x*y + c_im;
@@ -159,10 +160,15 @@ fragment float4 brot_fragment_main(BrotVertexOut in [[stage_in]]) {
         if (normalizedIncrease > 0.666){
             out.x = randomB * (normalizedIncrease / 1.0); //* normalizedIncrease;  /* blue */
         }
-        return out;
+    
+    } else {
+        //write black to "void:"
+        out = black;
     }
-    //write black to "void:"
-    return black;
+    
+    fragOut.color = out;
+    
+    return fragOut;
     
 }
 

@@ -32,7 +32,10 @@ struct BrotVertexOut {
     float4 color [[ flat ]];
     float2 origin;
     float2 zoom;
-    float vAdjust;
+};
+
+struct FragmentOut {
+    float4 color [[ color(0) ]];
 };
 
 #endif /* MetalHeaders_h */
