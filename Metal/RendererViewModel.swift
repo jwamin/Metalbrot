@@ -65,6 +65,10 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
         zoomLevelConcretePublished += newZoomLevel
     }
     
+    func setZoom(_ newZoomLevel: CGFloat){
+        zoomLevelConcretePublished = newZoomLevel
+    }
+    
     //Concrete Implementation
     @Published private var zoomLevelConcretePublished: CGFloat
     @Published private var centerConcretePublished: CGPoint

@@ -11,95 +11,49 @@ import SwiftUI
 
 final class MetalbrotViewController: MetalbrotBaseViewController {
     
-    var guideLayer: CALayer!
-    var translation: CGPoint!
     var panRecognizer: UIPanGestureRecognizer?
     var pinchRecognizer: UIPinchGestureRecognizer?
     
-    private var firstRun: Bool = true
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        //renderer?.delegate = self
-        
         print("hello world - iOS")
-    
-        setupGuideLayer()
         setupGestures()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if firstRun{
-            guideLayer.frame = self.view.frame
-            firstRun = false
-        }
-    }
-    
-    func setupGuideLayer(){
-        guideLayer = CALayer()
-        guideLayer.frame = self.view.bounds
-        
-        //DEBUGGING
-//        guideLayer.backgroundColor = UIColor.magenta.cgColor
-//        guideLayer.opacity = 0.5
-        view.layer.addSublayer(guideLayer)
-    }
-    
+
+
     func setupGestures(){
         panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan(_:)))
         panRecognizer?.maximumNumberOfTouches = 1
         view.addGestureRecognizer(panRecognizer!)
+        
         pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch(_:)))
         view.addGestureRecognizer(pinchRecognizer!)
     }
     
-    var startPosition: CGPoint!
-    var endPosition: CGPoint!
-    
     @objc
     func handlePan(_ recognizer: UIPanGestureRecognizer){
-        let gestureTranslation = recognizer.translation(in: metalView)
-        let gesturePosition = recognizer.location(in: metalView)
-        
-        let multiplyer: CGFloat = 2
         switch(recognizer.state){
-        case .began:
-            print("started at \(gesturePosition)")
-        case .changed:
-            
-            let dX = gestureTranslation.x * multiplyer
-            let dY = gestureTranslation.y * multiplyer
-            
-            let translation = CGPoint(x: translation.x - dX, y: translation.y - dY)
-            
-            //self.renderer?.updatePan(translation, updateDelegate: false)
-            endPosition = translation
-        case.ended, .cancelled, .failed:
-            translation = endPosition
-
+        case .began, .changed, .ended:
+            let gestureTranslation = recognizer.translation(in: metalView)
+            let updateTranslation = CGPoint(x: -gestureTranslation.x, y: -gestureTranslation.y)
+            viewModel?.updateCenter(updateTranslation)
+        case .cancelled, .failed:
+            print("some error, pan gesture ended with code \(recognizer.state)")
         default:
-            print("do nothing with gesture state \(recognizer.state)")
+            print("unhandled pan gesture case \(recognizer.state)")
         }
     }
 
     @objc
     func handlePinch(_ recognizer: UIPinchGestureRecognizer){
-        let scale = recognizer.scale
         switch(recognizer.state){
-        case .began,.changed:
-            
-            guideLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5) //TODO: centerAnchor
-            guideLayer.position = translation
-            guideLayer.setAffineTransform(.init(scaleX: -scale, y: -scale))
-            //renderer?.updateZoom(guideLayer.frame, updateDelegate: false)
-            //recognizer.scale = 1.0
-        case .ended:
-            //self.scale = scale
-            //renderer?.updateZoom(guideLayer.frame)
-            fallthrough
+        case .began,.changed, .ended:
+            let scrollzoom = 1 - recognizer.scale// / 2
+            (viewModel as! MetalbrotRendererViewModel).setZoom(scrollzoom)
+        case .cancelled, .failed:
+            print("some error, pinch gesture ended with code \(recognizer.state)")
         default:
-            print("do nothing gestureState: \(recognizer.state)")
+            print("unhandled pinch gesture case \(recognizer.state)")
         }
 
     }
