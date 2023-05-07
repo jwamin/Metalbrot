@@ -37,15 +37,15 @@ class MetalbrotViewController: MetalbrotBaseViewController {
         
     }
     
+    
     override func mouseDragged(with event: NSEvent) {
-
-        
+        viewModel?.updateCenter(CGPoint(x: event.locationInWindow.x, y: event.locationInWindow.y))
     }
     
     override func scrollWheel(with event: NSEvent) {
         
         let scrollzoom = CGFloat(event.scrollingDeltaY)
-        //print(scrollzoom)
+        print(scrollzoom)
         viewModel?.updateZoom(scrollzoom)
         
     }

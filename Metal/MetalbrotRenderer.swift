@@ -130,10 +130,10 @@ class MetalbrotRenderer: NSObject {
         vertexDescriptor.layouts[2].stride = MemoryLayout<vector_int2>.stride
         
         //Zoom
-        vertexDescriptor.attributes[3].format = .int2
+        vertexDescriptor.attributes[3].format = .float2
         vertexDescriptor.attributes[3].offset = 0
         vertexDescriptor.attributes[3].bufferIndex = 3
-        vertexDescriptor.layouts[3].stride = MemoryLayout<vector_int2>.stride
+        vertexDescriptor.layouts[3].stride = MemoryLayout<vector_float2>.stride
         
         descriptor.vertexDescriptor = vertexDescriptor
         
@@ -173,7 +173,7 @@ class MetalbrotRenderer: NSObject {
         let drawableSize: vector_uint2 = view.drawableSize.vector_uint2_32
         
         let origin: vector_int2 = viewModel?.getAdjustedPosition(viewSize: drawableSize) ?? [0, 0]
-        let zoomSize: vector_int2 = viewModel?.getAdjustedSize(viewSize: drawableSize) ?? [0, 0]
+        let zoomSize: vector_float2 = viewModel?.getAdjustedSize(viewSize: drawableSize) ?? [0, 0]
         
         
         let sizePtr = viewportBuffer?.contents()
@@ -183,7 +183,7 @@ class MetalbrotRenderer: NSObject {
         originPtr?.storeBytes(of: origin, as: vector_int2.self)
 
         let zoomPtr = zoomBuffer?.contents()
-        zoomPtr?.storeBytes(of: zoomSize, as: vector_int2.self)
+        zoomPtr?.storeBytes(of: zoomSize, as: vector_float2.self)
         
         renderEncoder.setRenderPipelineState(pipelineState)
         

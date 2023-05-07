@@ -24,7 +24,7 @@ protocol MetalbrotViewModelInterface: AnyObject {
     func updateCenter(_ newPoint: CGPoint)
     func updateZoom(_ newZoomLevel: CGFloat)
     
-    func getAdjustedSize(viewSize: vector_uint2) -> vector_int2
+    func getAdjustedSize(viewSize: vector_uint2) -> vector_float2
     func getAdjustedPosition(viewSize: vector_uint2) -> vector_int2
     
 }
@@ -43,19 +43,21 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     var centerPublisher: Published<CGPoint>.Publisher { $centerConcretePublished }
     
     //GET
-    func getAdjustedSize(viewSize: vector_uint2) -> vector_int2 {
+    func getAdjustedSize(viewSize: vector_uint2) -> vector_float2 {
         //let zoomSize: vector_uint2 = view.frame.size.vector_uint2_32 &* 2
         // Int lacks precision here, needs to be decimal
-        print(zoomLevel)
-        let signed_vector = vector_int2(Int32(viewSize.x), Int32(viewSize.y))
-        let fixedZoomLevel = zoomLevel == 0 ? 1 : Int32(zoomLevel)
-        return signed_vector / fixedZoomLevel
+        //print(zoomLevel)
+        let signed_vector = vector_float2(Float(viewSize.x), Float(viewSize.y))
+        //let fixedZoomLevel = zoomLevel == 0 ? 1 : Float(zoomLevel)
+        return signed_vector
     
     }
     
     func getAdjustedPosition(viewSize: vector_uint2) -> vector_int2 {
         //let origin: vector_uint2 = view.frame.origin.vector_uint2_32 &* 2
-        [0 , 0] &* Int32(zoomLevel)
+        let x = Int32(center.x) - Int32(viewSize.x / 2)
+        let y = Int32(center.y) - Int32(viewSize.y / 2)
+        return [x , y]// &* Int32(zoomLevel)
     }
     
     //SET
@@ -66,8 +68,6 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     func updateZoom(_ newZoomLevel: CGFloat){
         zoomLevelConcretePublished += newZoomLevel
     }
-    
-    
     
     //Concrete Implementation
     @Published private var zoomLevelConcretePublished: CGFloat
