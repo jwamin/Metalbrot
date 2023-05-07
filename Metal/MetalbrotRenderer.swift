@@ -73,6 +73,8 @@ class MetalbrotRenderer: NSObject {
             fatalError("cannot setup view model bindings with viewmodel nil")
         }
         
+        viewModel.updateCenter(metalKitView.bounds.center)
+        
         Publishers.CombineLatest(viewModel.centerPublisher, viewModel.zoomLevelPublisher)
             .map { _ in
                 Void()
@@ -172,8 +174,7 @@ class MetalbrotRenderer: NSObject {
         let (vertexBuffer, viewportBuffer, originBuffer, zoomBuffer) = getBuffers
         let drawableSize: vector_uint2 = view.drawableSize.vector_uint2_32
         
-        let origin: vector_int2 = viewModel?.getAdjustedPosition(viewSize: drawableSize) ?? [0, 0]
-        let zoomSize: vector_float2 = viewModel?.getAdjustedSize(viewSize: drawableSize) ?? [0, 0]
+        let (origin, zoomSize) = viewModel!.getAdjustedRect(viewSize: drawableSize)
         
         //print(drawableSize,origin,zoomSize)
         let sizePtr = viewportBuffer?.contents()

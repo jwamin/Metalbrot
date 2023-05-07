@@ -24,15 +24,13 @@ protocol MetalbrotViewModelInterface: AnyObject {
     func updateCenter(_ newPoint: CGPoint)
     func updateZoom(_ newZoomLevel: CGFloat)
     
-    func getAdjustedSize(viewSize: vector_uint2) -> vector_float2
-    func getAdjustedPosition(viewSize: vector_uint2) -> vector_int2
+    func getAdjustedRect(viewSize: vector_uint2) -> (vector_int2, vector_float2)
     
 }
 
 
 final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
 
-    
     //MetalbrotViewModelInterface protocol conformance
     var zoomLevel: CGFloat { zoomLevelConcretePublished }
     var zoomLevelPublished: Published<CGFloat> { _zoomLevelConcretePublished }
@@ -43,26 +41,19 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     var centerPublisher: Published<CGPoint>.Publisher { $centerConcretePublished }
     
     //GET
-    func getAdjustedSize(viewSize: vector_uint2) -> vector_float2 {
-        //let zoomSize: vector_uint2 = view.frame.size.vector_uint2_32 &* 2
-        // Int lacks precision here, needs to be decimal
-        //print(zoomLevel)
-        //        newX = x + width/2 - newWidth/2
-        //        newY = y + height/2 - newHeight/2
+    func getAdjustedRect(viewSize: vector_uint2) -> (vector_int2, vector_float2) {
+        
         let signed_vector = vector_float2(Float(viewSize.x), Float(viewSize.y))
         let fixedZoomLevel = zoomLevel == 0 ? 1 : Float(zoomLevel)
-        print(signed_vector, fixedZoomLevel, signed_vector * fixedZoomLevel)
-        return signed_vector * fixedZoomLevel
-    
-    }
-    
-    func getAdjustedPosition(viewSize: vector_uint2) -> vector_int2 {
-        //let origin: vector_uint2 = view.frame.origin.vector_uint2_32 &* 2
+        let newSize = signed_vector * fixedZoomLevel
+        
         let xWidth = Int32(viewSize.x / 2)
         let yHeight = Int32(viewSize.y / 2)
-        let x = Int32(center.x) + xWidth - xWidth
-        let y = Int32(center.y) + yHeight - yHeight
-        return [-x , y]// &* Int32(zoomLevel)
+        let xWidthN = Int32(newSize.x / 2)
+        let yHeightN = Int32(newSize.y / 2)
+        let x = Int32(center.x) + xWidth - xWidthN
+        let y = Int32(center.y) + yHeight - yHeightN
+        return ([x , y], [newSize.x, newSize.y])
     }
     
     //SET

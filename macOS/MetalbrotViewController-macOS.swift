@@ -39,7 +39,9 @@ class MetalbrotViewController: MetalbrotBaseViewController {
     
     
     override func mouseDragged(with event: NSEvent) {
-        viewModel?.updateCenter(CGPoint(x: event.locationInWindow.x, y: event.locationInWindow.y))
+        //TODO: Move to viewmodel
+        let current = viewModel!.center
+        viewModel?.updateCenter(CGPoint(x: current.x - event.deltaX, y: current.y - event.deltaY))
     }
     
     override func scrollWheel(with event: NSEvent) {
