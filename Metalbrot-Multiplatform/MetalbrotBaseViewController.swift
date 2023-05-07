@@ -25,8 +25,13 @@ class MetalbrotBaseViewController: ViewController {
     }
     
     var renderer: MetalbrotRenderer?
+    var viewModel: MetalbrotViewModelInterface?
     
-    init(){
+    //Printing - TODO Refactor to dependencyInjection
+    var printHandler: PrintManager?
+    
+    init(printHandler: PrintManager? = PrintManager.shared){
+        self.printHandler = printHandler
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -43,8 +48,13 @@ class MetalbrotBaseViewController: ViewController {
         let metalView = MTKView(frame: .zero, device: device)
         self.view = metalView
         metalView.autoresizingMask = basicPinning
-        
+        printHandler?.setPrintView(metalView)
         renderer = MetalbrotRenderer(view: metalView)
+    }
+    
+    override func viewDidLoad() {
+        viewModel = MetalbrotRendererViewModel()
+        renderer?.viewModel = viewModel
     }
     
 }

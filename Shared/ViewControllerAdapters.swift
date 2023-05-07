@@ -51,14 +51,14 @@ struct SwiftUIMetalKitView: VCRepresentable {
     }
     
 #else
-    typealias UIViewControllerType = MetalbrotBaseViewController
+    typealias UIViewControllerType = MetalbrotTVViewController
     typealias UIViewType = UIView
     
-    func makeUIViewController(context: Context) -> MetalbrotBaseViewController {
-        MetalbrotBaseViewController()
+    func makeUIViewController(context: Context) -> MetalbrotTVViewController {
+        MetalbrotTVViewController()
     }
     
-    func updateUIViewController(_ uiViewController: MetalbrotBaseViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: MetalbrotTVViewController, context: Context) {
         print("view updated")
     }
     

@@ -5,11 +5,28 @@
 //  Created by Joss Manger on 6/16/22.
 //
 
-import Foundation
+import simd
 
-let gon:[ColoredVertex] = [
-    ColoredVertex(with:(-1.0,-1.0,1.0,0.0,0.0,1.0)), // r
-    ColoredVertex(with:(-1.0,1.0,0.0,0.0,1.0,1.0)), //b
-    ColoredVertex(with:(1.0,-1.0,1.0,1.0,1.0,1.0)), //w
-    ColoredVertex(with:(1.0,1.0,0.0,1.0,0.0,1.0)), //g
-]
+struct MetalbrotConstants {
+    
+    struct data {
+        
+        //vertices for full viewport coverage
+        static let vertices:[vector_float2] = [
+            [-1.0,-1.0],
+            [-1.0,1.0],
+            [1.0,-1.0],
+            [1.0,1.0]
+        ]
+        
+        //Colors for debugging
+        static let colors:[vector_float4] = [
+            [1, 0, 0, 1],
+            [0, 1, 0, 1],
+            [0, 0, 1, 1],
+            [1, 1, 1, 1],
+        ]
+        
+    }
+    
+}

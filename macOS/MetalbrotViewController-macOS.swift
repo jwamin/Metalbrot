@@ -20,59 +20,50 @@ class MyView: NSView {
 
 class MetalbrotViewController: MetalbrotBaseViewController {
     
-    let viewRect: MyView = {
-        let view = MyView(frame: NSRect(origin: .zero, size: CGSize(width: 30, height: 30)))
-        
-        return view
-    }()
-    
-    var totalYScale:  CGFloat = 100
-    
-    var translation: NSPoint!
-    var gesture: NSPanGestureRecognizer!
-    
-    override init(){
-        super.init()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
     override func loadView() {
         super.loadView()
-        metalView.autoresizingMask = [.height,.width]
-        renderer?.delegate = self
-        viewRect.frame = self.view.bounds
-        viewRect.autoresizingMask = [.height,.width]
-        self.view.addSubview(viewRect)
-    }
-    
-    override func viewDidLoad() {
-        gesture = NSPanGestureRecognizer(target: self, action: nil)
-        print("hello world")
 
     }
     
-    override func mouseDragged(with event: NSEvent) {
+    override var acceptsFirstResponder: Bool {
+        true
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        let translation = CGPoint(x: translation.x - event.deltaX, y: translation.y - event.deltaY)
-        viewRect.layer?.position = translation
-        self.translation = translation
-        renderer?.updatePan(translation)
+        print("hello world - macOS \(acceptsFirstResponder)")
+        becomeFirstResponder()
         
     }
     
+    
+    override func mouseDragged(with event: NSEvent) {
+        //TODO: Move to viewmodel
+        let current = viewModel!.center
+        viewModel?.updateCenter(CGPoint(x: current.x - event.deltaX, y: current.y - event.deltaY))
+    }
+    
     override func scrollWheel(with event: NSEvent) {
+        //TODO: Move to viewmodel
+        let scrollzoom = CGFloat(event.scrollingDeltaY) / 100
+        viewModel?.updateZoom(scrollzoom)
+    }
+    
+    override func interpretKeyEvents(_ eventArray: [NSEvent]) {
+        print(eventArray)
+    }
+    
+    override func keyDown(with event: NSEvent) {
+        super.keyDown(with: event)
+        print(event.keyCode)
+    }
+    
+    override func keyUp(with event: NSEvent) {
+        super.keyUp(with: event)
+        print(event.keyCode)
+        //if event.keyCode == .
         
-        totalYScale += event.scrollingDeltaY
-        let yScale: CGFloat = totalYScale / 100
-        viewRect.layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        viewRect.layer?.position = translation
-        viewRect.layer?.setAffineTransform(.init(scaleX: yScale, y: yScale))
-        viewRect.setNeedsDisplay(viewRect.bounds)
-        translation = viewRect.layer?.position
-        renderer?.updateZoom(viewRect.layer!.frame, updateDelegate: false)
     }
     
 }

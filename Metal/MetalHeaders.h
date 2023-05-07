@@ -28,11 +28,14 @@ struct BrotVertexIn {
 
 struct BrotVertexOut {
     float4 position [[ position ]];
-    vector_float2 viewportSize;
+    float2 viewportSize;
     float4 color [[ flat ]];
-    vector_float2 origin;
-    vector_float2 zoom;
-    float vAdjust;
+    float2 origin;
+    float2 zoom;
+};
+
+struct FragmentOut {
+    float4 color [[ color(0) ]];
 };
 
 #endif /* MetalHeaders_h */
