@@ -69,7 +69,8 @@ using namespace metal;
 vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
                                       constant vector_uint2 *viewportSizePointer [[buffer(AAPLVertexInputIndexViewportSize)]],
                                       constant vector_int2 *originPointer [[buffer(2)]],
-                                      constant vector_float2 *zoomPointer [[buffer(3)]]
+                                      constant vector_float2 *zoomPointer [[buffer(3)]],
+                                      constant vector_float4 *color [[buffer(4)]]
                                       ) {
     
     //define vertexOut struct
@@ -84,6 +85,7 @@ vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
     out.viewportSize = viewportSize;
     out.origin = vector_float2(*originPointer);
     out.zoom = *zoomPointer;
+    out.color = *color;
     //pass vertex on
     return out;
     
@@ -137,9 +139,9 @@ fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     const float adjustedWidth = width * pxXScaleFactor;
     const float adjustedHeight = height * pxYScaleFactor;
     
-    const float randomR = 1.0;
-    const float randomG = 1.0;
-    const float randomB = 1.0;
+    const float randomR = in.color.r;
+    const float randomG = in.color.g;
+    const float randomB = in.color.b;
     
     const float c_re = (adjustedPixX - adjustedWidth/2.0)*4.0/adjustedWidth;
     const float c_im = (adjustedPixY - adjustedHeight/2.0)*4.0/adjustedWidth; //height/width constrains proportions
@@ -156,18 +158,11 @@ fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     
     if (iteration < ITERATION_MAX) {
         
-        half halfiteration = iteration;
-        half normalizedIncrease = halfiteration / ITERATION_MAX;
+        float iterationFactor = float(iteration) / ITERATION_MAX;
+        out.r = randomR * iterationFactor;
+        out.g = randomG * iterationFactor;
+        out.b = randomB * iterationFactor;
         
-        out.z = randomR * (normalizedIncrease / 0.333);   /* red */
-        
-        if (normalizedIncrease > 0.333){
-            out.y = randomG * (normalizedIncrease / 0.666); //* normalizedIncrease;   /* green */
-        }
-        if (normalizedIncrease > 0.666){
-            out.x = randomB * (normalizedIncrease / 1.0); //* normalizedIncrease;  /* blue */
-        }
-    
     } else {
         //write black to "void:"
         out = black;

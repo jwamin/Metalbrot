@@ -33,13 +33,15 @@ class MetalbrotRenderer: NSObject {
     
     
     ///Metal Variables
-    private typealias metalbuffers = (vertexBuffer: MTLBuffer?, viewportBuffer: MTLBuffer?, originBuffer: MTLBuffer?, zoomBuffer: MTLBuffer?)
+    private typealias metalbuffers = (vertexBuffer: MTLBuffer?, viewportBuffer: MTLBuffer?, originBuffer: MTLBuffer?, zoomBuffer: MTLBuffer?, colorBuffer: MTLBuffer?)
     
     private lazy var getBuffers: metalbuffers = {
         (device.makeBuffer(bytes: MetalbrotConstants.data.vertices, length: MemoryLayout<vector_float2>.size * MetalbrotConstants.data.vertices.count),
          device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
          device.makeBuffer(length: MemoryLayout<vector_int2>.stride),
-         device.makeBuffer(length: MemoryLayout<vector_int2>.stride))
+         device.makeBuffer(length: MemoryLayout<vector_int2>.stride),
+         device.makeBuffer(length: MemoryLayout<vector_float4>.stride)
+        )
     }()
     
 
@@ -137,6 +139,12 @@ class MetalbrotRenderer: NSObject {
         vertexDescriptor.attributes[3].bufferIndex = 3
         vertexDescriptor.layouts[3].stride = MemoryLayout<vector_float2>.stride
         
+        //Color
+        vertexDescriptor.attributes[4].format = .float4
+        vertexDescriptor.attributes[4].offset = 0
+        vertexDescriptor.attributes[4].bufferIndex = 4
+        vertexDescriptor.layouts[4].stride = MemoryLayout<vector_float4>.stride
+        
         descriptor.vertexDescriptor = vertexDescriptor
         
         metalKitView.enableSetNeedsDisplay = true
@@ -171,7 +179,7 @@ class MetalbrotRenderer: NSObject {
     //            double c_im = (row - maxY / 2.0) * 4.0 / maxX;
         
         
-        let (vertexBuffer, viewportBuffer, originBuffer, zoomBuffer) = getBuffers
+        let (vertexBuffer, viewportBuffer, originBuffer, zoomBuffer, colorBuffer) = getBuffers
         let drawableSize: vector_uint2 = view.drawableSize.vector_uint2_32
         
         let (origin, zoomSize) = viewModel!.getAdjustedRect(viewSize: drawableSize)
@@ -186,10 +194,14 @@ class MetalbrotRenderer: NSObject {
         let zoomPtr = zoomBuffer?.contents()
         zoomPtr?.storeBytes(of: zoomSize, as: vector_float2.self)
         
+        let colorPtr = colorBuffer?.contents()
+        let testColor: vector_float4 = [1,1,0,1]
+        colorPtr?.storeBytes(of: testColor, as: vector_float4.self)
+        
         renderEncoder.setRenderPipelineState(pipelineState)
         
         //begin actual drawing code
-        for (bufferIndex,buffer) in [vertexBuffer,viewportBuffer,originBuffer,zoomBuffer].enumerated(){
+        for (bufferIndex,buffer) in [vertexBuffer,viewportBuffer,originBuffer,zoomBuffer,colorBuffer].enumerated(){
             renderEncoder.setVertexBuffer(buffer, offset: 0, index: bufferIndex)
         }
         
