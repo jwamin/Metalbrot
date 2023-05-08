@@ -31,7 +31,7 @@ struct BrotVertexOut {
     uint2 viewportSize;
     int2 origin;
     float2 zoom;
-    float4 color [[ flat ]];
+    float4 color;
 };
 
 struct FragmentOut {

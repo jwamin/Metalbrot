@@ -49,7 +49,7 @@ final class MetalbrotViewController: MetalbrotBaseViewController {
     func handlePinch(_ recognizer: UIPinchGestureRecognizer){
         switch(recognizer.state){
         case .began,.changed, .ended:
-            let scrollzoom = 1 - recognizer.scale// / 2
+            let scrollzoom = 1 - recognizer.scale
             (viewModel as! MetalbrotRendererViewModel).setZoom(scrollzoom)
         case .cancelled, .failed:
             print("some error, pinch gesture ended with code \(recognizer.state)")

@@ -101,6 +101,48 @@ vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
     
 };
 
+//http://en.wikipedia.org/wiki/HSL_color_space
+//https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
+float hue2rgb(float3 pqtIn){ //(p ,q ,t)
+    float p = pqtIn.x;
+    float q = pqtIn.y;
+    float t = pqtIn.z;
+    
+    if(t < 0)
+        t += 1;
+    if(t > 1)
+        t -= 1;
+    if(t < 1/6)
+        return p + (q - p) * 6 * t;
+    if(t < 1/2)
+        return q;
+    if(t < 2/3)
+        return p + (q - p) * (2/3 - t) * 6;
+    return p;
+}
+
+float4 hslToRGBA(float3 hslIn){
+    
+    float4 rgbaOut = {0,0,0,1};
+    float h = hslIn.x;
+    float s = hslIn.y;
+    float l = hslIn.z;
+    float q,p = 0;
+    
+    if (s == 0) {
+        rgbaOut.rgb = l; // achromatic
+    } else {
+        q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        p = 2 * l - q;
+        rgbaOut.r = hue2rgb({p, q, h + 1/3});
+        rgbaOut.g = hue2rgb({p, q, h});
+        rgbaOut.b = hue2rgb({p, q, h - 1/3});
+    }
+    
+    return rgbaOut;
+    
+}
+
 
 /// Fragment Function - assigns colors to individually rasterized pixels in the form of the Mandelbrot set
 fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
@@ -126,10 +168,6 @@ fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     const float adjustedWidth = width * pxXScaleFactor;
     const float adjustedHeight = height * pxYScaleFactor;
     
-    const float randomR = in.color.r;
-    const float randomG = in.color.g;
-    const float randomB = in.color.b;
-    
     const float c_re = (adjustedPixX - adjustedWidth/2.0)*4.0/adjustedWidth;
     const float c_im = (adjustedPixY - adjustedHeight/2.0)*4.0/adjustedWidth; //height/width constrains proportions
     float x = 0, y = 0;
@@ -146,10 +184,8 @@ fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     if (iteration < ITERATION_MAX) {
         
         float iterationFactor = float(iteration) / ITERATION_MAX;
-        out.r = randomR * iterationFactor;
-        out.g = randomG * iterationFactor;
-        out.b = randomB * iterationFactor;
-        
+        out = hslToRGBA({iterationFactor,1.0,0.8});
+
     } else {
         //write black to "void:"
         out = black;
