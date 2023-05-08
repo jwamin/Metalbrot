@@ -15,7 +15,16 @@
 #endif
 
 #define MODULO_MAX 256
-#define AAPLVertexInputIndexViewportSize 1
+
+typedef enum {
+    VertexIndex,
+    ViewportSizeIndex,
+    OriginIndex,
+    ZoomRectIndex,
+    BaseColorIndex
+} MetalbrotBufferIndex;
+
+#define ViewportSizeIndex 1
 using namespace metal;
 
 
@@ -67,10 +76,10 @@ using namespace metal;
 
 /// Vertex function
 vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
-                                      constant vector_uint2 *viewportSizePointer [[buffer(AAPLVertexInputIndexViewportSize)]],
-                                      constant vector_int2 *originPointer [[buffer(2)]],
-                                      constant vector_float2 *zoomPointer [[buffer(3)]],
-                                      constant vector_float4 *color [[buffer(4)]]
+                                      constant vector_uint2 *viewportSizePointer [[buffer(ViewportSizeIndex)]],
+                                      constant vector_int2 *originPointer [[buffer(OriginIndex)]],
+                                      constant vector_float2 *zoomPointer [[buffer(ZoomRectIndex)]],
+                                      constant vector_float4 *color [[buffer(BaseColorIndex)]]
                                       ) {
     
     //define vertexOut struct
@@ -79,13 +88,14 @@ vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
     //get xy position from vertex in
     out.position = float4(vertex_in.position,0.0,1.0);
     
-    vector_float2 viewportSize = vector_float2(*viewportSizePointer);
+    vector_uint2 viewportSize = *viewportSizePointer;
     
     //assign viewportSize to out struct
     out.viewportSize = viewportSize;
-    out.origin = vector_float2(*originPointer);
+    out.origin = *originPointer;
     out.zoom = *zoomPointer;
     out.color = *color;
+    
     //pass vertex on
     return out;
     
@@ -96,36 +106,13 @@ vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
 fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     
     FragmentOut fragOut;
-    //pass on color to fragment
     float4 black = float4(0,0,0,1);
-    //float4 error = float4(1.0,0.0,1.0,1);
-    float4 out = float4(0.0,0.0,0.0,1);
-    
-    /// \param maxX the the width of the full mandelbrot set image
-    /// \param maxY the height of the full mandelbrot set image
-    /// \param originX the origin horizontal pixel of the sub rect of mandelbrot set we are rendering
-    /// \param originY the origin vertical pixel of the sub rect of mandelbrot set we are rendering
-    /// \param dimensionX the width of the drawing region of mandelbrot set
-    /// \param dimensionY the height of the drawing region of mandelbrot set
-//    int dimensionXMax = originX + dimensionX;
-//    int dimensionYMax = originY + dimensionY;
-//
-//    for (int row = originY; row < dimensionYMax; row++) {
-//        for (int col = originX; col < dimensionXMax; col++) {
-    
-// INSIDE SHADER CODE
-//            double c_re = (col - maxX / 2.0) * 4.0 / maxX;
-//            double c_im = (row - maxY / 2.0) * 4.0 / maxX;
-    
+    float4 out = black;
 
     const float pixX = in.position.x ;// + 500;
     const float pixY = in.position.y ;// + 800;
     const float width = in.viewportSize.x;
     const float height = in.viewportSize.y;
-    
-    //414.315, 291.06, 8.370000000000005, 5.8799999999999955
-    
-    // createSquare(10000,10000,1300,4900,300,300, randomR, randomG, randomB);
     
     const float pxXScaleFactor = in.viewportSize.x / in.zoom.x; // a low number
     const float pxYScaleFactor = in.viewportSize.y / in.zoom.y;

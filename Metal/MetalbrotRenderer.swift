@@ -35,6 +35,8 @@ class MetalbrotRenderer: NSObject {
     ///Metal Variables
     private typealias metalbuffers = (vertexBuffer: MTLBuffer?, viewportBuffer: MTLBuffer?, originBuffer: MTLBuffer?, zoomBuffer: MTLBuffer?, colorBuffer: MTLBuffer?)
     
+    private var buffers: [MTLBuffer?] = []
+    
     private lazy var getBuffers: metalbuffers = {
         (device.makeBuffer(bytes: MetalbrotConstants.data.vertices, length: MemoryLayout<vector_float2>.size * MetalbrotConstants.data.vertices.count),
          device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
@@ -71,12 +73,14 @@ class MetalbrotRenderer: NSObject {
     
     
     private func setupViewModel(){
+        
         guard let viewModel = viewModel else {
             fatalError("cannot setup view model bindings with viewmodel nil")
         }
         
         viewModel.updateCenter(metalKitView.bounds.center)
         
+        //Basic Listener to look for _any_ changes on view model @Published interface
         Publishers.CombineLatest(viewModel.centerPublisher, viewModel.zoomLevelPublisher)
             .map { _ in
                 Void()
@@ -84,8 +88,6 @@ class MetalbrotRenderer: NSObject {
             .sink(receiveValue: { [weak self] _ in
                 self?.renderAll()
             }).store(in: &storage)
-        
-        //Set view model bindings
         
     }
     
@@ -103,12 +105,6 @@ class MetalbrotRenderer: NSObject {
         let library = device.makeDefaultLibrary()!
         let vertexFunction = library.makeFunction(name: "brot_vertex_main")
         let fragmentFunction = library.makeFunction(name: "brot_fragment_main")
-        
-        if #available(macOS 13.0, iOS 16.0, *) {
-            (metalKitView.layer as! CAMetalLayer).developerHUDProperties = [
-                "mode":"default"
-            ]
-        }
         
         descriptor.vertexFunction = vertexFunction
         descriptor.fragmentFunction = fragmentFunction
@@ -153,12 +149,16 @@ class MetalbrotRenderer: NSObject {
         pipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
     }
     
+    
+    /// Main Render Function
+    /// - Parameter view: render surface
     func render(view: MTKView){
         
         guard let descriptor = view.currentRenderPassDescriptor,
               let pipelineState = pipelineState,
               let commandBuffer = commandQueue.makeCommandBuffer(),
-              let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
+              let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor),
+              let viewModel = viewModel else {
             fatalError("Unable to create render encoder")
         }
         
@@ -180,9 +180,14 @@ class MetalbrotRenderer: NSObject {
         
         
         let (vertexBuffer, viewportBuffer, originBuffer, zoomBuffer, colorBuffer) = getBuffers
+        
+        if buffers.isEmpty {
+            self.buffers = [vertexBuffer, viewportBuffer, originBuffer, zoomBuffer, colorBuffer]
+        }
+        
         let drawableSize: vector_uint2 = view.drawableSize.vector_uint2_32
         
-        let (origin, zoomSize) = viewModel!.getAdjustedRect(viewSize: drawableSize)
+        let (origin, zoomSize) = viewModel.getAdjustedRect(viewSize: drawableSize)
         
         //print(drawableSize,origin,zoomSize)
         let sizePtr = viewportBuffer?.contents()
@@ -201,7 +206,7 @@ class MetalbrotRenderer: NSObject {
         renderEncoder.setRenderPipelineState(pipelineState)
         
         //begin actual drawing code
-        for (bufferIndex,buffer) in [vertexBuffer,viewportBuffer,originBuffer,zoomBuffer,colorBuffer].enumerated(){
+        for (bufferIndex,buffer) in buffers.enumerated(){
             renderEncoder.setVertexBuffer(buffer, offset: 0, index: bufferIndex)
         }
         
@@ -233,7 +238,8 @@ class MetalbrotRenderer: NSObject {
     
 }
 
-//MARK: Metal Kit
+
+//MARK: Metal Kit View Delegate
 extension MetalbrotRenderer: MTKViewDelegate {
     
     func renderAll(){
