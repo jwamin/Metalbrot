@@ -103,46 +103,74 @@ vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
 
 //http://en.wikipedia.org/wiki/HSL_color_space
 //https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
-float hue2rgb(float3 pqtIn){ //(p ,q ,t)
-    float p = pqtIn.x;
-    float q = pqtIn.y;
-    float t = pqtIn.z;
-    
-    if(t < 0)
-        t += 1;
-    if(t > 1)
-        t -= 1;
-    if(t < 1/6)
-        return p + (q - p) * 6 * t;
-    if(t < 1/2)
-        return q;
-    if(t < 2/3)
-        return p + (q - p) * (2/3 - t) * 6;
-    return p;
-}
+//float hue2rgb(float3 pqtIn){ //(p ,q ,t)
+//    float p = pqtIn.x;
+//    float q = pqtIn.y;
+//    float t = pqtIn.z;
+//
+//    if(t < 0)
+//        t += 1;
+//    if(t > 1)
+//        t -= 1;
+//    if(t < 1/6)
+//        return p + (q - p) * 6 * t;
+//    if(t < 1/2)
+//        return q;
+//    if(t < 2/3)
+//        return p + (q - p) * (2/3 - t) * 6;
+//    return p;
+//}
+//
+//float4 hslToRGBA(float3 hslIn){
+//
+//    float4 rgbaOut = {0,0,0,1};
+//    float h = hslIn.x;
+//    float s = hslIn.y;
+//    float l = hslIn.z;
+//    float q,p = 0;
+//
+//    if (s == 0) {
+//        rgbaOut.rgb = l; // achromatic
+//    } else {
+//        q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+//        p = 2 * l - q;
+//        rgbaOut.r = hue2rgb({p, q, h + 1/3});
+//        rgbaOut.g = hue2rgb({p, q, h});
+//        rgbaOut.b = hue2rgb({p, q, h - 1/3});
+//    }
+//
+//    return rgbaOut;
+//
+//}
 
-float4 hslToRGBA(float3 hslIn){
+float4 hsv2rgb(float3 hsv)
+{
+    float h = hsv.x * 6.0; /* H in 0°=0 ... 1=360° */
+    float s = hsv.y;
+    float v = hsv.z;
+    float c = v * s;
+    float f2 = 2.;
+    float modh = 1 - abs(modf(h, f2)- 1.);
     
-    float4 rgbaOut = {0,0,0,1};
-    float h = hslIn.x;
-    float s = hslIn.y;
-    float l = hslIn.z;
-    float q,p = 0;
-    
-    if (s == 0) {
-        rgbaOut.rgb = l; // achromatic
+    float2 cx = float2(v*s, c * modh);
+
+    float3 rgb = float3(0., 0., 0.);
+    if( h < 1. ) {
+        rgb.rg = cx;
+    } else if( h < 2. ) {
+        rgb.gr = cx;
+    } else if( h < 3. ) {
+        rgb.gb = cx;
+    } else if( h < 4. ) {
+        rgb.bg = cx;
+    } else if( h < 5. ) {
+        rgb.br = cx;
     } else {
-        q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        p = 2 * l - q;
-        rgbaOut.r = hue2rgb({p, q, h + 1/3});
-        rgbaOut.g = hue2rgb({p, q, h});
-        rgbaOut.b = hue2rgb({p, q, h - 1/3});
+        rgb.rb = cx;
     }
-    
-    return rgbaOut;
-    
+    rgb += float3(v-cx.y);
+    return float4(rgb,1.0);
 }
-
 
 /// Fragment Function - assigns colors to individually rasterized pixels in the form of the Mandelbrot set
 fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
@@ -175,16 +203,19 @@ fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     uint iteration = 0;
 
     while (x*x+y*y <= 4 && iteration < ITERATION_MAX) {
-        half x_new = x*x - y*y + c_re;
+        float x_new = x*x - y*y + c_re;
         y = 2*x*y + c_im;
         x = x_new;
         iteration++;
     }
     
     if (iteration < ITERATION_MAX) {
+        //fourth root of (iter / MaxIterations).
+        float val = float(iteration)/float(ITERATION_MAX);
+        float colorValue = pow(val, 1.0/4);
+//        out = {colorValue,colorValue,1.0,1.0};
         
-        float iterationFactor = float(iteration) / ITERATION_MAX;
-        out = hslToRGBA({iterationFactor,1.0,0.8});
+        out = hsv2rgb({colorValue,1.0,1.0});
 
     } else {
         //write black to "void:"
