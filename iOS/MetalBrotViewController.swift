@@ -5,6 +5,7 @@
 //  Created by Joss Manger on 6/11/22.
 //
 
+#if os(iOS)
 import UIKit
 import MetalKit
 import SwiftUI
@@ -60,3 +61,5 @@ final class MetalbrotViewController: MetalbrotBaseViewController {
     }
     
 }
+
+#endif

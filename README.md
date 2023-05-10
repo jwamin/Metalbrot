@@ -7,18 +7,21 @@
 ## DONE
 
 * Basic Apple Platforms targets (macOS, iOS/iPadOS, tvOS)
-* Metal Shaders to draw set
-* Viewport Sizing
+* Unified Multiplatform Xcode Target
+* Metal Shaders to draw and color set
 * Basic coloring
+* Viewport Sizing
 * Pan and Zoom on MacOS, iOS
 
 ## Issues
 * "Frisky" pan speed at high zoom levels ~ inverse pan speed to zoom level in view model
 * "Inverting/flip" drawing during zoom 
-*
+* Print doesnt get correct target view
 
 ## TODO
-* View model optimizations 
+
+* Unit tests for view model
+* View model enhancements / optimizations 
 * Color options
 * Greater control for Pan
 * Reset on macOS, iOS
