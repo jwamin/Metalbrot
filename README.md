@@ -12,10 +12,19 @@
 * Basic coloring
 * Pan and Zoom on MacOS, iOS
 
-## TODO
+## Issues
+* "Frisky" pan speed at high zoom levels ~ inverse pan speed to zoom level in view model
+* "Inverting/flip" drawing during zoom 
+*
 
-* Reset on macOS, iOS
-* Reset Zoom w/ Animation, interpolation
+## TODO
+* View model optimizations 
 * Color options
+* Greater control for Pan
+* Reset on macOS, iOS
 * Print
 * Settings, Disable Metal HUD etc
+
+## ROADMAP FEATURES
+* Reset Zoom w/ Animation, interpolation
+* Shader refactor

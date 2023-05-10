@@ -200,8 +200,8 @@ class MetalbrotRenderer: NSObject {
         zoomPtr?.storeBytes(of: zoomSize, as: vector_float2.self)
         
         let colorPtr = colorBuffer?.contents()
-        let testColor: vector_float4 = [1,1,0,1]
-        colorPtr?.storeBytes(of: testColor, as: vector_float4.self)
+        let baseColor = #colorLiteral(red: 0.3036130369, green: 0.1568089426, blue: 0.5214661956, alpha: 1).float4()
+        colorPtr?.storeBytes(of: baseColor, as: vector_float4.self)
         
         renderEncoder.setRenderPipelineState(pipelineState)
         

@@ -61,6 +61,10 @@ extension Color {
     
   }
     
+    func float4() -> vector_float4 {
+        vector_float4(self.cgColor.components!.map({Float($0)}))
+    }
+    
 }
 
 protocol PositionInSuperView {

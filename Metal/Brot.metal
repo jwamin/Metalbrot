@@ -143,7 +143,7 @@ vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
 //
 //}
 
-float4 hsv2rgb(float3 hsv)
+float4 hsb2rgb(float3 hsv)
 {
     float h = hsv.x * 6.0; /* H in 0°=0 ... 1=360° */
     float s = hsv.y;
@@ -212,10 +212,13 @@ fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     if (iteration < ITERATION_MAX) {
         //fourth root of (iter / MaxIterations).
         float val = float(iteration)/float(ITERATION_MAX);
-        float colorValue = pow(val, 1.0/4);
-//        out = {colorValue,colorValue,1.0,1.0};
         
-        out = hsv2rgb({colorValue,1.0,1.0});
+        //HSLA from Javascript Code
+        float colorValue = pow(val, 1.0/4);
+        //out = {colorValue,colorValue,1.0,1.0};
+        
+        //HSB from OpenGL code
+        out = hsb2rgb({colorValue,1.0,1.0});// * in.color;
 
     } else {
         //write black to "void:"
