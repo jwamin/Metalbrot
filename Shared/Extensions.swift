@@ -67,6 +67,8 @@ extension Color {
     
 }
 
+fileprivate let internalPrivateColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+
 protocol PositionInSuperView {
     
     var positionInSuperView: CGPoint {

@@ -27,6 +27,39 @@ typedef enum {
 #define ViewportSizeIndex 1
 using namespace metal;
 
+typedef enum {
+    black,
+    red,
+    orange,
+    yellow,
+    green,
+    blue,
+    indigo,
+    violet
+} LinearColor;
+
+float4 colorFromUInt(LinearColor color){
+    
+    switch (color){
+        case red:
+            return { 1.0,0.149,0,1 };
+        case orange:
+            return { 0.968,0.524,0.291,1 };
+        case yellow:
+            return { 0.998,1,0.625,1 };
+        case green:
+            return { 0.626,0.835,0.242,1 };
+        case blue:
+            return { 0,0.748,1,1 };
+        case indigo:
+            return { 0.324,0.106,0.575,1 };
+        case violet:
+            return { 1.0,0,1,1 };
+        case black:
+            return {0,0,0,1};
+    }
+    return {1,1,1,1};
+}
 
 /**
  
@@ -214,12 +247,14 @@ fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
         float val = float(iteration)/float(ITERATION_MAX);
         
         //HSLA from Javascript Code
-        float colorValue = pow(val, 1.0/4);
+        //float colorValue = pow(val, 1.0/4);
         //out = {colorValue,colorValue,1.0,1.0};
         
         //HSB from OpenGL code
-        out = hsb2rgb({colorValue,1.0,1.0});// * in.color;
+        //out = hsb2rgb({colorValue,1.0,1.0});// * in.color;
 
+        out = colorFromUInt((LinearColor)(uint)iteration);
+        
     } else {
         //write black to "void:"
         out = black;
