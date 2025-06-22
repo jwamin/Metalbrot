@@ -2,8 +2,6 @@
 //  Brot.metal
 //  Metalbrot
 //
-//  Created by Joss Manger on 6/11/22.
-//
 
 #include "MetalHeaders.h"
 #include <TargetConditionals.h>
@@ -14,8 +12,6 @@
 #define ITERATION_MAX 100
 #endif
 
-#define MODULO_MAX 256
-
 typedef enum {
     VertexIndex,
     ViewportSizeIndex,
@@ -24,245 +20,136 @@ typedef enum {
     BaseColorIndex
 } MetalbrotBufferIndex;
 
-#define ViewportSizeIndex 1
 using namespace metal;
 
 typedef enum {
-    black,
-    red,
-    orange,
-    yellow,
-    green,
-    blue,
-    indigo,
-    violet
+    black, red, orange, yellow, green, blue, indigo, violet
 } LinearColor;
 
-float4 colorFromUInt(LinearColor color){
-    
-    switch (color){
-        case red:
-            return { 1.0,0.149,0,1 };
-        case orange:
-            return { 0.968,0.524,0.291,1 };
-        case yellow:
-            return { 0.998,1,0.625,1 };
-        case green:
-            return { 0.626,0.835,0.242,1 };
-        case blue:
-            return { 0,0.748,1,1 };
-        case indigo:
-            return { 0.324,0.106,0.575,1 };
-        case violet:
-            return { 1.0,0,1,1 };
-        case black:
-            return {0,0,0,1};
+// Color scheme 1: Classic Rainbow
+float4 colorFromUInt_rainbow(LinearColor color) {
+    switch (color) {
+        case red: return {1.0, 0.0, 0.0, 1};
+        case orange: return {1.0, 0.5, 0.0, 1};
+        case yellow: return {1.0, 1.0, 0.0, 1};
+        case green: return {0.0, 1.0, 0.0, 1};
+        case blue: return {0.0, 0.0, 1.0, 1};
+        case indigo: return {0.5, 0.0, 1.0, 1};
+        case violet: return {1.0, 0.0, 1.0, 1};
+        case black: return {0, 0, 0, 1};
     }
-    return {1,1,1,1};
+    return {1, 1, 1, 1};
 }
 
-/**
- 
- C sample code from CPU project:
- 
- void drawEntireSet(FILE *fp, int width, int height, unsigned int r, unsigned int g, unsigned int b){
- 
- (void) fprintf(fp, "P6\n%d %d\n255\n", width, height);
- 
- int randomR = r;
- int randomB = b;
- int randomG = g;
- 
- unsigned char other[3];
- 
- for (int row = 0; row < height; row++) {
- for (int col = 0; col < width; col++) {
- double c_re = (col - width/2.0)*4.0/width;
- double c_im = (row - height/2.0)*4.0/width;
- double x = 0, y = 0;
- int iteration = 0;
- while (x*x+y*y <= 4 && iteration < ITERATION_MAX) {
- double x_new = x*x - y*y + c_re;
- y = 2*x*y + c_im;
- x = x_new;
- iteration++;
- }
- if (iteration < ITERATION_MAX) {
- int increase = iteration * 100;
- 
- 
- other[0] = randomR * increase;  // red
- other[1] = randomG * increase;   //green
- other[2] = randomB * increase;  //  blue
- 
- (void) fwrite(other, 1, 3, fp);
- } else {
- (void) fwrite(black, 1, 3, fp);
- }
- }
- }
- 
- }
- **/
+// Color scheme 2: Warm Sunset
+float4 colorFromUInt_sunset(LinearColor color) {
+    switch (color) {
+        case red: return {0.8, 0.2, 0.1, 1};
+        case orange: return {0.9, 0.4, 0.2, 1};
+        case yellow: return {1.0, 0.6, 0.3, 1};
+        case green: return {0.7, 0.5, 0.2, 1};
+        case blue: return {0.4, 0.3, 0.6, 1};
+        case indigo: return {0.3, 0.2, 0.5, 1};
+        case violet: return {0.5, 0.1, 0.4, 1};
+        case black: return {0, 0, 0, 1};
+    }
+    return {1, 1, 1, 1};
+}
 
+// Color scheme 3: Cool Ocean
+float4 colorFromUInt_ocean(LinearColor color) {
+    switch (color) {
+        case red: return {0.1, 0.3, 0.5, 1};
+        case orange: return {0.2, 0.4, 0.6, 1};
+        case yellow: return {0.3, 0.5, 0.7, 1};
+        case green: return {0.4, 0.6, 0.8, 1};
+        case blue: return {0.5, 0.7, 0.9, 1};
+        case indigo: return {0.3, 0.5, 0.8, 1};
+        case violet: return {0.2, 0.4, 0.7, 1};
+        case black: return {0, 0, 0, 1};
+    }
+    return {1, 1, 1, 1};
+}
 
+// Original function (keeping for reference)
+float4 colorFromUInt(LinearColor color) {
+    switch (color) {
+        case red: return {1.0, 0.149, 0, 1};
+        case orange: return {0.968, 0.524, 0.291, 1};
+        case yellow: return {0.998, 1, 0.625, 1};
+        case green: return {0.626, 0.835, 0.242, 1};
+        case blue: return {0, 0.748, 1, 1};
+        case indigo: return {0.324, 0.106, 0.575, 1};
+        case violet: return {1.0, 0, 1, 1};
+        case black: return {0, 0, 0, 1};
+    }
+    return {1, 1, 1, 1};
+}
 
-/// Vertex function
-vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[ stage_in ]],
-                                      constant vector_uint2 *viewportSizePointer [[buffer(ViewportSizeIndex)]],
-                                      constant vector_int2 *originPointer [[buffer(OriginIndex)]],
-                                      constant vector_float2 *zoomPointer [[buffer(ZoomRectIndex)]],
-                                      constant vector_float4 *color [[buffer(BaseColorIndex)]]
-                                      ) {
-    
-    //define vertexOut struct
+vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[stage_in]],
+                                     constant vector_uint2 *viewportSizePointer [[buffer(ViewportSizeIndex)]],
+                                     constant vector_int2 *originPointer [[buffer(OriginIndex)]],
+                                     constant vector_float2 *zoomPointer [[buffer(ZoomRectIndex)]],
+                                     constant vector_float4 *color [[buffer(BaseColorIndex)]],
+                                     constant uint *colorScheme [[buffer(5)]]) {
     BrotVertexOut out;
-    
-    //get xy position from vertex in
-    out.position = float4(vertex_in.position,0.0,1.0);
-    
-    vector_uint2 viewportSize = *viewportSizePointer;
-    
-    //assign viewportSize to out struct
-    out.viewportSize = viewportSize;
+    out.position = float4(vertex_in.position, 0.0, 1.0);
+    out.viewportSize = *viewportSizePointer;
     out.origin = *originPointer;
     out.zoom = *zoomPointer;
     out.color = *color;
-    
-    //pass vertex on
+    out.colorScheme = *colorScheme;
     return out;
-    
-};
-
-//http://en.wikipedia.org/wiki/HSL_color_space
-//https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
-//float hue2rgb(float3 pqtIn){ //(p ,q ,t)
-//    float p = pqtIn.x;
-//    float q = pqtIn.y;
-//    float t = pqtIn.z;
-//
-//    if(t < 0)
-//        t += 1;
-//    if(t > 1)
-//        t -= 1;
-//    if(t < 1/6)
-//        return p + (q - p) * 6 * t;
-//    if(t < 1/2)
-//        return q;
-//    if(t < 2/3)
-//        return p + (q - p) * (2/3 - t) * 6;
-//    return p;
-//}
-//
-//float4 hslToRGBA(float3 hslIn){
-//
-//    float4 rgbaOut = {0,0,0,1};
-//    float h = hslIn.x;
-//    float s = hslIn.y;
-//    float l = hslIn.z;
-//    float q,p = 0;
-//
-//    if (s == 0) {
-//        rgbaOut.rgb = l; // achromatic
-//    } else {
-//        q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-//        p = 2 * l - q;
-//        rgbaOut.r = hue2rgb({p, q, h + 1/3});
-//        rgbaOut.g = hue2rgb({p, q, h});
-//        rgbaOut.b = hue2rgb({p, q, h - 1/3});
-//    }
-//
-//    return rgbaOut;
-//
-//}
-
-float4 hsb2rgb(float3 hsv)
-{
-    float h = hsv.x * 6.0; /* H in 0°=0 ... 1=360° */
-    float s = hsv.y;
-    float v = hsv.z;
-    float c = v * s;
-    float f2 = 2.;
-    float modh = 1 - abs(modf(h, f2)- 1.);
-    
-    float2 cx = float2(v*s, c * modh);
-
-    float3 rgb = float3(0., 0., 0.);
-    if( h < 1. ) {
-        rgb.rg = cx;
-    } else if( h < 2. ) {
-        rgb.gr = cx;
-    } else if( h < 3. ) {
-        rgb.gb = cx;
-    } else if( h < 4. ) {
-        rgb.bg = cx;
-    } else if( h < 5. ) {
-        rgb.br = cx;
-    } else {
-        rgb.rb = cx;
-    }
-    rgb += float3(v-cx.y);
-    return float4(rgb,1.0);
 }
 
-/// Fragment Function - assigns colors to individually rasterized pixels in the form of the Mandelbrot set
 fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
-    
     FragmentOut fragOut;
-    float4 black = float4(0,0,0,1);
-    float4 out = black;
-
-    const float pixX = in.position.x ;// + 500;
-    const float pixY = in.position.y ;// + 800;
+    float4 black = float4(0, 0, 0, 1);
+    
     const float width = in.viewportSize.x;
     const float height = in.viewportSize.y;
+    const float pxXScaleFactor = width / in.zoom.x;
+    const float pxYScaleFactor = height / in.zoom.y;
     
-    const float pxXScaleFactor = in.viewportSize.x / in.zoom.x; // a low number
-    const float pxYScaleFactor = in.viewportSize.y / in.zoom.y;
-
-    const float dimensionXMax = in.origin.x * pxXScaleFactor;
-    const float dimensionYMax = in.origin.y * pxYScaleFactor;
+    const float adjustedPixX = ((in.position.x / width) * (in.zoom.x * pxXScaleFactor)) + (in.origin.x * pxXScaleFactor);
+    const float adjustedPixY = ((in.position.y / height) * (in.zoom.y * pxYScaleFactor)) + (in.origin.y * pxYScaleFactor);
     
-    const float adjustedPixX = ((pixX / width) * (in.zoom.x * pxXScaleFactor)) + dimensionXMax;
-    const float adjustedPixY = ((pixY / height) * (in.zoom.y * pxYScaleFactor)) + dimensionYMax;// + magicVAdjust;
-
     const float adjustedWidth = width * pxXScaleFactor;
     const float adjustedHeight = height * pxYScaleFactor;
     
-    const float c_re = (adjustedPixX - adjustedWidth/2.0)*4.0/adjustedWidth;
-    const float c_im = (adjustedPixY - adjustedHeight/2.0)*4.0/adjustedWidth; //height/width constrains proportions
-    float x = 0, y = 0;
+    const float c_re = (adjustedPixX - adjustedWidth/2.0) * 4.0/adjustedWidth;
+    const float c_im = (adjustedPixY - adjustedHeight/2.0) * 4.0/adjustedWidth;
     
+    float x = 0, y = 0;
     uint iteration = 0;
-
-    while (x*x+y*y <= 4 && iteration < ITERATION_MAX) {
+    
+    while (x*x + y*y <= 4 && iteration < ITERATION_MAX) {
         float x_new = x*x - y*y + c_re;
         y = 2*x*y + c_im;
         x = x_new;
         iteration++;
     }
     
-    if (iteration < ITERATION_MAX) {
-        //fourth root of (iter / MaxIterations).
-        float val = float(iteration)/float(ITERATION_MAX);
-        
-        //HSLA from Javascript Code
-        //float colorValue = pow(val, 1.0/4);
-        //out = {colorValue,colorValue,1.0,1.0};
-        
-        //HSB from OpenGL code
-        //out = hsb2rgb({colorValue,1.0,1.0});// * in.color;
-
-        out = colorFromUInt((LinearColor)(uint)iteration);
-        
-    } else {
-        //write black to "void:"
-        out = black;
+    // Use the passed color scheme instead of random selection
+    float4 color;
+    
+    switch (in.colorScheme) {
+        case 0:
+            color = colorFromUInt_rainbow((LinearColor)(uint)iteration);
+            break;
+        case 1:
+            color = colorFromUInt_sunset((LinearColor)(uint)iteration);
+            break;
+        case 2:
+            color = colorFromUInt_ocean((LinearColor)(uint)iteration);
+            break;
+        default:
+            color = colorFromUInt((LinearColor)(uint)iteration);
+            break;
     }
     
-    fragOut.color = out;
+    // Blend the calculated color with the passed-in base color
+    fragOut.color = (iteration < ITERATION_MAX) ? mix(in.color, color, 0.8) : black;
     
     return fragOut;
-    
 }
-

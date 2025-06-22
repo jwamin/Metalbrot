@@ -29,6 +29,13 @@ protocol MetalbrotViewModelInterface: AnyObject {
     
     func getAdjustedRect(viewSize: vector_uint2) -> (vector_int2, vector_float2)
     
+    // Color scheme support
+    var selectedColorScheme: UInt32 { get }
+    var selectedColorSchemePublished: Published<UInt32> { get }
+    var selectedColorSchemePublisher: Published<UInt32>.Publisher { get }
+    
+    func setColorScheme(_ scheme: UInt32)
+    
 }
 
 
@@ -42,6 +49,10 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     var center: CGPoint { centerConcretePublished }
     var centerPublished: Published<CGPoint> { _centerConcretePublished }
     var centerPublisher: Published<CGPoint>.Publisher { $centerConcretePublished }
+    
+    var selectedColorScheme: UInt32 { selectedColorSchemeConcretePublished }
+    var selectedColorSchemePublished: Published<UInt32> { _selectedColorSchemeConcretePublished }
+    var selectedColorSchemePublisher: Published<UInt32>.Publisher { $selectedColorSchemeConcretePublished }
     
     //GET
     func getAdjustedRect(viewSize: vector_uint2) -> (vector_int2, vector_float2) {
@@ -72,6 +83,10 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
         zoomLevelConcretePublished = newZoomLevel
     }
     
+    func setColorScheme(_ scheme: UInt32) {
+        selectedColorSchemeConcretePublished = scheme
+    }
+    
     func requestUpdate() {
         let concrete = zoomLevel
         zoomLevelConcretePublished = concrete
@@ -80,10 +95,12 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     //Concrete Implementation
     @Published private var zoomLevelConcretePublished: CGFloat
     @Published private var centerConcretePublished: CGPoint
+    @Published private var selectedColorSchemeConcretePublished: UInt32
     
     init(){
         zoomLevelConcretePublished = 1
         centerConcretePublished = .zero
+        selectedColorSchemeConcretePublished = 1 // Default to sunset scheme
     }
     
 }

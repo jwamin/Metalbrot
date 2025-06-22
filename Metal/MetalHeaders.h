@@ -32,6 +32,7 @@ struct BrotVertexOut {
     int2 origin;
     float2 zoom;
     float4 color;
+    uint colorScheme;
 };
 
 struct FragmentOut {
