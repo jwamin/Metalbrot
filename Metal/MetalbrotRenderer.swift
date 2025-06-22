@@ -80,8 +80,11 @@ class MetalbrotRenderer: NSObject {
         
         viewModel.updateCenter(metalKitView.bounds.center)
         
+        // Clear existing subscriptions before setting up new ones
+        storage.removeAll()
+        
         //Basic Listener to look for _any_ changes on view model @Published interface
-        Publishers.CombineLatest(viewModel.centerPublisher, viewModel.zoomLevelPublisher)
+        Publishers.CombineLatest3(viewModel.centerPublisher, viewModel.zoomLevelPublisher, viewModel.selectedColorSchemePublisher)
             .map { _ in
                 Void()
             }

@@ -8,18 +8,6 @@
 import SwiftUI
 import MetalKit
 
-class PrintManager {
-    
-    static let shared = PrintManager()
-    
-    private init() { }
-    
-    public private(set) var printView: MTKView?
-    func setPrintView(_ metalKitView: MTKView?){
-        printView = metalKitView
-    }
-}
-
 @main
 struct MetalbrotApp: App {
     var body: some Scene {
@@ -30,14 +18,27 @@ struct MetalbrotApp: App {
         #if !os(tvOS)
         .commands(content: {
             CommandGroup(after: .newItem) {
-                Button("Print",action: {
+                Button("Print") {
                     #if os(macOS)
-                    PrintManager.shared.printView?.printView(nil)
-                    #else
+                    if let printView = PrintManager.shared.printView {
+                        printView.printView(nil)
+                    }
                     #endif
-                })
+                }
             }
         })
         #endif
+    }
+}
+
+// Simple singleton for managing print view reference
+class PrintManager {
+    static let shared = PrintManager()
+    private init() { }
+    
+    var printView: MTKView?
+    
+    func setPrintView(_ view: MTKView?) {
+        printView = view
     }
 }

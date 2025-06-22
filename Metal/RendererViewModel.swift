@@ -35,6 +35,7 @@ protocol MetalbrotViewModelInterface: AnyObject {
     var selectedColorSchemePublisher: Published<UInt32>.Publisher { get }
     
     func setColorScheme(_ scheme: UInt32)
+    func cycleColorScheme()
     
 }
 
@@ -84,7 +85,15 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     }
     
     func setColorScheme(_ scheme: UInt32) {
+        print("Color scheme changed from \(selectedColorSchemeConcretePublished) to \(scheme)")
         selectedColorSchemeConcretePublished = scheme
+    }
+    
+    func cycleColorScheme() {
+        let currentScheme = selectedColorSchemeConcretePublished
+        let nextScheme = (currentScheme % 3) + 1 // Cycle through schemes 1, 2, 3
+        print("Cycling color scheme from \(currentScheme) to \(nextScheme)")
+        selectedColorSchemeConcretePublished = nextScheme
     }
     
     func requestUpdate() {

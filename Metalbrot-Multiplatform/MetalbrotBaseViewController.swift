@@ -27,20 +27,7 @@ class MetalbrotBaseViewController: ViewController {
     var renderer: MetalbrotRenderer?
     var viewModel: MetalbrotViewModelInterface?
     
-    //Printing - TODO Refactor to dependencyInjection
-    var printHandler: PrintManager?
-    
-    init(printHandler: PrintManager? = PrintManager.shared){
-        self.printHandler = printHandler
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func loadView() {
-        
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("No Metal Device")
         }
@@ -48,7 +35,16 @@ class MetalbrotBaseViewController: ViewController {
         let metalView = MTKView(frame: .zero, device: device)
         self.view = metalView
         metalView.autoresizingMask = basicPinning
-        printHandler?.setPrintView(metalView)
+        
+        // Setup tap/click gesture
+        #if os(macOS)
+        let clickGesture = NSClickGestureRecognizer(target: self, action: #selector(handleTap))
+        metalView.addGestureRecognizer(clickGesture)
+        #else
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        metalView.addGestureRecognizer(tapGesture)
+        #endif
+        
         renderer = MetalbrotRenderer(view: metalView)
     }
     
@@ -57,4 +53,7 @@ class MetalbrotBaseViewController: ViewController {
         renderer?.viewModel = viewModel
     }
     
+    @objc private func handleTap() {
+        viewModel?.cycleColorScheme()
+    }
 }
