@@ -33,13 +33,17 @@ class MetalbrotRenderer: NSObject {
     
     
     ///Metal Variables
-    private typealias metalbuffers = (vertexBuffer: MTLBuffer?, viewportBuffer: MTLBuffer?, originBuffer: MTLBuffer?, zoomBuffer: MTLBuffer?)
+    private typealias metalbuffers = (vertexBuffer: MTLBuffer?, viewportBuffer: MTLBuffer?, originBuffer: MTLBuffer?, zoomBuffer: MTLBuffer?, colorBuffer: MTLBuffer?)
+    
+    private var buffers: [MTLBuffer?] = []
     
     private lazy var getBuffers: metalbuffers = {
         (device.makeBuffer(bytes: MetalbrotConstants.data.vertices, length: MemoryLayout<vector_float2>.size * MetalbrotConstants.data.vertices.count),
          device.makeBuffer(length: MemoryLayout<vector_uint2>.stride),
          device.makeBuffer(length: MemoryLayout<vector_int2>.stride),
-         device.makeBuffer(length: MemoryLayout<vector_int2>.stride))
+         device.makeBuffer(length: MemoryLayout<vector_int2>.stride),
+         device.makeBuffer(length: MemoryLayout<vector_float4>.stride)
+        )
     }()
     
 
@@ -69,21 +73,24 @@ class MetalbrotRenderer: NSObject {
     
     
     private func setupViewModel(){
+        
         guard let viewModel = viewModel else {
             fatalError("cannot setup view model bindings with viewmodel nil")
         }
         
         viewModel.updateCenter(metalKitView.bounds.center)
         
-        Publishers.CombineLatest(viewModel.centerPublisher, viewModel.zoomLevelPublisher)
+        // Clear existing subscriptions before setting up new ones
+        storage.removeAll()
+        
+        //Basic Listener to look for _any_ changes on view model @Published interface
+        Publishers.CombineLatest3(viewModel.centerPublisher, viewModel.zoomLevelPublisher, viewModel.selectedColorSchemePublisher)
             .map { _ in
                 Void()
             }
             .sink(receiveValue: { [weak self] _ in
                 self?.renderAll()
             }).store(in: &storage)
-        
-        //Set view model bindings
         
     }
     
@@ -102,40 +109,26 @@ class MetalbrotRenderer: NSObject {
         let vertexFunction = library.makeFunction(name: "brot_vertex_main")
         let fragmentFunction = library.makeFunction(name: "brot_fragment_main")
         
-        if #available(macOS 13.0, iOS 16.0, *) {
-            (metalKitView.layer as! CAMetalLayer).developerHUDProperties = [
-                "mode":"default"
-            ]
-        }
-        
         descriptor.vertexFunction = vertexFunction
         descriptor.fragmentFunction = fragmentFunction
         descriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
         
-        //Vertex
         let vertexDescriptor = MTLVertexDescriptor()
-        vertexDescriptor.attributes[0].format = .float2
-        vertexDescriptor.attributes[0].offset = 0
-        vertexDescriptor.attributes[0].bufferIndex = 0
-        vertexDescriptor.layouts[0].stride = MemoryLayout<vector_float2>.stride
         
-        //Viewport
-        vertexDescriptor.attributes[1].format = .uint2
-        vertexDescriptor.attributes[1].offset = 0
-        vertexDescriptor.attributes[1].bufferIndex = 1
-        vertexDescriptor.layouts[1].stride = MemoryLayout<vector_uint2>.stride
+        let attributes: [(format: MTLVertexFormat, bufferIndex: Int, stride: Int)] = [
+            (.float2, 0, MemoryLayout<vector_float2>.stride),   // Vertex
+            (.uint2, 1, MemoryLayout<vector_uint2>.stride),     // Viewport
+            (.int2, 2, MemoryLayout<vector_int2>.stride),       // Origin
+            (.float2, 3, MemoryLayout<vector_float2>.stride),   // Zoom
+            (.float4, 4, MemoryLayout<vector_float4>.stride)    // Color
+        ]
         
-        //Origin
-        vertexDescriptor.attributes[2].format = .int2
-        vertexDescriptor.attributes[2].offset = 0
-        vertexDescriptor.attributes[2].bufferIndex = 2
-        vertexDescriptor.layouts[2].stride = MemoryLayout<vector_int2>.stride
-        
-        //Zoom
-        vertexDescriptor.attributes[3].format = .float2
-        vertexDescriptor.attributes[3].offset = 0
-        vertexDescriptor.attributes[3].bufferIndex = 3
-        vertexDescriptor.layouts[3].stride = MemoryLayout<vector_float2>.stride
+        for (index, (format, bufferIndex, stride)) in attributes.enumerated() {
+            vertexDescriptor.attributes[index].format = format
+            vertexDescriptor.attributes[index].offset = 0
+            vertexDescriptor.attributes[index].bufferIndex = bufferIndex
+            vertexDescriptor.layouts[bufferIndex].stride = stride
+        }
         
         descriptor.vertexDescriptor = vertexDescriptor
         
@@ -145,12 +138,16 @@ class MetalbrotRenderer: NSObject {
         pipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
     }
     
+    
+    /// Main Render Function
+    /// - Parameter view: render surface
     func render(view: MTKView){
         
         guard let descriptor = view.currentRenderPassDescriptor,
               let pipelineState = pipelineState,
               let commandBuffer = commandQueue.makeCommandBuffer(),
-              let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
+              let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor),
+              let viewModel = viewModel else {
             fatalError("Unable to create render encoder")
         }
         
@@ -171,45 +168,44 @@ class MetalbrotRenderer: NSObject {
     //            double c_im = (row - maxY / 2.0) * 4.0 / maxX;
         
         
-        let (vertexBuffer, viewportBuffer, originBuffer, zoomBuffer) = getBuffers
-        let drawableSize: vector_uint2 = view.drawableSize.vector_uint2_32
+        let (vertexBuffer, viewportBuffer, originBuffer, zoomBuffer, colorBuffer) = getBuffers
         
-        let (origin, zoomSize) = viewModel!.getAdjustedRect(viewSize: drawableSize)
-        
-        //print(drawableSize,origin,zoomSize)
-        let sizePtr = viewportBuffer?.contents()
-        sizePtr?.storeBytes(of: drawableSize, as: vector_uint2.self)
-        
-        let originPtr = originBuffer?.contents()
-        originPtr?.storeBytes(of: origin, as: vector_int2.self)
-
-        let zoomPtr = zoomBuffer?.contents()
-        zoomPtr?.storeBytes(of: zoomSize, as: vector_float2.self)
-        
-        renderEncoder.setRenderPipelineState(pipelineState)
-        
-        //begin actual drawing code
-        for (bufferIndex,buffer) in [vertexBuffer,viewportBuffer,originBuffer,zoomBuffer].enumerated(){
-            renderEncoder.setVertexBuffer(buffer, offset: 0, index: bufferIndex)
+        if buffers.isEmpty {
+            self.buffers = [vertexBuffer, viewportBuffer, originBuffer, zoomBuffer, colorBuffer]
         }
         
-        renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
-    
-        //END actual draw code
+        let drawableSize = view.drawableSize.vector_uint2_32
+        let (origin, zoomSize) = viewModel.getAdjustedRect(viewSize: drawableSize)
         
+        // Update buffer contents
+        viewportBuffer?.contents().storeBytes(of: drawableSize, as: vector_uint2.self)
+        originBuffer?.contents().storeBytes(of: origin, as: vector_int2.self)
+        zoomBuffer?.contents().storeBytes(of: zoomSize, as: vector_float2.self)
+        colorBuffer?.contents().storeBytes(of: #colorLiteral(red: 0.3036130369, green: 0.1568089426, blue: 0.5214661956, alpha: 1).float4(), as: vector_float4.self)
+        
+        // Create and set color scheme buffer
+        var colorScheme = viewModel.selectedColorScheme
+        let colorSchemeBuffer = device.makeBuffer(bytes: &colorScheme, length: MemoryLayout<UInt32>.stride)
+        renderEncoder.setVertexBuffer(colorSchemeBuffer, offset: 0, index: 5)
+        
+        renderEncoder.setRenderPipelineState(pipelineState)
+        // Set vertex buffers and draw
+        for (index, buffer) in buffers.enumerated() {
+            renderEncoder.setVertexBuffer(buffer, offset: 0, index: index)
+        }
+        renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+        
+        // Present and commit
         if let drawable = view.currentDrawable {
-            
             renderEncoder.endEncoding()
             commandBuffer.present(drawable)
+            
             if manuallySynchronize {
-                commandBuffer.addCompletedHandler {[weak self] buffer in
-                    print("2 finished waiting")
+                commandBuffer.addCompletedHandler { [weak self] _ in
                     self?.semaphore.signal()
                 }
                 commandBuffer.commit()
-                print("1 waiting")
                 semaphore.wait()
-                print("3 waited")
             } else {
                 commandBuffer.commit()
                 commandBuffer.waitUntilScheduled()
@@ -221,7 +217,8 @@ class MetalbrotRenderer: NSObject {
     
 }
 
-//MARK: Metal Kit
+
+//MARK: Metal Kit View Delegate
 extension MetalbrotRenderer: MTKViewDelegate {
     
     func renderAll(){

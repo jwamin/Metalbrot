@@ -28,10 +28,11 @@ struct BrotVertexIn {
 
 struct BrotVertexOut {
     float4 position [[ position ]];
-    float2 viewportSize;
-    float4 color [[ flat ]];
-    float2 origin;
+    uint2 viewportSize;
+    int2 origin;
     float2 zoom;
+    float4 color;
+    uint colorScheme;
 };
 
 struct FragmentOut {

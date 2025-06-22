@@ -15,21 +15,59 @@ typealias Color = UIColor
 
 import simd
 
-
+extension MTLClearColor {
+    subscript(index: Int) -> Double {
+        get {
+            switch(index){
+            case 0:
+                return self.red
+            case 1:
+                return self.green
+            case 2:
+                return self.blue
+            case 3:
+                return self.alpha
+            default:
+                fatalError("metal clear color element out of range")
+            }
+        }
+        set(newValue){
+            switch(index){
+            case 0:
+                self.red = newValue
+            case 1:
+                self.green = newValue
+            case 2:
+                self.blue = newValue
+            case 3:
+                self.alpha = newValue
+            default:
+                fatalError("metal clear color element out of range")
+            }
+        }
+    }
+}
 
 extension Color {
     
   func metalClearColor() -> MTLClearColor {
     
-    let colors = self.cgColor.components!.map({ color in
-        return Double(color)
-    })
+      var metalClearColor = MTLClearColor()
+      self.cgColor.components!.enumerated().forEach({ (index,color) in
+          metalClearColor[index] = Double(color)
+      })
     
-    return MTLClearColor(red: colors[0], green: colors[1], blue: colors[2], alpha: colors[3])
+    return metalClearColor
     
   }
     
+    func float4() -> vector_float4 {
+        vector_float4(self.cgColor.components!.map({Float($0)}))
+    }
+    
 }
+
+fileprivate let internalPrivateColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
 
 protocol PositionInSuperView {
     
