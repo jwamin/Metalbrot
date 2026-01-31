@@ -183,7 +183,7 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     
     func cycleColorScheme() {
         let currentScheme = selectedColorSchemeConcretePublished
-        let nextScheme = (currentScheme % 3) + 1 // Cycle through schemes 1, 2, 3
+        let nextScheme = (currentScheme + 1) % colorSchemeCount
         print("Cycling color scheme from \(currentScheme) to \(nextScheme)")
         selectedColorSchemeConcretePublished = nextScheme
     }
@@ -197,6 +197,8 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     @Published private var zoomLevelConcretePublished: CGFloat
     @Published private var centerConcretePublished: CGPoint
     @Published private var selectedColorSchemeConcretePublished: UInt32
+    
+    private let colorSchemeCount: UInt32 = 10
     
     private let zoomSpeed: CGFloat
     private let zoomSpeedMinFactor: CGFloat = 0.05
@@ -218,7 +220,7 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
         #endif
         zoomLevelConcretePublished = 1
         centerConcretePublished = .zero
-        selectedColorSchemeConcretePublished = 1 // Default to sunset scheme
+        selectedColorSchemeConcretePublished = 0 // Default to rainbow scheme
     }
     
     private func zoomSpeedForLevel(_ level: CGFloat) -> CGFloat {
