@@ -36,9 +36,13 @@ final class MetalbrotViewController: MetalbrotBaseViewController {
         switch(recognizer.state){
         case .began, .changed, .ended:
             //TODO: Move to viewmodel
+            viewModel?.stopZoomInertia()
             let gestureTranslation = recognizer.translation(in: metalView)
-            let updateTranslation = CGPoint(x: -gestureTranslation.x, y: -gestureTranslation.y)
-            viewModel?.updateCenter(updateTranslation)
+            let current = viewModel?.center ?? .zero
+            let zoom = max(viewModel?.zoomLevel ?? 1, 0.0001)
+            let updateTranslation = CGPoint(x: -gestureTranslation.x * zoom, y: -gestureTranslation.y * zoom)
+            viewModel?.updateCenter(CGPoint(x: current.x + updateTranslation.x, y: current.y + updateTranslation.y))
+            recognizer.setTranslation(.zero, in: metalView)
         case .cancelled, .failed:
             print("some error, pan gesture ended with code \(recognizer.state)")
         default:
@@ -50,8 +54,12 @@ final class MetalbrotViewController: MetalbrotBaseViewController {
     func handlePinch(_ recognizer: UIPinchGestureRecognizer){
         switch(recognizer.state){
         case .began,.changed, .ended:
-            let scrollzoom = 1 - recognizer.scale
-            (viewModel as! MetalbrotRendererViewModel).setZoom(scrollzoom)
+            viewModel?.stopZoomInertia()
+            viewModel?.applyZoom(scaleFactor: recognizer.scale, focus: recognizer.location(in: metalView), viewSize: metalView.bounds.size)
+            recognizer.scale = 1
+            if recognizer.state == .ended {
+                viewModel?.startZoomInertia(scaleVelocity: recognizer.velocity, focus: recognizer.location(in: metalView), viewSize: metalView.bounds.size)
+            }
         case .cancelled, .failed:
             print("some error, pinch gesture ended with code \(recognizer.state)")
         default:

@@ -24,6 +24,11 @@ protocol MetalbrotViewModelInterface: AnyObject {
     func updateCenter(_ newPoint: CGPoint)
     func updateZoom(_ newZoomLevel: CGFloat)
     func setZoom(_ newZoomLevel: CGFloat)
+    func applyZoom(delta: CGFloat, focus: CGPoint, viewSize: CGSize)
+    func applyZoom(scaleFactor: CGFloat, focus: CGPoint, viewSize: CGSize)
+    func startZoomInertia(deltaVelocity: CGFloat, focus: CGPoint, viewSize: CGSize)
+    func startZoomInertia(scaleVelocity: CGFloat, focus: CGPoint, viewSize: CGSize)
+    func stopZoomInertia()
     
     func requestUpdate()
     
@@ -84,6 +89,93 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
         zoomLevelConcretePublished = newZoomLevel
     }
     
+    func applyZoom(scaleFactor: CGFloat, focus: CGPoint, viewSize: CGSize) {
+        let effectiveSpeed = zoomSpeedForLevel(zoomLevelConcretePublished)
+        let safeScale = max(scaleFactor, 0.0001)
+        let delta = log(safeScale) / effectiveSpeed
+        applyZoom(delta: delta, focus: focus, viewSize: viewSize)
+    }
+    
+    func applyZoom(delta: CGFloat, focus: CGPoint, viewSize: CGSize) {
+        guard viewSize.width > 0, viewSize.height > 0 else {
+            return
+        }
+        let effectiveSpeed = zoomSpeedForLevel(zoomLevelConcretePublished)
+        let factor = exp(delta * effectiveSpeed)
+        let oldZoom = max(zoomLevelConcretePublished, 0.0001)
+        let newZoom = min(max(oldZoom * factor, 0.0001), 1000)
+        
+        let oldZoomSize = CGSize(width: viewSize.width * oldZoom, height: viewSize.height * oldZoom)
+        let newZoomSize = CGSize(width: viewSize.width * newZoom, height: viewSize.height * newZoom)
+        
+        let oldOrigin = CGPoint(
+            x: centerConcretePublished.x + (viewSize.width / 2) - (oldZoomSize.width / 2),
+            y: centerConcretePublished.y + (viewSize.height / 2) - (oldZoomSize.height / 2)
+        )
+        
+        let focusNorm = CGPoint(x: focus.x / viewSize.width, y: focus.y / viewSize.height)
+        let worldPoint = CGPoint(
+            x: oldOrigin.x + (focusNorm.x * oldZoomSize.width),
+            y: oldOrigin.y + (focusNorm.y * oldZoomSize.height)
+        )
+        
+        let newOrigin = CGPoint(
+            x: worldPoint.x - (focusNorm.x * newZoomSize.width),
+            y: worldPoint.y - (focusNorm.y * newZoomSize.height)
+        )
+        
+        let newCenter = CGPoint(
+            x: newOrigin.x - (viewSize.width / 2) + (newZoomSize.width / 2),
+            y: newOrigin.y - (viewSize.height / 2) + (newZoomSize.height / 2)
+        )
+        
+        zoomLevelConcretePublished = newZoom
+        centerConcretePublished = newCenter
+        
+        zoomInertiaFocus = focus
+        zoomInertiaViewSize = viewSize
+    }
+    
+    func startZoomInertia(deltaVelocity: CGFloat, focus: CGPoint, viewSize: CGSize) {
+        guard viewSize.width > 0, viewSize.height > 0 else {
+            return
+        }
+        stopZoomInertia()
+        zoomInertiaSpeed = zoomSpeedForLevel(zoomLevelConcretePublished)
+        zoomInertiaVelocity = deltaVelocity
+        zoomInertiaFocus = focus
+        zoomInertiaViewSize = viewSize
+        lastInertiaTick = CFAbsoluteTimeGetCurrent()
+        
+        zoomInertiaTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            let now = CFAbsoluteTimeGetCurrent()
+            let dt = max(now - self.lastInertiaTick, 0)
+            self.lastInertiaTick = now
+            
+            if abs(self.zoomInertiaVelocity) < self.zoomInertiaMinVelocity {
+                self.stopZoomInertia()
+                return
+            }
+            
+            let delta = self.zoomInertiaVelocity * dt
+            self.applyZoom(delta: delta, focus: self.zoomInertiaFocus, viewSize: self.zoomInertiaViewSize)
+            self.zoomInertiaVelocity *= exp(-self.zoomInertiaDamping * dt)
+        }
+        RunLoop.main.add(zoomInertiaTimer!, forMode: .common)
+    }
+    
+    func startZoomInertia(scaleVelocity: CGFloat, focus: CGPoint, viewSize: CGSize) {
+        let deltaVelocity = scaleVelocity / max(zoomInertiaSpeed, 0.0001)
+        startZoomInertia(deltaVelocity: deltaVelocity, focus: focus, viewSize: viewSize)
+    }
+    
+    func stopZoomInertia() {
+        zoomInertiaTimer?.invalidate()
+        zoomInertiaTimer = nil
+        zoomInertiaVelocity = 0
+    }
+    
     func setColorScheme(_ scheme: UInt32) {
         print("Color scheme changed from \(selectedColorSchemeConcretePublished) to \(scheme)")
         selectedColorSchemeConcretePublished = scheme
@@ -91,7 +183,7 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     
     func cycleColorScheme() {
         let currentScheme = selectedColorSchemeConcretePublished
-        let nextScheme = (currentScheme % 3) + 1 // Cycle through schemes 1, 2, 3
+        let nextScheme = (currentScheme + 1) % colorSchemeCount
         print("Cycling color scheme from \(currentScheme) to \(nextScheme)")
         selectedColorSchemeConcretePublished = nextScheme
     }
@@ -106,10 +198,34 @@ final class MetalbrotRendererViewModel: MetalbrotViewModelInterface {
     @Published private var centerConcretePublished: CGPoint
     @Published private var selectedColorSchemeConcretePublished: UInt32
     
+    private let colorSchemeCount: UInt32 = 10
+    
+    private let zoomSpeed: CGFloat
+    private let zoomSpeedMinFactor: CGFloat = 0.05
+    private let zoomSpeedMaxFactor: CGFloat = 2.0
+    private let zoomInertiaDamping: CGFloat = 6.0
+    private let zoomInertiaMinVelocity: CGFloat = 5.0
+    private var zoomInertiaVelocity: CGFloat = 0
+    private var zoomInertiaFocus: CGPoint = .zero
+    private var zoomInertiaViewSize: CGSize = .zero
+    private var zoomInertiaTimer: Timer?
+    private var zoomInertiaSpeed: CGFloat = 0
+    private var lastInertiaTick: CFAbsoluteTime = 0
+    
     init(){
+        #if os(macOS)
+        zoomSpeed = 0.0035
+        #else
+        zoomSpeed = 0.0020
+        #endif
         zoomLevelConcretePublished = 1
         centerConcretePublished = .zero
-        selectedColorSchemeConcretePublished = 1 // Default to sunset scheme
+        selectedColorSchemeConcretePublished = 0 // Default to rainbow scheme
+    }
+    
+    private func zoomSpeedForLevel(_ level: CGFloat) -> CGFloat {
+        let clamped = min(max(level, zoomSpeedMinFactor), zoomSpeedMaxFactor)
+        return zoomSpeed * clamped
     }
     
 }

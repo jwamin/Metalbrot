@@ -21,6 +21,8 @@ class MyView: NSView {
 
 class MetalbrotViewController: MetalbrotBaseViewController {
     
+    private var lastScrollTimestamp: TimeInterval?
+    
     override func loadView() {
         super.loadView()
 
@@ -41,14 +43,33 @@ class MetalbrotViewController: MetalbrotBaseViewController {
     
     override func mouseDragged(with event: NSEvent) {
         //TODO: Move to viewmodel
-        let current = viewModel!.center
-        viewModel?.updateCenter(CGPoint(x: current.x - event.deltaX, y: current.y - event.deltaY))
+        viewModel?.stopZoomInertia()
+        let current = viewModel?.center ?? .zero
+        let zoom = max(viewModel?.zoomLevel ?? 1, 0.0001)
+        let updateTranslation = CGPoint(x: -event.deltaX * zoom, y: -event.deltaY * zoom)
+        viewModel?.updateCenter(CGPoint(x: current.x + updateTranslation.x, y: current.y + updateTranslation.y))
     }
     
     override func scrollWheel(with event: NSEvent) {
         //TODO: Move to viewmodel
-        let scrollzoom = CGFloat(event.scrollingDeltaY) / 100
-        viewModel?.updateZoom(scrollzoom)
+        if event.phase == .began {
+            viewModel?.stopZoomInertia()
+            lastScrollTimestamp = event.timestamp
+        }
+        let locationInView = metalView.convert(event.locationInWindow, from: nil)
+        let focus = CGPoint(x: locationInView.x, y: metalView.bounds.height - locationInView.y)
+        viewModel?.applyZoom(delta: CGFloat(event.scrollingDeltaY), focus: focus, viewSize: metalView.bounds.size)
+        
+        if event.momentumPhase == .none && event.phase == .ended {
+            if let lastTimestamp = lastScrollTimestamp {
+                let dt = max(event.timestamp - lastTimestamp, 0.001)
+                let velocity = CGFloat(event.scrollingDeltaY) / dt
+                viewModel?.startZoomInertia(deltaVelocity: velocity, focus: focus, viewSize: metalView.bounds.size)
+            }
+            lastScrollTimestamp = nil
+        } else {
+            lastScrollTimestamp = event.timestamp
+        }
     }
     
     override func interpretKeyEvents(_ eventArray: [NSEvent]) {
@@ -70,5 +91,3 @@ class MetalbrotViewController: MetalbrotBaseViewController {
 }
 
 #endif
-
-
