@@ -330,6 +330,7 @@ int main(int argc, const char * argv[]) {
         CGDataProviderRelease(provider);
 
         printf("Wrote %s (%lux%lu)\n", outputPath.UTF8String, (unsigned long)width, (unsigned long)height);
+        printf("End of autorelease pool\n");
     }
     return 0;
 }

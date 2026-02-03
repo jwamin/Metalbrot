@@ -1,7 +1,7 @@
 #include <metal_stdlib>
 using namespace metal;
 
-#include "../Metal/Palette.metal"
+#include "../Metal/Shared/MandelbrotCore.metal"
 
 struct VertexIn {
     float2 position [[attribute(0)]];
@@ -42,26 +42,10 @@ fragment IterOut mbrot_iter_fragment(VertexOut in [[stage_in]],
     c.x = params.center.x + (in.uv.x - 0.5f) * params.scale * 2.0f;
     c.y = params.center.y + (in.uv.y - 0.5f) * params.scale * 2.0f * aspect;
 
-    float x = 0.0f;
-    float y = 0.0f;
-    uint iteration = 0;
-    while ((x * x + y * y <= 4.0f) && (iteration < safeMaxIter)) {
-        float x_new = x * x - y * y + c.x;
-        y = 2.0f * x * y + c.y;
-        x = x_new;
-        iteration++;
-    }
+    float smoothIter = mandelbrotSmoothIter(c, safeMaxIter);
 
-    float smoothIter = (float)iteration;
-    if (iteration < safeMaxIter) {
-        float modulus = x * x + y * y;
-        float log_zn = log2(modulus) / 2.0f;
-        float nu = log2(log_zn);
-        smoothIter = (float)iteration + 1.0f - nu;
-    }
-
-    float normalized = smoothIter / (float)safeMaxIter;
-    out.value = clamp(normalized, 0.0f, 1.0f);
+    // Store smooth iteration count (not normalized) for the deferred color pass.
+    out.value = clamp(smoothIter, 0.0f, (float)safeMaxIter);
     return out;
 }
 
@@ -69,14 +53,6 @@ fragment float4 mbrot_color_fragment(VertexOut in [[stage_in]],
                                     texture2d<float, access::sample> iterTex [[texture(0)]],
                                     constant Params &params [[buffer(0)]]) {
     constexpr sampler s(coord::normalized, address::clamp_to_edge, filter::nearest);
-    float iterNorm = (float)iterTex.sample(s, in.uv).r;
-    if (iterNorm >= 1.0f) {
-        return float4(0, 0, 0, 1);
-    }
-
-    float zoomBoost = clamp(log2(1.0f / max(params.scale, 1.0e-6f)), 0.0f, 8.0f);
-    float cycles = 0.08f + (zoomBoost * 0.05f);
-    float t = fract(iterNorm * cycles);
-    float4 color = paletteSample(params.colorScheme, t);
-    return color;
+    float smoothIter = (float)iterTex.sample(s, in.uv).r;
+    return mandelbrotColor(smoothIter, params.scale, params.colorScheme, max(params.maxIter, 1u));
 }

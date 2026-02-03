@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60C43154DF154F72A4E7797B /* MandelbrotCore.metal in Sources */ = {isa = PBXBuildFile; fileRef = 29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */; };
+		AEF1C529442F42F78E564E83 /* MandelbrotCore.metal in Sources */ = {isa = PBXBuildFile; fileRef = 29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */; };
+		BEBAF9E719804ABCA6D05387 /* MandelbrotCore.metal in Sources */ = {isa = PBXBuildFile; fileRef = 29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */; };
+		E8D67EA2169E4E00A422BE75 /* MandelbrotCore.metal in Sources */ = {isa = PBXBuildFile; fileRef = 29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */; };
+		085D5AD02F30E51800682890 /* Palette.metal in Sources */ = {isa = PBXBuildFile; fileRef = A713C1D371CB4B789660FAEE /* Palette.metal */; };
 		089F78CC2F2E66EA008EBD80 /* Palette.metal in Sources */ = {isa = PBXBuildFile; fileRef = A713C1D371CB4B789660FAEE /* Palette.metal */; };
 		089F78CD2F2E66EA008EBD80 /* Palette.metal in Sources */ = {isa = PBXBuildFile; fileRef = A713C1D371CB4B789660FAEE /* Palette.metal */; };
 		089F78CE2F2E66EA008EBD80 /* Palette.metal in Sources */ = {isa = PBXBuildFile; fileRef = A713C1D371CB4B789660FAEE /* Palette.metal */; };
@@ -91,6 +96,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MandelbrotCore.metal; sourceTree = "<group>"; };
 		089F78D22F2E6BAC008EBD80 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		089F78D42F2E6BCC008EBD80 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		089F78DA2F2E6C05008EBD80 /* MetalbrotCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MetalbrotCLI; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -218,6 +224,7 @@
 		57A033AD2A0448D000EB11B2 /* Metal */ = {
 			isa = PBXGroup;
 			children = (
+				9EFACAFCE86B496D969A96EC /* Shared */,
 				57ACEA3B2854E823004D6F23 /* MetalbrotRenderer.swift */,
 				57ACEA442854F481004D6F23 /* MetalHeaders.h */,
 				A713C1D371CB4B789660FAEE /* Palette.metal */,
@@ -228,6 +235,14 @@
 				570883F12A06D56100292AA1 /* BrotRendererModels.swift */,
 			);
 			path = Metal;
+			sourceTree = "<group>";
+		};
+		9EFACAFCE86B496D969A96EC /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 		57ACE9ED2854E23A004D6F23 = {
@@ -533,6 +548,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60C43154DF154F72A4E7797B /* MandelbrotCore.metal in Sources */,
+				085D5AD02F30E51800682890 /* Palette.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,6 +566,7 @@
 				572656CD2A04710F0031B46F /* Helpers.swift in Sources */,
 				572656C82A04710A0031B46F /* Brot.metal in Sources */,
 				572656D32A0474700031B46F /* MetalbrotBaseViewController.swift in Sources */,
+				BEBAF9E719804ABCA6D05387 /* MandelbrotCore.metal in Sources */,
 				089F78CC2F2E66EA008EBD80 /* Palette.metal in Sources */,
 				57BBA1802A084FD100D9A92E /* MetalbrotTVViewController.swift in Sources */,
 				570883F22A06D56100292AA1 /* BrotRendererModels.swift in Sources */,
@@ -566,6 +584,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57ACEA1D2854E23E004D6F23 /* MainView.swift in Sources */,
+				AEF1C529442F42F78E564E83 /* MandelbrotCore.metal in Sources */,
 				089F78CD2F2E66EA008EBD80 /* Palette.metal in Sources */,
 				57A033A62A04123300EB11B2 /* SwiftUIMetalKitView.swift in Sources */,
 				57ACEA3F2854E87E004D6F23 /* Helpers.swift in Sources */,
@@ -598,6 +617,7 @@
 				57ACEA432854F43D004D6F23 /* Brot.metal in Sources */,
 				57ACEA3D2854E823004D6F23 /* MetalbrotRenderer.swift in Sources */,
 				57FEEC9A285B534300C4B9B4 /* Data.swift in Sources */,
+				E8D67EA2169E4E00A422BE75 /* MandelbrotCore.metal in Sources */,
 				089F78CE2F2E66EA008EBD80 /* Palette.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -646,8 +666,10 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
+				INFOPLIST_KEY_MetalCaptureEnabled = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_COMPILER_FLAGS = "-fmetal-enable-logging";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
@@ -663,8 +685,10 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
+				INFOPLIST_KEY_MetalCaptureEnabled = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_COMPILER_FLAGS = "-fmetal-enable-logging";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};

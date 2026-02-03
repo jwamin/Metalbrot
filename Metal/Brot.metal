@@ -22,7 +22,7 @@ typedef enum {
 
 using namespace metal;
 
-#include "Palette.metal"
+#include "Shared/MandelbrotCore.metal"
 
 vertex BrotVertexOut brot_vertex_main(BrotVertexIn vertex_in [[stage_in]],
                                      constant vector_uint2 *viewportSizePointer [[buffer(ViewportSizeIndex)]],
@@ -58,33 +58,13 @@ fragment FragmentOut brot_fragment_main(BrotVertexOut in [[stage_in]]) {
     const float c_re = (adjustedPixX - adjustedWidth/2.0) * 4.0/adjustedWidth;
     const float c_im = (adjustedPixY - adjustedHeight/2.0) * 4.0/adjustedWidth;
     
-    float x = 0, y = 0;
-    uint iteration = 0;
-    
-    while (x*x + y*y <= 4 && iteration < ITERATION_MAX) {
-        float x_new = x*x - y*y + c_re;
-        y = 2*x*y + c_im;
-        x = x_new;
-        iteration++;
-    }
-    
-    float smoothIteration = (float)iteration;
-    if (iteration < ITERATION_MAX) {
-        float modulus = x * x + y * y;
-        float log_zn = log2(modulus) / 2.0;
-        float nu = log2(log_zn);
-        smoothIteration = (float)iteration + 1.0 - nu;
-    }
-    
+    float2 c = float2(c_re, c_im);
+    float smoothIteration = mandelbrotSmoothIter(c, ITERATION_MAX);
     float zoomLevel = in.zoom.x / width;
-    float zoomBoost = clamp(log2(zoomLevel + 1.0), 0.0, 6.0);
-    float cycles = 0.08 + (zoomBoost * 0.05);
-    float t = fract(smoothIteration * cycles);
-    
-    float4 color = paletteSample(in.colorScheme, t);
+    float4 color = mandelbrotColor(smoothIteration, zoomLevel, in.colorScheme, ITERATION_MAX);
     
     // Blend the calculated color with the passed-in base color
-    fragOut.color = (iteration < ITERATION_MAX) ? mix(in.color, color, 0.8) : black;
+    fragOut.color = (smoothIteration < ITERATION_MAX) ? mix(in.color, color, 0.8) : black;
     
     return fragOut;
 }
