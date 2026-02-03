@@ -40,7 +40,7 @@ final class MetalbrotViewController: MetalbrotBaseViewController {
             let gestureTranslation = recognizer.translation(in: metalView)
             let current = viewModel?.center ?? .zero
             let zoom = max(viewModel?.zoomLevel ?? 1, 0.0001)
-            let updateTranslation = CGPoint(x: -gestureTranslation.x * zoom, y: -gestureTranslation.y * zoom)
+            let updateTranslation = CGPoint(x: -gestureTranslation.x / zoom, y: -gestureTranslation.y / zoom)
             viewModel?.updateCenter(CGPoint(x: current.x + updateTranslation.x, y: current.y + updateTranslation.y))
             recognizer.setTranslation(.zero, in: metalView)
         case .cancelled, .failed:
@@ -55,7 +55,7 @@ final class MetalbrotViewController: MetalbrotBaseViewController {
         switch(recognizer.state){
         case .began,.changed, .ended:
             viewModel?.stopZoomInertia()
-            viewModel?.applyZoom(scaleFactor: recognizer.scale, focus: recognizer.location(in: metalView), viewSize: metalView.bounds.size)
+            viewModel?.applyZoom(scaleFactor: 1.0 / max(recognizer.scale, 0.0001), focus: recognizer.location(in: metalView), viewSize: metalView.bounds.size)
             recognizer.scale = 1
             if recognizer.state == .ended {
                 viewModel?.startZoomInertia(scaleVelocity: recognizer.velocity, focus: recognizer.location(in: metalView), viewSize: metalView.bounds.size)

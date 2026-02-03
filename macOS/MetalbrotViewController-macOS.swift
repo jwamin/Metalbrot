@@ -45,8 +45,9 @@ class MetalbrotViewController: MetalbrotBaseViewController {
         //TODO: Move to viewmodel
         viewModel?.stopZoomInertia()
         let current = viewModel?.center ?? .zero
-        let zoom = max(viewModel?.zoomLevel ?? 1, 0.0001)
-        let updateTranslation = CGPoint(x: -event.deltaX * zoom, y: -event.deltaY * zoom)
+        let zoomLevel = max(viewModel?.zoomLevel ?? 1, 0.0001)
+        let dragScale = 1.0 / zoomLevel
+        let updateTranslation = CGPoint(x: -event.deltaX * dragScale, y: -event.deltaY * dragScale)
         viewModel?.updateCenter(CGPoint(x: current.x + updateTranslation.x, y: current.y + updateTranslation.y))
     }
     
