@@ -3,10 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60C43154DF154F72A4E7797B /* MandelbrotCore.metal in Sources */ = {isa = PBXBuildFile; fileRef = 29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */; };
+		AEF1C529442F42F78E564E83 /* MandelbrotCore.metal in Sources */ = {isa = PBXBuildFile; fileRef = 29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */; };
+		BEBAF9E719804ABCA6D05387 /* MandelbrotCore.metal in Sources */ = {isa = PBXBuildFile; fileRef = 29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */; };
+		E8D67EA2169E4E00A422BE75 /* MandelbrotCore.metal in Sources */ = {isa = PBXBuildFile; fileRef = 29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */; };
+		085D5AD02F30E51800682890 /* Palette.metal in Sources */ = {isa = PBXBuildFile; fileRef = A713C1D371CB4B789660FAEE /* Palette.metal */; };
+		089F78CC2F2E66EA008EBD80 /* Palette.metal in Sources */ = {isa = PBXBuildFile; fileRef = A713C1D371CB4B789660FAEE /* Palette.metal */; };
+		089F78CD2F2E66EA008EBD80 /* Palette.metal in Sources */ = {isa = PBXBuildFile; fileRef = A713C1D371CB4B789660FAEE /* Palette.metal */; };
+		089F78CE2F2E66EA008EBD80 /* Palette.metal in Sources */ = {isa = PBXBuildFile; fileRef = A713C1D371CB4B789660FAEE /* Palette.metal */; };
 		570883F22A06D56100292AA1 /* BrotRendererModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F12A06D56100292AA1 /* BrotRendererModels.swift */; };
 		570883F32A06D56100292AA1 /* BrotRendererModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F12A06D56100292AA1 /* BrotRendererModels.swift */; };
 		570883F42A06D56100292AA1 /* BrotRendererModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570883F12A06D56100292AA1 /* BrotRendererModels.swift */; };
@@ -75,7 +83,23 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		089F78D82F2E6C05008EBD80 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MandelbrotCore.metal; sourceTree = "<group>"; };
+		089F78D22F2E6BAC008EBD80 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		089F78D42F2E6BCC008EBD80 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		089F78DA2F2E6C05008EBD80 /* MetalbrotCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MetalbrotCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		570883F12A06D56100292AA1 /* BrotRendererModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrotRendererModels.swift; sourceTree = "<group>"; };
 		570883F52A06D5A700292AA1 /* RendererViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererViewModel.swift; sourceTree = "<group>"; };
 		570883F92A06E7AA00292AA1 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
@@ -108,9 +132,22 @@
 		57FEEC98285B534300C4B9B4 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		57FEEC9B285B563900C4B9B4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		57FEEC9D285B57BB00C4B9B4 /* mbrot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbrot.png; sourceTree = "<group>"; };
+		878E2E5362EA463D8D8F024D /* MetalbrotCLI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MetalbrotCLI.m; sourceTree = "<group>"; };
+		A713C1D371CB4B789660FAEE /* Palette.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Palette.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		089F78DB2F2E6C05008EBD80 /* MetalbrotCLI */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = MetalbrotCLI; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		089F78D72F2E6C05008EBD80 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		572656B32A0470FD0031B46F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -149,6 +186,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		089F78D12F2E6BAC008EBD80 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				089F78D42F2E6BCC008EBD80 /* Foundation.framework */,
+				089F78D22F2E6BAC008EBD80 /* Metal.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		572656B72A0470FD0031B46F /* Metalbrot-Multiplatform */ = {
 			isa = PBXGroup;
 			children = (
@@ -178,8 +224,10 @@
 		57A033AD2A0448D000EB11B2 /* Metal */ = {
 			isa = PBXGroup;
 			children = (
+				9EFACAFCE86B496D969A96EC /* Shared */,
 				57ACEA3B2854E823004D6F23 /* MetalbrotRenderer.swift */,
 				57ACEA442854F481004D6F23 /* MetalHeaders.h */,
+				A713C1D371CB4B789660FAEE /* Palette.metal */,
 				57ACEA382854E7EC004D6F23 /* BasicShader.metal */,
 				57ACEA352854E7A0004D6F23 /* Brot.metal */,
 				57FEEC98285B534300C4B9B4 /* Data.swift */,
@@ -189,12 +237,22 @@
 			path = Metal;
 			sourceTree = "<group>";
 		};
+		9EFACAFCE86B496D969A96EC /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				29B882576EDC4DE5A5745CA8 /* MandelbrotCore.metal */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		57ACE9ED2854E23A004D6F23 = {
 			isa = PBXGroup;
 			children = (
 				570883F92A06E7AA00292AA1 /* .gitignore */,
 				57FEEC9B285B563900C4B9B4 /* README.md */,
 				57FEEC9C285B575700C4B9B4 /* readme-assets */,
+				089F78DB2F2E6C05008EBD80 /* MetalbrotCLI */,
+				DDD0E20B67DC41A299C3A1B6 /* CLI */,
 				57A033AD2A0448D000EB11B2 /* Metal */,
 				57ACE9F22854E23A004D6F23 /* Shared */,
 				572656B72A0470FD0031B46F /* Metalbrot-Multiplatform */,
@@ -203,6 +261,7 @@
 				577EC0F12A0852CA003812AD /* tvOS */,
 				57ACEA0A2854E23E004D6F23 /* Tests iOS */,
 				57ACEA162854E23E004D6F23 /* Tests macOS */,
+				089F78D12F2E6BAC008EBD80 /* Frameworks */,
 				57ACE9FB2854E23E004D6F23 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -228,6 +287,7 @@
 				57ACEA072854E23E004D6F23 /* Tests iOS.xctest */,
 				57ACEA132854E23E004D6F23 /* Tests macOS.xctest */,
 				572656B62A0470FD0031B46F /* Metalbrot.app */,
+				089F78DA2F2E6C05008EBD80 /* MetalbrotCLI */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -267,9 +327,39 @@
 			path = "readme-assets";
 			sourceTree = "<group>";
 		};
+		DDD0E20B67DC41A299C3A1B6 /* CLI */ = {
+			isa = PBXGroup;
+			children = (
+				878E2E5362EA463D8D8F024D /* MetalbrotCLI.m */,
+			);
+			path = CLI;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		089F78D92F2E6C05008EBD80 /* MetalbrotCLI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 089F78DE2F2E6C05008EBD80 /* Build configuration list for PBXNativeTarget "MetalbrotCLI" */;
+			buildPhases = (
+				089F78D62F2E6C05008EBD80 /* Sources */,
+				089F78D72F2E6C05008EBD80 /* Frameworks */,
+				089F78D82F2E6C05008EBD80 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				089F78DB2F2E6C05008EBD80 /* MetalbrotCLI */,
+			);
+			name = MetalbrotCLI;
+			packageProductDependencies = (
+			);
+			productName = MetalbrotCLI;
+			productReference = 089F78DA2F2E6C05008EBD80 /* MetalbrotCLI */;
+			productType = "com.apple.product-type.tool";
+		};
 		572656B52A0470FD0031B46F /* Metalbrot */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 572656C42A0470FE0031B46F /* Build configuration list for PBXNativeTarget "Metalbrot" */;
@@ -367,6 +457,9 @@
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1340;
 				TargetAttributes = {
+					089F78D92F2E6C05008EBD80 = {
+						CreatedOnToolsVersion = 26.0;
+					};
 					572656B52A0470FD0031B46F = {
 						CreatedOnToolsVersion = 14.3;
 					};
@@ -404,6 +497,7 @@
 				57ACE9FF2854E23E004D6F23 /* Metalbrot (macOS) */,
 				57ACEA062854E23E004D6F23 /* Tests iOS */,
 				57ACEA122854E23E004D6F23 /* Tests macOS */,
+				089F78D92F2E6C05008EBD80 /* MetalbrotCLI */,
 			);
 		};
 /* End PBXProject section */
@@ -450,6 +544,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		089F78D62F2E6C05008EBD80 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60C43154DF154F72A4E7797B /* MandelbrotCore.metal in Sources */,
+				085D5AD02F30E51800682890 /* Palette.metal in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		572656B22A0470FD0031B46F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -463,6 +566,8 @@
 				572656CD2A04710F0031B46F /* Helpers.swift in Sources */,
 				572656C82A04710A0031B46F /* Brot.metal in Sources */,
 				572656D32A0474700031B46F /* MetalbrotBaseViewController.swift in Sources */,
+				BEBAF9E719804ABCA6D05387 /* MandelbrotCore.metal in Sources */,
+				089F78CC2F2E66EA008EBD80 /* Palette.metal in Sources */,
 				57BBA1802A084FD100D9A92E /* MetalbrotTVViewController.swift in Sources */,
 				570883F22A06D56100292AA1 /* BrotRendererModels.swift in Sources */,
 				572656C52A04710A0031B46F /* BasicShader.metal in Sources */,
@@ -479,6 +584,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				57ACEA1D2854E23E004D6F23 /* MainView.swift in Sources */,
+				AEF1C529442F42F78E564E83 /* MandelbrotCore.metal in Sources */,
+				089F78CD2F2E66EA008EBD80 /* Palette.metal in Sources */,
 				57A033A62A04123300EB11B2 /* SwiftUIMetalKitView.swift in Sources */,
 				57ACEA3F2854E87E004D6F23 /* Helpers.swift in Sources */,
 				57ACEA1B2854E23E004D6F23 /* MetalbrotApp.swift in Sources */,
@@ -510,6 +617,8 @@
 				57ACEA432854F43D004D6F23 /* Brot.metal in Sources */,
 				57ACEA3D2854E823004D6F23 /* MetalbrotRenderer.swift in Sources */,
 				57FEEC9A285B534300C4B9B4 /* Data.swift in Sources */,
+				E8D67EA2169E4E00A422BE75 /* MandelbrotCore.metal in Sources */,
+				089F78CE2F2E66EA008EBD80 /* Palette.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -547,6 +656,44 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		089F78DF2F2E6C05008EBD80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				INFOPLIST_KEY_MetalCaptureEnabled = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_COMPILER_FLAGS = "-fmetal-enable-logging";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		089F78E02F2E6C05008EBD80 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				INFOPLIST_KEY_MetalCaptureEnabled = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_COMPILER_FLAGS = "-fmetal-enable-logging";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 		572656C22A0470FE0031B46F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -597,10 +744,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -623,6 +772,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jossy.Metalbrot-multiplatform.multiplatform";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
@@ -957,6 +1107,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		089F78DE2F2E6C05008EBD80 /* Build configuration list for PBXNativeTarget "MetalbrotCLI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				089F78DF2F2E6C05008EBD80 /* Debug */,
+				089F78E02F2E6C05008EBD80 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		572656C42A0470FE0031B46F /* Build configuration list for PBXNativeTarget "Metalbrot" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
